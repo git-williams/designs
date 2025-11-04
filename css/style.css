@@ -31,14 +31,12 @@ footer {
 
 /* Hidden state (slides up when scrolled past hero) */
 .main-header.hidden {
-  transform: translateY(-100%);
-  opacity: 0;
+  transform: translateY(-120%); 
 }
 
 /* Visible again when scrolling back up */
 .main-header.visible {
   transform: translateY(0);
-  opacity: 1;
 }
 
 /* =============== HERO =============== */
