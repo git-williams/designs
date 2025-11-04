@@ -1,1 +1,130 @@
+/* =============== GLOBAL =============== */
+body {
+  background-color: #5b2cc5; /* purple background */
+  color: #333;
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 50px; /* 50px between major sections */
+}
+
+/* Ensure spacing doesn’t affect internal spacing */
+section,
+header,
+footer {
+  width: 100%;
+}
+
+/* =============== HEADER =============== */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 70px;
+  width: 100%;
+  background-color: red;
+  z-index: 1000;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+/* Hidden state (slides up when scrolled past hero) */
+.main-header.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+/* Visible again when scrolling back up */
+.main-header.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* =============== HERO =============== */
+.hero {
+  height: 80vh;
+  background-color: yellow;
+}
+
+/* =============== WRAPPER SECTIONS =============== */
+.wrapper2 {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.wrapper2.visible2 {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.inner2 {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.image2 {
+  flex: 1 1 300px;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.image2 img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.content2 {
+  flex: 1 1 300px;
+}
+
+.major2 {
+  margin-top: 0;
+  font-size: 1.8rem;
+}
+
+.special2 {
+  display: inline-block;
+  margin-top: 1rem;
+  color: white;
+  background: #5b2cc5;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.special2:hover {
+  background: #7e4df1;
+}
+
+/* Light backgrounds for each section */
+.sp_light1 { background-color: #f7f7f7; }
+.sp_light2 { background-color: #f0f0f0; }
+.sp_light3 { background-color: #eaeaea; }
+
+/* =============== FOOTER =============== */
+.main-footer {
+  height: 200px;
+  background-color: blue;
+}
+
+/* =============== RESPONSIVE =============== */
+@media (max-width: 768px) {
+  .inner2 {
+    flex-direction: column;
+    text-align: center;
+  }
+}
 
