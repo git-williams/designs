@@ -103,7 +103,7 @@ h1 {
   position: absolute;
   width: 25px;
   height: 40px;
-  background: url('images/mouse.png') no-repeat center/contain;
+  background: url('../images/mouse.avif') no-repeat center/contain;
   top: 0;
   left: 0;
   pointer-events: none;
