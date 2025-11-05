@@ -41,10 +41,74 @@ footer {
 
 /* =============== HERO =============== */
 .hero {
-  height: 100vh;
-  width: 100%;
-  background-color: yellow;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: yellow;
+  overflow: hidden;
 }
+
+.hero-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 85%;
+  max-width: 1200px;
+}
+
+.hero-text {
+  flex: 0 0 65%;
+  position: relative;
+}
+
+.hero-cta {
+  flex: 0 0 30%;
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 3rem;
+  position: relative;
+  line-height: 1.2;
+}
+
+.highlight {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1.2em;
+  width: 0;
+  background: rgba(100, 150, 255, 0.5);
+  z-index: -1;
+  transition: width 0.3s ease;
+}
+
+.cta-btn {
+  padding: 1em 2em;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transform-origin: center;
+  transition: all 0.2s ease;
+}
+
+.mouse-cursor {
+  position: absolute;
+  width: 25px;
+  height: 40px;
+  background: url('images/mouse.png') no-repeat center/contain;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
 
 /* =============== WRAPPER SECTIONS =============== */
 .wrapper2 {
