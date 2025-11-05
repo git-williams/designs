@@ -170,15 +170,15 @@ footer {
 
 /* Backgrounds */
 .sp_light1::before {
-  background-image: url("images/background_d.jpg");
+  background-image: url("../images/background_d.jpg");
 }
 
 .sp_light2::before {
-  background-image: url("images/background_d.jpg");
+  background-image: url("../images/background_d.jpg");
 }
 
 .sp_light3::before {
-  background-image: url("images/background_d.jpg");
+  background-image: url("../images/background_d.jpg");
 }
 
 /* Overlay */
