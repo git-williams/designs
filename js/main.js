@@ -1,13 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
   // ===== Scroll-triggered section animation =====
   const sections = document.querySelectorAll(".wrapper2");
+
   const revealOnScroll = () => {
     const triggerBottom = window.innerHeight * 0.85;
     sections.forEach((section) => {
       const rect = section.getBoundingClientRect();
-      if (rect.top < triggerBottom) section.classList.add("visible2");
+      if (rect.top < triggerBottom) {
+        section.classList.add("visible2");
+      }
     });
   };
+
   window.addEventListener("scroll", revealOnScroll);
   revealOnScroll();
 
@@ -19,12 +23,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleHeader = () => {
     const heroBottom = hero.offsetTop + hero.offsetHeight;
     const currentScroll = window.scrollY;
+
     if (currentScroll > heroBottom) {
-      if (currentScroll < lastScrollY) header.classList.add("visible");
-      else header.classList.remove("visible");
-    } else header.classList.add("visible");
+      if (currentScroll < lastScrollY) {
+        header.classList.add("visible");
+        header.classList.remove("hidden");
+      } else {
+        header.classList.add("hidden");
+        header.classList.remove("visible");
+      }
+    } else {
+      header.classList.add("visible");
+      header.classList.remove("hidden");
+    }
+
     lastScrollY = currentScroll;
   };
+
   window.addEventListener("scroll", toggleHeader);
   toggleHeader();
 
@@ -36,44 +51,49 @@ document.addEventListener("DOMContentLoaded", () => {
   const highlight = document.querySelector(".highlight");
   const mouse = document.querySelector(".mouse-cursor");
   const button = document.querySelector(".cta-btn");
+  const wordContainer = document.querySelector(".word-container");
 
   const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
 
-  // Slide in hero elements
+  // Step 1 — type "Designs that impress."
   tl.from(".hero-text", { x: -100, opacity: 0, duration: 1 })
     .from(".hero-cta", { x: 100, opacity: 0, duration: 1 }, "-=0.5")
     .to(mouse, { opacity: 1, duration: 0.5 }, "-=0.5")
-
-    // Move mouse to word + highlight
-    .to(mouse, { x: 250, y: 300, duration: 1 })
-    .add(() => {
-      // Dynamically match highlight width to the current word
-      const wordWidth = changingWord.offsetWidth;
-      gsap.to(highlight, { width: wordWidth + 10, duration: 0.5 }); // +10 for overshoot
+    .to(changingWord, {
+      text: "impress.",
+      duration: 2,
+      ease: "none"
     })
+    // Move mouse to word
+    .to(mouse, { x: 250, y: 300, duration: 1 })
+    // Highlight slides in
+    .to(highlight, { width: "100%", duration: 0.4, ease: "power2.out" }, "-=0.2")
 
-    // Hold highlight before changing words
-    .addPause("+=0.8")
-
-    // Cycle words with short delay between each
+    // Step 2 — cycle through words abruptly, updating highlight width instantly
     .add(() => {
+      const adjustHighlight = (word) => {
+        changingWord.textContent = word;
+        // measure word width live
+        const width = changingWord.offsetWidth;
+        gsap.set(highlight, { width });
+      };
+
       let i = 1;
-      const cycleWords = () => {
+      const nextWord = () => {
         if (i < words.length) {
-          gsap.to(changingWord, { text: words[i], duration: 0.4 });
+          adjustHighlight(words[i]);
           i++;
-          setTimeout(cycleWords, 700); // slightly slower
+          setTimeout(nextWord, 800); // small pause between words
+        } else {
+          // remove highlight when done cycling
+          gsap.to(highlight, { width: 0, duration: 0.4, ease: "power2.inOut", delay: 0.3 });
         }
       };
-      cycleWords();
+      nextWord();
     })
 
-    // Wait for word changes to complete, then remove highlight
-    .addPause("+=3.5") // adjust this for how long the word loop takes
-    .to(highlight, { width: 0, duration: 0.4, ease: "power2.in" })
-
-    // Move mouse to CTA and click
-    .to(mouse, { x: 800, y: 350, duration: 1 })
+    // Step 3 — move to CTA and click animation
+    .to(mouse, { x: 800, y: 350, duration: 1, delay: 2 }) // delayed so highlight can finish
     .to(button, { scale: 1.2, backgroundColor: "#ff4081", duration: 0.2 })
     .to(button, { scale: 1, backgroundColor: "#000", duration: 0.3 })
     .to(mouse, { opacity: 0, duration: 0.5 });
