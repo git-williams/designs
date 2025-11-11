@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (i < words.length) {
           adjustHighlight(words[i]);
           i++;
-          setTimeout(nextWord, 800); // small pause between words
+          setTimeout(nextWord, 1200); // small pause between words
         } else {
           // remove highlight when done cycling
           gsap.to(highlight, { width: 0, duration: 0.4, ease: "power2.inOut", delay: 0.3 });
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     // Step 3 — move to CTA and click animation
-    .to(mouse, { x: 800, y: 350, duration: 1, delay: 2 }) // delayed so highlight can finish
+    .to(mouse, { x: 800, y: 350, duration: 1, delay: 4 }) // delayed so highlight can finish
     .to(button, { scale: 1.2, backgroundColor: "#ff4081", duration: 0.2 })
     .to(button, { scale: 1, backgroundColor: "#000", duration: 0.3 })
     .to(mouse, { opacity: 0, duration: 0.5 });
