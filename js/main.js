@@ -51,49 +51,71 @@ document.addEventListener("DOMContentLoaded", () => {
   const highlight = document.querySelector(".highlight");
   const mouse = document.querySelector(".mouse-cursor");
   const button = document.querySelector(".cta-btn");
-  const wordContainer = document.querySelector(".word-container");
+
+  // Remove highlight transition between word changes — only animate in/out
+  highlight.style.transition = "none";
+
+  // Typing function
+  function typeText(element, text, speed = 0.06) {
+    return gsap.to(element, {
+      duration: text.length * speed,
+      text: text,
+      ease: "none"
+    });
+  }
 
   const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
 
-  // Step 1 — type "Designs that impress."
+  // ===== Step 1 — Fade hero, show mouse, TYPE OUT first word =====
   tl.from(".hero-text", { x: -100, opacity: 0, duration: 1 })
     .from(".hero-cta", { x: 100, opacity: 0, duration: 1 }, "-=0.5")
     .to(mouse, { opacity: 1, duration: 0.5 }, "-=0.5")
-    .to(changingWord, {
-      text: "impress.",
-      duration: 2,
-      ease: "none"
-    })
-    // Move mouse to word
-    .to(mouse, { x: 250, y: 300, duration: 1 })
-    // Highlight slides in
-    .to(highlight, { width: "100%", duration: 0.4, ease: "power2.out" }, "-=0.2")
 
-    // Step 2 — cycle through words abruptly, updating highlight width instantly
+    // Reset text, then type it
     .add(() => {
-      const adjustHighlight = (word) => {
+      changingWord.textContent = "";
+    })
+    .add(typeText(changingWord, "impress.", 0.065))
+
+    // Move mouse toward the word
+    .to(mouse, { x: 250, y: 300, duration: 1 })
+
+    // Highlight slides in smoothly (only this first time)
+    .to(
+      highlight,
+      { width: "100%", duration: 0.4, ease: "power2.out" },
+      "-=0.2"
+    )
+
+    // ===== Step 2 — Cycle through words instantly (no delay, no smooth resize) =====
+    .add(() => {
+      const adjustInstant = (word) => {
         changingWord.textContent = word;
-        // measure word width live
         const width = changingWord.offsetWidth;
-        gsap.set(highlight, { width });
+        highlight.style.transition = "none"; // no animation between words
+        highlight.style.width = width + "px";
       };
 
       let i = 1;
+
       const nextWord = () => {
         if (i < words.length) {
-          adjustHighlight(words[i]);
+          adjustInstant(words[i]);
           i++;
-          setTimeout(nextWord, 1200); // small pause between words
+          setTimeout(nextWord, 300); // faster switching
         } else {
-          // remove highlight when done cycling
-          gsap.to(highlight, { width: 0, duration: 0.4, ease: "power2.inOut", delay: 0.3 });
+          // Final removal of highlight — animated
+          highlight.style.transition = "width 0.3s ease";
+          gsap.to(highlight, { width: 0, duration: 0.4 });
         }
       };
-      nextWord();
+
+      // Give highlight time to finish full intro animation BEFORE cycling words
+      setTimeout(() => nextWord(), 500);
     })
 
-    // Step 3 — move to CTA and click animation
-    .to(mouse, { x: 800, y: 350, duration: 1, delay: 4 }) // delayed so highlight can finish
+    // ===== Step 3 — Move mouse to CTA, click animation =====
+    .to(mouse, { x: 800, y: 350, duration: 1, delay: 4 }) // match highlight cycle duration
     .to(button, { scale: 1.2, backgroundColor: "#ff4081", duration: 0.2 })
     .to(button, { scale: 1, backgroundColor: "#000", duration: 0.3 })
     .to(mouse, { opacity: 0, duration: 0.5 });
