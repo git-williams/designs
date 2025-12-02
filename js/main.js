@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .add(() => {
       changingWord.textContent = "";
     })
-    .add(typeText(changingWord, "impress.", 0.065))
+    .add(typeText(changingWord, "Designs that impress.", 0.065))
 
     // Move mouse toward the word
     .to(mouse, { x: 250, y: 300, duration: 1 })
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (i < words.length) {
           adjustInstant(words[i]);
           i++;
-          setTimeout(nextWord, 300); // faster switching
+          setTimeout(nextWord, 500); // faster switching
         } else {
           // Final removal of highlight — animated
           highlight.style.transition = "width 0.3s ease";
