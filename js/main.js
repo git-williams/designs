@@ -158,3 +158,179 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // show mouse while moving
     // Motion path: small downward arc landing on point A
+    gsap.to(mouse, {
+      duration: 0.95,
+      opacity: 1,
+      ease: "power2.out"
+    });
+
+    // curved approach using MotionPathPlugin
+    gsap.to(mouse, {
+      duration: 0.95,
+      ease: "power2.inOut",
+      motionPath: {
+        path: [
+          { x: coords.ax - 260, y: coords.ay - 120 }, // start curve control
+          { x: coords.ax - 120, y: coords.ay - 30 }, // mid
+          { x: ax, y: ay } // land at A
+        ],
+        curviness: 1.6,
+        autoRotate: false
+      }
+    });
+  });
+
+  // Pause at A for 0.2s
+  const pauseA = 0.2;
+  tl.to({}, { duration: pauseA });
+
+  // ---- STEP 3: From A -> B: Straight line; highlight expands simultaneously ----
+  // We'll compute the full width needed to cover the (current) word and animate highlight in same time as mouse moves.
+  tl.add(() => {
+    const coords = getCoords();
+    const { ax, ay, bx, by, wordRect } = coords;
+
+    // Start highlight at 0 width (left aligned)
+    highlight.style.width = "0px";
+    highlight.style.transition = "none";
+
+    // Expose target width — the highlight should grow to the width of the changingWord
+    const targetWidth = wordRect.width + "px";
+
+    const tAB = 0.6; // seconds to move from A to B (straight)
+    // Move mouse in a straight line to B
+    gsap.to(mouse, {
+      duration: tAB,
+      x: bx,
+      y: by,
+      ease: "power2.inOut"
+    });
+
+    // Simultaneously animate highlight width so it looks like the mouse drags it
+    gsap.to(highlight, { duration: tAB, width: targetWidth, ease: "power2.inOut" });
+  });
+
+  // Pause at B for 0.2s
+  const pauseB = 0.2;
+  tl.to({}, { duration: pauseB });
+
+  // ---- STEP 4: Word cycling while mouse swoops toward C ----
+  // We'll drive word changes with a timeline-driven driver tween so it syncs with the mouse swoop.
+  // Config:
+  const cycleInterval = 300; // ms per word change
+  const cycleCount = words.length - 1; // number of changes (we already showed index 0)
+  const totalCycleTime = (cycleCount * cycleInterval) / 1000; // convert to seconds
+
+  tl.add(() => {
+    // recompute coords in case responsive layout changes
+    const coords = getCoords();
+    const { bx, by, cx, cy } = coords;
+
+    // Ensure highlight snaps instantly while cycling
+    highlight.style.transition = "none";
+
+    // driver controls progress from 0 -> 1 across totalCycleTime
+    const driverCycle = { t: 0 };
+    let lastIndex = 0; // current index in words array (0 is initial)
+
+    // Mouse swoop path: a few bezier control points to create smooth loops, ending at Point C
+    // We'll make the path start from current mouse position (approximately B), loop, then head to C.
+    const startX = bx;
+    const startY = by;
+
+    // Build an array of path points to simulate swoops. These are relative to document coords.
+    const swoopPath = [
+      { x: startX, y: startY },
+      { x: startX - 80, y: startY - 90 }, // up-left arch
+      { x: startX + 60, y: startY - 130 }, // up-right swoop
+      { x: startX - 30, y: startY - 60 }, // small loop
+      { x: cx - 120, y: cy - 30 }, // approach C
+      { x: cx, y: cy } // land at C
+    ];
+
+    // Start the mouse swoop that lasts exactly totalCycleTime (so words change while it moves)
+    gsap.to(mouse, {
+      duration: totalCycleTime,
+      ease: "power1.inOut",
+      motionPath: {
+        path: swoopPath,
+        curviness: 1.8,
+        autoRotate: false
+      }
+    });
+
+    // driver tween controls the words — same duration as mouse swoop
+    gsap.to(driverCycle, {
+      t: 1,
+      duration: totalCycleTime,
+      ease: "none",
+      onUpdate: () => {
+        // compute how many ms have "elapsed"
+        const elapsedMs = driverCycle.t * totalCycleTime * 1000;
+        // index increments each cycleInterval
+        let index = 1 + Math.floor(elapsedMs / cycleInterval);
+        if (index > words.length - 1) index = words.length - 1;
+        if (index !== lastIndex) {
+          lastIndex = index;
+          changingWord.textContent = words[index];
+          // snap highlight width instantly to match the new word
+          const newW = changingWord.offsetWidth;
+          highlight.style.width = newW + "px";
+        }
+      },
+      onComplete: () => {
+        // at the very end of cycling, the final word is already set
+        // animate highlight exit smoothly shortly after (we'll time the button pop with a small offset)
+        highlight.style.transition = "width 0.3s ease";
+        gsap.to(highlight, { width: 0, duration: 0.4, ease: "power2.inOut" });
+      }
+    });
+
+    // Important: schedule the button "pop" to happen 0.1s AFTER the final word appears.
+    // Since driverCycle duration = totalCycleTime, we set a delayed call:
+    const popDelay = totalCycleTime + 0.1; // seconds from now
+    gsap.delayedCall(popDelay, () => {
+      // The mouse should be arriving at Point C around this same time.
+      // Button pop: quick scale change + color flash (user requested no mouse size change)
+      gsap.to(button, { scale: 1.08, duration: 0.09, ease: "power2.out" });
+      gsap.to(button, { scale: 1, duration: 0.12, delay: 0.09, ease: "power2.in" });
+      // background flash (temporary)
+      gsap.to(button, { backgroundColor: "#ff4081", duration: 0.07 });
+      gsap.to(button, { backgroundColor: "#000", duration: 0.14, delay: 0.07 });
+    });
+
+    // After the swoop finishes, mouse should pause at C for 0.8s before exiting.
+    // We'll schedule a small timeline-based delay (using a delayedCall).
+    gsap.delayedCall(totalCycleTime + 0.01, () => {
+      // small pause achieved in the main TL by adding an empty tween of 0.8s
+      // but because we're inside an add callback, we'll push a blank tween onto the main timeline:
+      tl.to({}, { duration: 0.8 });
+    });
+  });
+
+  // ---- STEP 5: Mouse exits after pause at C (arc off-screen) ----
+  // After the previous paused 0.8s (scheduled inside onComplete), we now fly the mouse off-screen.
+  // We'll append these tweens to tl so they run after the pause inserted above.
+  tl.add(() => {
+    const coords = getCoords();
+    const { cx, cy } = coords;
+
+    // create an upward-right arc offscreen
+    const offPath = [
+      { x: cx, y: cy },
+      { x: cx + 120, y: cy - 140 },
+      { x: cx + 420, y: cy - 360 } // offscreen
+    ];
+
+    gsap.to(mouse, {
+      duration: 1.05,
+      ease: "power2.in",
+      motionPath: { path: offPath, curviness: 1.6, autoRotate: false }
+    });
+
+    // fade out as it leaves
+    gsap.to(mouse, { opacity: 0, duration: 0.9, delay: 0.15 });
+  });
+
+  // End of timeline - nothing else appended.
+});
