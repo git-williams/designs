@@ -66,26 +66,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
 
-  // ===== Step 1 — Fade hero, show mouse, TYPE OUT first word =====
-  tl.from(".hero-text", { x: -100, opacity: 0, duration: 1 })
-    .from(".hero-cta", { x: 100, opacity: 0, duration: 1 }, "-=0.5")
-    .to(mouse, { opacity: 1, duration: 0.5 }, "-=0.5")
+// ===== Step 1 — TYPE OUT "Designs that impress." =====
+tl.from(".hero-text", { x: -100, opacity: 0, duration: 1 })
+  .from(".hero-cta", { x: 100, opacity: 0, duration: 1 }, "-=0.5")
+  .to(mouse, { opacity: 1, duration: 0.5 }, "-=0.5")
 
-    // Reset text, then type it
-    .add(() => {
-      changingWord.textContent = "";
-    })
-    .add(typeText(changingWord, "Designs that impress.", 0.065))
+  // Reset full hero text for typing
+  .add(() => {
+    document.querySelector(".hero-text").innerHTML =
+      'Designs that <span class="changing-word"></span><span class="highlight"></span>';
+  })
 
-    // Move mouse toward the word
-    .to(mouse, { x: 250, y: 300, duration: 1 })
+  // Type full sentence (the first run uses the changing-word span)
+  .to(".changing-word", {
+    text: "impress.",
+    duration: 1.7,
+    ease: "none"
+  })
 
-    // Highlight slides in smoothly (only this first time)
-    .to(
-      highlight,
-      { width: "100%", duration: 0.4, ease: "power2.out" },
-      "-=0.2"
-    )
 
     // ===== Step 2 — Cycle through words instantly (no delay, no smooth resize) =====
     .add(() => {
