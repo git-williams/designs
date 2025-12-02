@@ -1,3 +1,4 @@
+// Requires GSAP core + TextPlugin + MotionPathPlugin to be loaded on the page
 document.addEventListener("DOMContentLoaded", () => {
   // ===== Scroll-triggered section animation =====
   const sections = document.querySelectorAll(".wrapper2");
@@ -44,7 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
   toggleHeader();
 
   // ===== HERO ANIMATION =====
-  gsap.registerPlugin(TextPlugin);
+  // Register the GSAP plugins we use
+  gsap.registerPlugin(TextPlugin, MotionPathPlugin);
 
   const words = ["impress.", "convert.", "inspire.", "grow.", "lead."];
   const mouse = document.querySelector(".mouse-cursor");
@@ -53,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Grab the H1 inside .hero-text and replace its content immediately
   const heroH1 = document.querySelector(".hero-text h1");
 
-  // Build controlled structure for typing + highlight
+  // Build controlled structure for typing + highlight (keeps existing CSS intact)
   heroH1.innerHTML =
     '<span class="typed-prefix"></span>' +
     '<span class="word-container" style="position:relative; display:inline-block;">' +
@@ -72,10 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
   highlight.style.bottom = "0";
   highlight.style.height = "1.2em";
   highlight.style.zIndex = "-1";
-  // width stays 0 until we animate it
   highlight.style.width = "0px";
-  // keep the same background as your CSS (in case CSS didn't load yet)
-  // (If your CSS already sets it, this line is harmless.)
   highlight.style.background = "rgba(100, 150, 255, 0.5)";
 
   // Typing config
@@ -83,11 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const prefix = "Designs that ";
   const perChar = 0.05; // seconds per character — tweak if you want faster/slower
 
-  // Create main timeline. Keep default easing for other tweens.
+  // Main timeline
   const tl = gsap.timeline();
 
   // ---- STEP 1: Typing (first thing to run) ----
-  // We create a driver and animate its value from 0 to fullText.length.
   const driver = { i: 0 };
   const totalChars = fullText.length;
   tl.to(driver, {
@@ -106,53 +104,57 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ---- After typing: animate highlight entrance to cover first word ----
+  // Pause briefly after typing so the sentence sits before the mouse enters and highlight starts
+  const postTypingHold = 0.5; // seconds
+  tl.to({}, { duration: postTypingHold }); // simple delay
+
+  // Compute key coordinates for A (left of word), B (right of word), C (button center).
+  // We will compute them when needed (after layout), but decide to measure now:
+  const getCoords = () => {
+    const wordRect = changingWord.getBoundingClientRect();
+    const btnRect = button.getBoundingClientRect();
+    const heroRect = hero.getBoundingClientRect();
+
+    // Use viewport coords; GSAP x/y will place the mouse transform relative to initial transform.
+    // We'll position mouse center to these coordinates.
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    // Point A: left edge of changingWord (vertically center on the word's midline)
+    const ax = wordRect.left + scrollX; // left side
+    const ay = wordRect.top + scrollY + wordRect.height / 2;
+
+    // Point B: right edge of changingWord
+    const bx = wordRect.left + scrollX + wordRect.width;
+    const by = ay;
+
+    // Point C: center of CTA button
+    const cx = btnRect.left + scrollX + btnRect.width / 2;
+    const cy = btnRect.top + scrollY + btnRect.height / 2;
+
+    return { ax, ay, bx, by, cx, cy, wordRect };
+  };
+
+  // Ensure mouse starts off-screen left and invisible
+  // We'll set its initial transform position based on viewport (so GSAP tweens move in absolute pixels)
+  const initMousePos = () => {
+    const coords = getCoords();
+    // start off-screen left, slightly above the word center for a nice arc
+    const startX = coords.ax - 300; // well off to the left
+    const startY = coords.ay - 120;
+    gsap.set(mouse, { x: startX, y: startY, opacity: 0 });
+  };
+
+  // init positions now (typing may take a bit, but this gives starting spot)
+  initMousePos();
+
+  // ---- STEP 2: Mouse arc into Point A ----
+  // We'll create a short curved path into ax,ay.
   tl.add(() => {
-    // compute needed width for the first typed last-word
-    const w = changingWord.offsetWidth;
-    // animate highlight width smoothly
-    gsap.to(highlight, { width: w, duration: 0.4, ease: "power2.out" });
+    // in case layout changed during typing, recompute coords
+    const coords = getCoords();
+    initMousePos(); // ensure starting position consistent
+    const { ax, ay } = coords;
 
-    // after entrance completes, remove CSS transition so further width changes snap instantly
-    setTimeout(() => {
-      highlight.style.transition = "none";
-    }, 420);
-  }, "+=0.06"); // tiny gap to feel natural after typing ends
-
-  // ---- Bring mouse in (after highlight begins) ----
-  // First make mouse visible (opacity) then move it.
-  tl.to(mouse, { opacity: 1, duration: 0.25 }, "-=0.15");
-  tl.to(mouse, { x: 250, y: 300, duration: 0.9, ease: "power2.inOut" }, "-=0.1");
-
-  // ---- STEP 2: Word cycling (instant highlight jumps) ----
-  // We'll start cycling after a short pause to let the highlight finish its entrance.
-  tl.add(() => {
-    let i = 1; // start from second word (first is already 'impress.')
-    const cycleInterval = 300; // ms between word switches (fast)
-
-    function cycleNext() {
-      if (i < words.length) {
-        changingWord.textContent = words[i];
-        // instant width jump (no CSS transition)
-        const newW = changingWord.offsetWidth;
-        highlight.style.width = newW + "px";
-        i++;
-        setTimeout(cycleNext, cycleInterval);
-      } else {
-        // final: animate highlight exit smoothly
-        highlight.style.transition = "width 0.3s ease";
-        gsap.to(highlight, { width: 0, duration: 0.4, ease: "power2.inOut" });
-      }
-    }
-
-    // ensure highlight had time to animate-in before starting
-    setTimeout(cycleNext, 500);
-  }, "+=0.05");
-
-  // ---- STEP 3: Mouse moves to CTA and button click animation ----
-  // Keep the same final sequence as original (delayed move so cycling can complete)
-  tl.to(mouse, { x: 800, y: 350, duration: 1, delay: 4 });
-  tl.to(button, { scale: 1.2, backgroundColor: "#ff4081", duration: 0.2 });
-  tl.to(button, { scale: 1, backgroundColor: "#000", duration: 0.3 });
-  tl.to(mouse, { opacity: 0, duration: 0.5 });
-});
+    // show mouse while moving
+    // Motion path: small downward arc landing on point A
