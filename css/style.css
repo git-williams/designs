@@ -44,10 +44,11 @@ footer {
 
 .mouse-anchor {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: 5px;
+  height: 5px;
   pointer-events: none;
-  opacity: 0; /* set to 1 and give background: red to debug */
+  opacity: 1; /* set to 1 and give background: red to debug */
+  background-color: red;
 }
 
 
