@@ -40,6 +40,20 @@ footer {
 }
 
 /* =============== HERO =============== */
+
+
+.mouse-anchor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  opacity: 0; /* set to 1 and give background: red to debug */
+}
+
+
+
+
+
 .hero {
   height: 100dvh;
   display: flex;
