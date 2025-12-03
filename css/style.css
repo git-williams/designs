@@ -156,6 +156,12 @@ h1 {
   z-index: 5;
 }
 
+.word-container1 {
+  position: relative;
+  display: inline-block;
+  z-index: 5;
+}
+
 
 
 /* =============== WRAPPER SECTIONS =============== */
