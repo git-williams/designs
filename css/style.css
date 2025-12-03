@@ -52,10 +52,27 @@ footer {
 }
 
 
-#mouse-point-a { left: 400px; top: 260px; }
-#mouse-point-b { left: 560px; top: 260px; }
-#mouse-point-c { left: 900px; top: 310px; }
-#mouse-point-cta { left: 930px; top: 490px; } /* center of button */
+#mouse-point-a {
+  left: 0;
+  top: 0.7em;
+}
+
+#mouse-point-b {
+  right: 0;
+  top: 0.7em;
+}
+
+#mouse-point-c {
+  right: 0;
+  top: 0.7em;
+}
+
+#mouse-point-cta {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 
 
 
