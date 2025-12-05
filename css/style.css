@@ -50,10 +50,10 @@ footer {
   height: 8px;
   pointer-events: none;
   opacity: 1; /* change to 0 to hide anchors */
-  background-color: rgba(255, 70, 70, 0.95); /* visible red for debugging */
+  background-color: rgba(255, 70, 70); /* visible red for debugging */
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  z-index: 50;
+  z-index: 5000;
 }
 
 /* IMPORTANT: anchors are positioned relative to their parent containers.
