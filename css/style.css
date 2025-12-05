@@ -56,6 +56,20 @@ footer {
   z-index: 5000;
 }
 
+/* avoid clipping */
+.hero {
+  overflow: visible;
+}
+
+.hero-inner {
+  overflow: visible;
+}
+
+.hero-text {
+  overflow: visible;
+}
+
+
 /* IMPORTANT: anchors are positioned relative to their parent containers.
    We place A and B relative to the word-container1 (so they follow the word),
    and C/CTA are relative to .hero-cta (so they follow the button). */
