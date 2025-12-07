@@ -56,15 +56,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const anchorC  = document.getElementById("mouse-point-c");
   const anchorD  = document.getElementById("mouse-point-d");
 
-  // Grab the H1 inside .hero-text and prepare structure
-  const heroH1 = document.querySelector(".hero-text h1");
-  
-  heroH1.innerHTML =
-    '<span class="typed-prefix"></span>' +
-    '<span class="word-container" style="position:relative; display:inline-block;">' +
-      '<span class="changing-word"></span>' +
-      '<span class="highlight"></span>' +
-    "</span>";
+  // Grab H1 + word-container
+const heroH1 = document.querySelector(".hero-text h1");
+const wordContainer = heroH1.querySelector(".word-container");
+
+// Insert typed prefix BEFORE the existing word container
+heroH1.insertAdjacentHTML("afterbegin", '<span class="typed-prefix"></span>');
+
+// Replace ONLY inner content of the word-container (safe)
+wordContainer.innerHTML = `
+  <span class="changing-word"></span>
+  <span class="highlight"></span>
+`;
+
+// Now grab your new sub-elements
+const typedPrefix   = heroH1.querySelector(".typed-prefix");
+const changingWord  = wordContainer.querySelector(".changing-word");
+const highlight     = wordContainer.querySelector(".highlight");
+
+// Highlight styling
+highlight.style.position = "absolute";
+highlight.style.left     = "0";
+highlight.style.bottom   = "0";
+highlight.style.height   = "1.2em";
+highlight.style.zIndex   = "-1";
+highlight.style.width    = "0px";
+highlight.style.background = "rgba(100,150,255,0.5)";
+
 
   const typedPrefix = heroH1.querySelector(".typed-prefix");
   const changingWord = heroH1.querySelector(".changing-word");
