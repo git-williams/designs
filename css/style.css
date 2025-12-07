@@ -17,6 +17,19 @@ footer {
   width: 100%;
 }
 
+
+.anchor {
+  width: 10px !important;
+  height: 10px !important;
+  background: red !important;
+  border-radius: 50% !important;
+  position: absolute !important;
+  z-index: 99999 !important;
+}
+
+
+
+
 /* =============== HEADER =============== */
 .main-header {
   position: fixed;
