@@ -18,7 +18,7 @@ footer {
 }
 
 
-.anchor {
+.mouse-anchor {
   width: 10px !important;
   height: 10px !important;
   background: red !important;
@@ -56,16 +56,6 @@ footer {
 
 
 ./* =============== Anchors (debug-visible) =============== */
-/* Set opacity:0 when you're done testing */
-.mouse-anchor {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  pointer-events: none;
-  opacity: 1; /* change to 0 to hide anchors */
-  background-color: rgba(255, 70, 70); /* visible red for debugging */
-  z-index: 999999999;
-}
 
 /* avoid clipping */
 .hero {
@@ -97,33 +87,41 @@ footer {
   z-index: 5;
 }
 
-/* place A at the left edge of the word container, vertically centered */
+/* A & B: follow the width of the word */
 #mouse-point-a {
-  left: 4%;  /* small offset from left edge — tweak as needed */
-  top: 50%;
+  top: 0;
+  left: 0;
 }
 
-/* place B at the right edge of the word container, vertically centered */
 #mouse-point-b {
-  left: 96%; /* right edge (use left % so it's relative to container width) */
-  top: 50%;
+  top: 0;
+  right: 0;
 }
 
-
-/* anchor near the button center (you can nudge left/top in % if button moves) */
-#mouse-point-cta {
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+/* Loop points relative to the word container */
+#mouse-point-l1 {
+  top: 40px;   /* adjust dramatic curve height */
+  left: 20%;
 }
 
-/* a support "approach" anchor (C) slightly above-left of the button,
-   where the mouse will start its final approach/swoop */
+#mouse-point-l2 {
+  top: -30px;  /* opposite direction for swoop */
+  left: 60%;
+}
+
+/* C: CTA center */
 #mouse-point-c {
-  left: 46%;
-  top: 34%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* D: offscreen exit */
+#mouse-point-d {
+  top: 50%;
+  left: 120%; /* flies off to the right */
+}
+
 
 
 
