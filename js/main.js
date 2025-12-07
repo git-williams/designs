@@ -55,8 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Anchors
   const anchorA = document.getElementById("mouse-point-a");
   const anchorB = document.getElementById("mouse-point-b");
-  const anchorC = document.getElementById("mouse-point-c");
-  const anchorCTA = document.getElementById("mouse-point-cta");
+  const anchorC = document.getElementById("mouse-point-c"); // this is the CTA anchor in your markup
+  // anchorD might not exist in DOM; we'll compute offscreen D dynamically
 
   // Grab the H1 inside .hero-text and prepare structure
   const heroH1 = document.querySelector(".hero-text h1");
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return { x: r.left + scrollX + r.width / 2, y: r.top + scrollY + r.height / 2, rect: r };
   };
 
-  // compute key coordinates: A,B,C, CTA centered in document coords
+  // compute key coordinates: A,B,C and CTA centered in document coords
   const getCoords = () => {
     const wordContainerRect = heroH1.querySelector(".word-container").getBoundingClientRect();
     const wordRect = changingWord.getBoundingClientRect();
@@ -104,11 +104,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const scrollY = window.scrollY || window.pageYOffset;
 
     // anchor elements (they are positioned relative to their parents)
-    // we'll translate their computed bounding client rect into page coords:
     const aRect = anchorA.getBoundingClientRect();
     const bRect = anchorB.getBoundingClientRect();
     const cRect = anchorC.getBoundingClientRect();
-    const ctaRect = anchorCTA.getBoundingClientRect();
 
     const ax = aRect.left + scrollX + aRect.width / 2;
     const ay = aRect.top + scrollY + aRect.height / 2;
@@ -119,9 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const cx = cRect.left + scrollX + cRect.width / 2;
     const cy = cRect.top + scrollY + cRect.height / 2;
 
-    const ctax = ctaRect.left + scrollX + ctaRect.width / 2;
-    const ctay = ctaRect.top + scrollY + ctaRect.height / 2;
-
     return {
       ax,
       ay,
@@ -129,9 +124,8 @@ document.addEventListener("DOMContentLoaded", () => {
       by,
       cx,
       cy,
-      ctax,
-      ctay,
-      wordRect
+      wordRect,
+      btnRect
     };
   };
 
@@ -139,16 +133,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const setMouseStart = () => {
     const coords = getCoords();
     // if anchors not yet placed in DOM or zero-size, fallback to some reasonable values
-    const startX = (coords.ax || window.innerWidth * 0.2) - 300;
+    const startX = (coords.ax || window.innerWidth * 0.2) - 360; // well offscreen left
     const startY = (coords.ay || window.innerHeight / 2) - 120;
-    gsap.set(mouse, { x: startX, y: startY, opacity: 0 });
+    // IMPORTANT: keep opacity = 1 (no fades). Place offscreen so it isn't visible initially.
+    gsap.set(mouse, { x: startX, y: startY, opacity: 1 });
   };
 
   // run initial set
   setMouseStart();
 
+  // prepare H1 entrance: quick slide+fade-in from left (finishes quickly before typing completes)
+  // set initial transform for heroH1 so it slides in
+  gsap.set(heroH1, { x: -28, opacity: 0 });
+
   // create master timeline
   const tl = gsap.timeline();
+
+  // ---- H1 entrance (quick slide+fade) ----
+  // We run this at the very start of the master timeline; it finishes quickly (0.6s)
+  tl.to(heroH1, {
+    duration: 0.6, // quick entrance (option 1: A - finish before typing completes)
+    x: 0,
+    opacity: 1,
+    ease: "power2.out"
+  }, 0); // start at time 0
 
   // ---- STEP 1: Typing ----
   const driver = { i: 0 };
@@ -167,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
         changingWord.textContent = fullText.slice(prefix.length, idx);
       }
     }
-  });
+  }, 0); // start typing at time 0 as well (runs in parallel with H1 entrance)
 
   // After typing: WAIT 1.5s but mouse should be entering during that 1.5s and landing at A
   const enterDuration = 1.5; // seconds
@@ -178,11 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const coords = getCoords();
     const { ax, ay } = coords;
 
-    // set mouse visible and animate on a half-arch into A (duration = enterDuration)
-    gsap.to(mouse, { duration: 0.15, opacity: 1, ease: "power1.out" });
-
     // build approach path: start a bit left & up from A then sweep down onto A
-    const startX = (ax || window.innerWidth * 0.3) - 260;
+    const startX = (ax || window.innerWidth * 0.3) - 360; // firmly offscreen left
     const startY = (ay || window.innerHeight / 2) - 120;
 
     // use MotionPathPlugin to curve into A
@@ -192,11 +197,12 @@ document.addEventListener("DOMContentLoaded", () => {
       motionPath: {
         path: [
           { x: startX, y: startY },
-          { x: ax - 140, y: ay - 60 },
-          { x: ax - 60, y: ay - 20 },
+          { x: ax - 240, y: ay - 120 },
+          { x: ax - 120, y: ay - 40 },
+          { x: ax - 20, y: ay - 10 },
           { x: ax, y: ay }
         ],
-        curviness: 1.6,
+        curviness: 2.2,
         autoRotate: false
       }
     });
@@ -236,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // pause at B for 0.4s
   tl.to({}, { duration: 0.4 });
 
-  // ---- STEP 4: Word cycling while mouse swoops to CTA (words not too fast) ----
+  // ---- STEP 4: Word cycling while mouse swoops to CTA (B -> C dramatic looping) ----
   // Word durations (how long each word sits). We'll use 0.9s per word so each reads comfortably.
   const wordDuration = 0.9; // seconds
   const wordsToCycle = words.slice(1); // exclude initial "impress."
@@ -245,55 +251,52 @@ document.addEventListener("DOMContentLoaded", () => {
   tl.add(() => {
     // recompute coords
     const coords = getCoords();
-    const { bx, by, ctax, ctay } = coords;
+    const { bx, by, cx, cy } = coords;
 
     // snap highlight to immediate changes
     highlight.style.transition = "none";
 
-    // prepare a swoop path starting at B and ending at CTA center
+    // prepare a dramatic swoop/loop path starting at B and ending at C
     const startX = bx;
     const startY = by;
 
+    // More dramatic/longer path points so swoop and looping are visible.
+    // Duration here = totalCycleTime so mouse travels while words cycle, landing at C as final word "lead." appears.
     const swoopPath = [
       { x: startX, y: startY },
-      { x: startX - 80, y: startY - 90 },
-      { x: startX + 60, y: startY - 120 },
-      { x: startX - 30, y: startY - 60 },
-      { x: ctax - 120, y: ctay - 30 },
-      { x: ctax, y: ctay }
+      { x: startX - 120, y: startY - 140 }, // big upward left loop
+      { x: startX + 80, y: startY - 220 },  // top of loop
+      { x: startX + 220, y: startY - 120 }, // come down on the right
+      { x: cx - 160, y: cy - 80 },
+      { x: cx - 40, y: cy - 20 },
+      { x: cx, y: cy }
     ];
 
-    // move the mouse along that path during totalCycleTime
     gsap.to(mouse, {
       duration: totalCycleTime,
       ease: "power1.inOut",
       motionPath: {
         path: swoopPath,
-        curviness: 1.8,
+        curviness: 2.6,
         autoRotate: false
       }
     });
 
     // Now drive each word display in sequence. We'll use timeline-style manual scheduling:
-    // For each word in wordsToCycle, set it then wait for wordDuration.
-    // For the final word, we also trigger the button pop 0.1s after it appears.
-
     wordsToCycle.forEach((w, idx) => {
       const isLast = idx === wordsToCycle.length - 1;
 
-      // set this word immediately in an atomic call
-      // (we use gsap.delayedCall with 0 to ensure it's on the GSAP tick queue)
       gsap.delayedCall(idx * wordDuration, () => {
         changingWord.textContent = w;
-        // snap highlight width to new word instantly
+        // snap highlight width to new word instantly (recompute width)
         const newW = changingWord.offsetWidth;
         highlight.style.width = newW + "px";
       });
 
       if (isLast) {
-        // schedule the "button pop" 0.1s after the final word appears
+        // schedule the "button pop" 0.1s after the final word (landing at C)
         gsap.delayedCall(idx * wordDuration + 0.1, () => {
-          // quick click/pop animation (no mouse size change)
+          // quick click/pop animation
           gsap.to(button, { scale: 1.08, duration: 0.09, ease: "power2.out" });
           gsap.to(button, { scale: 1, duration: 0.12, delay: 0.09, ease: "power2.in" });
           gsap.to(button, { backgroundColor: "#ff4081", duration: 0.07 });
@@ -308,30 +311,37 @@ document.addEventListener("DOMContentLoaded", () => {
       gsap.to(highlight, { width: 0, duration: 0.4, ease: "power2.inOut" });
     });
 
-    // After mouse reaches CTA, we want a 0.8s pause. We'll schedule adding that pause to the main timeline.
+    // After mouse reaches CTA (C), add a short pause (we'll queue it on the main timeline)
+    // We'll schedule a tiny delayedCall to insert that pause into the main timeline:
     gsap.delayedCall(totalCycleTime + 0.02, () => {
-      tl.to({}, { duration: 0.8 });
+      tl.to({}, { duration: 0.8 }); // pause at C before exiting to D
     });
   });
 
-  // ---- STEP 5: Mouse exits after pause at CTA ----
+  // ---- STEP 5: Mouse exits after pause at CTA (C -> D offscreen right) ----
   tl.add(() => {
     const coords = getCoords();
-    const { ctax, ctay } = coords;
+    const { cx, cy } = coords;
+
+    // compute D offscreen-right coords
+    const offscreenRightX = window.scrollX + window.innerWidth + 420;
+    const offscreenRightY = cy - 360;
 
     const offPath = [
-      { x: ctax, y: ctay },
-      { x: ctax + 120, y: ctay - 140 },
-      { x: ctax + 420, y: ctay - 360 } // offscreen
+      { x: cx, y: cy },
+      { x: cx + 120, y: cy - 140 },
+      { x: cx + 320, y: cy - 260 },
+      { x: offscreenRightX, y: offscreenRightY } // offscreen
     ];
 
     gsap.to(mouse, {
       duration: 1.05,
       ease: "power2.in",
-      motionPath: { path: offPath, curviness: 1.6, autoRotate: false }
+      motionPath: { path: offPath, curviness: 1.8, autoRotate: false }
     });
 
-    gsap.to(mouse, { opacity: 0, duration: 0.9, delay: 0.15 });
+    // keep opacity 1 — no fade out
+    // Mouse will simply be outside viewport after the motion path ends.
   });
 
   // start the timeline (it's already built and will play automatically)
