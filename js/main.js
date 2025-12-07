@@ -69,19 +69,7 @@ wordContainer.innerHTML = `
   <span class="highlight"></span>
 `;
 
-// Now grab your new sub-elements
-const typedPrefix   = heroH1.querySelector(".typed-prefix");
-const changingWord  = wordContainer.querySelector(".changing-word");
-const highlight     = wordContainer.querySelector(".highlight");
 
-// Highlight styling
-highlight.style.position = "absolute";
-highlight.style.left     = "0";
-highlight.style.bottom   = "0";
-highlight.style.height   = "1.2em";
-highlight.style.zIndex   = "-1";
-highlight.style.width    = "0px";
-highlight.style.background = "rgba(100,150,255,0.5)";
 
 
   const typedPrefix = heroH1.querySelector(".typed-prefix");
