@@ -27,6 +27,14 @@ footer {
   z-index: 99999 !important;
 }
 
+.mouse-cursor {
+  position: absolute !important;
+  transform: none !important;
+  left: 0;
+  top: 0;
+}
+
+
 
 
 
