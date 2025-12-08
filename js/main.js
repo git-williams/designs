@@ -57,20 +57,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const anchorD  = document.getElementById("mouse-point-d");
 
   // Grab H1 + word-container
-const heroH1 = document.querySelector(".hero-text h1");
-const wordContainer = heroH1.querySelector(".word-container");
+  const heroH1 = document.querySelector(".hero-text h1");
+  const wordContainer = heroH1.querySelector(".word-container");
 
-// Insert typed prefix BEFORE the existing word container
-heroH1.insertAdjacentHTML("afterbegin", '<span class="typed-prefix"></span>');
+  // Insert typed prefix BEFORE the existing word container
+  heroH1.insertAdjacentHTML("afterbegin", '<span class="typed-prefix"></span>');
 
-// Replace ONLY inner content of the word-container (safe)
-wordContainer.innerHTML = `
-  <span class="changing-word"></span>
-  <span class="highlight"></span>
-`;
-
-
-
+  // Replace ONLY inner content of the word-container (safe)
+  wordContainer.innerHTML = `
+    <span class="changing-word"></span>
+    <span class="highlight"></span>
+  `;
 
   const typedPrefix = heroH1.querySelector(".typed-prefix");
   const changingWord = heroH1.querySelector(".changing-word");
@@ -154,53 +151,70 @@ wordContainer.innerHTML = `
   }, 0);
 
 
+
   // ================================
-  // STEP 1: MOUSE ENTER → ANCHOR A
+  // STEP 1: START → A (LINEAR)
   // ================================
   tl.add(() => {
     const A = center(anchorA);
+    const startX = A.x - 380;
+    const startY = A.y - 180;
+
+    gsap.set(mouse, { x: startX, y: startY, opacity: 1 });
 
     gsap.to(mouse, {
       duration: 1.5,
       ease: "power2.inOut",
       motionPath: {
         path: [
-          { x: A.x - 380, y: A.y - 180 },
-          { x: A.x - 200, y: A.y - 90 },
-          { x: A.x - 50,  y: A.y - 20 },
-          { x: A.x,       y: A.y }
+          { x: startX, y: startY },
+          { x: A.x,    y: A.y }
         ],
-        curviness: 2
+        curviness: 0
       }
     });
   });
 
-  tl.to({}, { duration: 0.4 }); // small pause at A
+  tl.to({}, { duration: 0.4 }); // pause at A
+
 
 
   // ================================
-  // STEP 2: A → B (highlight sync)
+  // STEP 2: A → B (LINEAR)
   // ================================
   tl.add(() => {
-    const A = center(anchorA);
     const B = center(anchorB);
 
     const t = 0.5;
     const targetWidth = changingWord.offsetWidth + "px";
 
-    gsap.to(mouse, { duration: t, x: B.x, y: B.y, ease: "power2.inOut" });
+    gsap.to(mouse, {
+      duration: t,
+      ease: "power2.inOut",
+      motionPath: {
+        path: [
+          { x: mouse._gsap.x, y: mouse._gsap.y },
+          { x: B.x,           y: B.y }
+        ],
+        curviness: 0
+      }
+    });
 
-    gsap.to(highlight, { duration: t, width: targetWidth, ease: "power2.inOut" });
+    gsap.to(highlight, {
+      duration: t,
+      width: targetWidth,
+      ease: "power2.inOut"
+    });
   });
 
   tl.to({}, { duration: 0.4 }); // pause at B
 
 
+
   // ================================
-  // STEP 3: B → L1 → L2 → C (swooping loops)
+  // STEP 3: B → L1 → L2 → C (LINEAR)
   // ================================
   tl.add(() => {
-    const B  = center(anchorB);
     const L1 = center(anchorL1);
     const L2 = center(anchorL2);
     const C  = center(anchorC);
@@ -214,16 +228,16 @@ wordContainer.innerHTML = `
       ease: "power1.inOut",
       motionPath: {
         path: [
-          { x: B.x,  y: B.y  },
-          { x: L1.x, y: L1.y },
-          { x: L2.x, y: L2.y },
-          { x: C.x,  y: C.y  }
+          { x: mouse._gsap.x, y: mouse._gsap.y },
+          { x: L1.x,          y: L1.y },
+          { x: L2.x,          y: L2.y },
+          { x: C.x,           y: C.y }
         ],
-        curviness: 2.6
+        curviness: 0
       }
     });
 
-    // ---- EXISTING WORD CYCLING LOGIC (unchanged) ----
+    // ---- EXISTING WORD CYCLING (unchanged) ----
     wordsToCycle.forEach((w, idx) => {
       const isLast = idx === wordsToCycle.length - 1;
 
@@ -237,7 +251,7 @@ wordContainer.innerHTML = `
           gsap.to(button, { scale: 1.08, duration: 0.09 });
           gsap.to(button, { scale: 1.0, duration: 0.12, delay: 0.09 });
           gsap.to(button, { backgroundColor: "#ff4081", duration: 0.07 });
-          gsap.to(button, { backgroundColor: "#000", duration: 0.14, delay: 0.07 });
+          gsap.to(button, { backgroundColor: "#000",     duration: 0.14, delay: 0.07 });
         });
       }
     });
@@ -252,23 +266,24 @@ wordContainer.innerHTML = `
   });
 
 
+
   // ================================
-  // STEP 4: C → D (exit)
+  // STEP 4: C → D → exit right (LINEAR)
   // ================================
   tl.add(() => {
-    const C = center(anchorC);
     const D = center(anchorD);
+    const exitX = window.innerWidth + 300;
 
     gsap.to(mouse, {
       duration: 1.05,
-      ease: "power2.in",
+      ease: "power2.inOut",
       motionPath: {
         path: [
-          { x: C.x, y: C.y },
-          { x: (C.x + D.x) / 2, y: C.y - 140 },
-          { x: D.x, y: D.y }
+          { x: mouse._gsap.x, y: mouse._gsap.y },
+          { x: D.x,           y: D.y },
+          { x: exitX,         y: D.y }
         ],
-        curviness: 1.8
+        curviness: 0
       }
     });
   });
