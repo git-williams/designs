@@ -83,40 +83,52 @@ document.addEventListener("DOMContentLoaded", () => {
   highlight.style.background = "rgba(100,150,255,0.5)";
 
 
- // ================================
-// UTILITY: GET ABSOLUTE CENTER COORDS
-// ================================
-const center = el => {
-  const r = el.getBoundingClientRect();
-  return {
-    left: r.left + window.scrollX + r.width / 2,
-    top:  r.top  + window.scrollY + r.height / 2
+  // ================================
+  // UTILITY: GET ABSOLUTE CENTER COORDS
+  // ================================
+  const center = el => {
+    const r = el.getBoundingClientRect();
+    return {
+      left: r.left + window.scrollX + r.width / 2,
+      top:  r.top  + window.scrollY + r.height / 2
+    };
   };
-};
+
+  // Ensure the mouse element is positioned in document coordinate space
+  // (so left/top assignments line up with center(...) values).
+  // This is done in JS so you don't have to edit CSS — but you can also add similar CSS if you prefer.
+  if (mouse) {
+    mouse.style.position = mouse.style.position || "absolute";
+    mouse.style.transform = "none";
+    mouse.style.willChange = "left, top";
+    // ensure it has an explicit left/top so GSAP animates them cleanly
+    mouse.style.left = mouse.style.left || "0px";
+    mouse.style.top  = mouse.style.top  || "0px";
+  }
 
 
-// ================================
-// SET INITIAL MOUSE POSITION (offscreen left)
-// ================================
-const setMouseStart = () => {
-  const A = center(anchorA);
-  gsap.set(mouse, {
-    left: A.left - 380,
-    top:  A.top - 180,
-    opacity: 1
-  });
-};
+  // ================================
+  // SET INITIAL MOUSE POSITION (offscreen left)
+  // ================================
+  const setMouseStart = () => {
+    const A = center(anchorA);
+    gsap.set(mouse, {
+      left: A.left - 380,
+      top:  A.top - 180,
+      opacity: 1
+    });
+  };
 
-setMouseStart();
+  setMouseStart();
 
 
-// ================================
-// MASTER TIMELINE
-// ================================
-const tl = gsap.timeline();
+  // ================================
+  // MASTER TIMELINE
+  // ================================
+  const tl = gsap.timeline();
 
   // ========== H1 SLIDE + FADE ==========
-  gsap.set(heroH1, { left: -28, opacity: 0 });
+  gsap.set(heroH1, { x: -28, opacity: 0 });
   tl.to(heroH1, {
     duration: 0.6,
     x: 0,
@@ -151,78 +163,77 @@ const tl = gsap.timeline();
   }, 0);
 
 
+  // ================================
+  // STEP 1: START → A (LINEAR)
+  // ================================
+  tl.add(() => {
+    const A = center(anchorA);
 
- // ================================
-// STEP 1: START → A (LINEAR)
-// ================================
-tl.add(() => {
-  const A = center(anchorA);
-
-  gsap.to(mouse, {
-    duration: 1.5,
-    ease: "power2.inOut",
-    left: A.left,
-    top:  A.top
-  });
-});
-
-tl.to({}, { duration: 0.4 }); // pause at A
-
-
-
-// ================================
-// STEP 2: A → B (LINEAR)
-// ================================
-tl.add(() => {
-  const B = center(anchorB);
-
-  const t = 0.5;
-  const targetWidth = changingWord.offsetWidth + "px";
-
-  gsap.to(mouse, {
-    duration: t,
-    ease: "power2.inOut",
-    left: B.left,
-    top:  B.top
+    // animate left/top directly so it matches document coords
+    gsap.to(mouse, {
+      duration: 1.5,
+      ease: "power2.inOut",
+      left: A.left,
+      top:  A.top
+    });
   });
 
-  gsap.to(highlight, {
-    duration: t,
-    width: targetWidth,
-    ease: "power2.inOut"
-  });
-});
-
-tl.to({}, { duration: 0.4 }); // pause at B
+  tl.to({}, { duration: 0.4 }); // pause at A
 
 
+  // ================================
+  // STEP 2: A → B (LINEAR)
+  // ================================
+  tl.add(() => {
+    const B = center(anchorB);
 
-// ================================
-// STEP 3: B → L1 → L2 → C (LINEAR)
-// ================================
-tl.add(() => {
-  const L1 = center(anchorL1);
-  const L2 = center(anchorL2);
-  const C  = center(anchorC);
+    const t = 0.5;
+    const targetWidth = changingWord.offsetWidth + "px";
 
-  const wordsToCycle = words.slice(1);
-  const wordDuration = 0.9;
-  const totalTime = wordsToCycle.length * wordDuration;
+    gsap.to(mouse, {
+      duration: t,
+      ease: "power2.inOut",
+      left: B.left,
+      top:  B.top
+    });
 
-  gsap.to(mouse, {
-    duration: totalTime,
-    ease: "linear",
-    keyframes: [
-      { left: L1.left, top: L1.top, duration: wordDuration },
-      { left: L2.left, top: L2.top, duration: wordDuration },
-      { left: C.left,  top: C.top,  duration: wordDuration }
-    ]
+    gsap.to(highlight, {
+      duration: t,
+      width: targetWidth,
+      ease: "power2.inOut"
+    });
   });
 
-  // (your existing word cycling stays untouched)
-});
+  tl.to({}, { duration: 0.4 }); // pause at B
 
-    // ---- EXISTING WORD CYCLING (unchanged) ----
+
+  // ================================
+  // STEP 3: B → L1 → L2 → C (LINEAR)
+  // ================================
+  tl.add(() => {
+    const B  = center(anchorB);
+    const L1 = center(anchorL1);
+    const L2 = center(anchorL2);
+    const C  = center(anchorC);
+
+    const wordsToCycle = words.slice(1); // ["convert.","inspire.","grow.","lead."]
+    const wordDuration = 0.9;
+    const totalCycleTime = wordsToCycle.length * wordDuration;
+
+    // Move through the intermediate anchors in linear segments using keyframes.
+    // Start from current mouse position (left/top), then go to L1, L2, C.
+    // We approximate the initial segment duration to wordDuration as well so timing aligns.
+    gsap.to(mouse, {
+      duration: totalCycleTime,
+      ease: "linear",
+      keyframes: [
+        { left: L1.left, top: L1.top, duration: wordDuration },
+        { left: L2.left, top: L2.top, duration: wordDuration },
+        { left: C.left,  top: C.top,  duration: wordDuration }
+      ]
+    });
+
+    // ---- EXISTING WORD CYCLING LOGIC (unchanged) ----
     wordsToCycle.forEach((w, idx) => {
       const isLast = idx === wordsToCycle.length - 1;
 
@@ -245,26 +256,28 @@ tl.add(() => {
       gsap.to(highlight, { width: 0, duration: 0.4 });
     });
 
+    // After the cycle finishes, pause at C (we preserve your previous pause)
     gsap.delayedCall(totalCycleTime, () => {
       tl.to({}, { duration: 0.8 }); // pause at C
     });
   });
 
 
+  // ================================
+  // STEP 4: C → D → exit right (LINEAR)
+  // ================================
+  tl.add(() => {
+    const D = center(anchorD);
+    const exitX = window.innerWidth + 300;
 
-      // ================================
-    // STEP 4: C → D → exit right (LINEAR)
-    // ================================
-    tl.add(() => {
-      const D = center(anchorD);
-      const exitX = window.innerWidth + 300;
-    
-      gsap.to(mouse, {
-        duration: 1.05,
-        ease: "power2.inOut",
-        keyframes: [
-          { left: D.left, top: D.top },
-          { left: exitX,  top: D.top }
-        ]
-      });
+    gsap.to(mouse, {
+      duration: 1.05,
+      ease: "power2.inOut",
+      keyframes: [
+        { left: D.left, top: D.top, duration: 0.6 },
+        { left: exitX,  top: D.top, duration: 0.45 }
+      ]
+    });
   });
+
+});
