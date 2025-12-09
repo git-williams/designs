@@ -1,9 +1,8 @@
-// main.js
 // Requires GSAP core + TextPlugin + MotionPathPlugin to be loaded on the page
 document.addEventListener("DOMContentLoaded", () => {
 
   // ================================
-  // SCROLL SECTION REVEAL (keeps original behavior)
+  // SCROLL SECTION REVEAL
   // ================================
   const sections = document.querySelectorAll(".wrapper2");
   const revealOnScroll = () => {
@@ -17,14 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
   revealOnScroll();
 
   // ================================
-  // HEADER SHOW/HIDE ON SCROLL (keeps original behavior)
+  // HEADER SHOW/HIDE ON SCROLL
   // ================================
   const header = document.querySelector(".main-header");
   const hero = document.querySelector(".hero");
   let lastScrollY = window.scrollY;
 
   const toggleHeader = () => {
-    if (!hero) return;
     const heroBottom = hero.offsetTop + hero.offsetHeight;
     const currentScroll = window.scrollY;
 
@@ -49,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mouse = document.querySelector(".mouse-cursor");
   const button = document.querySelector(".cta-btn");
 
-  // Anchors (must exist in DOM — HTML file provides them)
+  // Anchors
   const anchorA  = document.getElementById("mouse-point-a");
   const anchorB  = document.getElementById("mouse-point-b");
   const anchorL1 = document.getElementById("mouse-point-l1");
@@ -61,23 +59,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const heroH1 = document.querySelector(".hero-text h1");
   const wordContainer = heroH1.querySelector(".word-container");
 
-  // Insert typed-prefix span if not present
-  if (!heroH1.querySelector(".typed-prefix")) {
-    heroH1.insertAdjacentHTML("afterbegin", '<span class="typed-prefix"></span>');
-  }
+  heroH1.insertAdjacentHTML("afterbegin", '<span class="typed-prefix"></span>');
+  wordContainer.innerHTML = `<span class="changing-word"></span><span class="highlight"></span>`;
 
-  // ensure changing-word + highlight exist
+  const typedPrefix = heroH1.querySelector(".typed-prefix");
   const changingWord = heroH1.querySelector(".changing-word");
   const highlight = heroH1.querySelector(".highlight");
-  const typedPrefix = heroH1.querySelector(".typed-prefix");
 
-  // defensive checks
-  if (!changingWord || !highlight || !typedPrefix) {
-    console.error("Required elements (.changing-word, .highlight, .typed-prefix) missing.");
-    return;
-  }
-
-  // initial highlight styles (kept from original script)
   highlight.style.position = "absolute";
   highlight.style.left = "0";
   highlight.style.bottom = "0";
@@ -89,8 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ================================
   // UTILITY: GET ABSOLUTE CENTER COORDS
   // ================================
-  const centerOf = el => {
-    if (!el) return { left: 0, top: 0 };
+  const center = el => {
     const r = el.getBoundingClientRect();
     return {
       left: r.left + window.scrollX + r.width / 2,
@@ -110,16 +97,14 @@ document.addEventListener("DOMContentLoaded", () => {
     mouse.style.top  = "0px";
   }
 
-  // place mouse offscreen-left at start (will re-set when movement starts)
   const setMouseStart = () => {
-    // fallback center for anchor A if available
-    const A = anchorA ? centerOf(anchorA) : { left: -200, top: 200 };
+    const A = center(anchorA);
     gsap.set(mouse, { left: A.left - 380, top: A.top - 180, opacity: 1 });
   };
   setMouseStart();
 
   // ================================
-  // MASTER TIMELINE (keeps your word typing & hero fade)
+  // MASTER TIMELINE
   // ================================
   const tl = gsap.timeline();
 
@@ -127,17 +112,16 @@ document.addEventListener("DOMContentLoaded", () => {
   gsap.set(heroH1, { x: -28, opacity: 0 });
   tl.to(heroH1, { duration: 0.6, x: 0, opacity: 1, ease: "power2.out" }, 0);
 
-  // Typing animation (keeps original behavior and timing)
+  // Typing animation
   const fullText = "Designs that impress.";
   const prefix   = "Designs that ";
   const perChar  = 0.05;
   const driver = { i: 0 };
   const totalChars = fullText.length;
-  const typingDuration = totalChars * perChar;
 
   tl.to(driver, {
     i: totalChars,
-    duration: typingDuration,
+    duration: totalChars * perChar,
     ease: "none",
     onUpdate: () => {
       const idx = Math.floor(driver.i);
@@ -148,20 +132,44 @@ document.addEventListener("DOMContentLoaded", () => {
         typedPrefix.textContent = prefix;
         changingWord.textContent = fullText.slice(prefix.length, idx);
       }
-      // update highlight width to follow the changing word during typing
-      highlight.style.width = changingWord.offsetWidth + "px";
     }
   }, 0);
 
-  // The word-cycling behavior (keep the earlier approach for cycling words and CTA pulse)
-  // We'll keep the original staged approach but we will *not* rely on anchor positions until the mouse moves.
-
-  // cycle words after the typed prefix finishes
+  // STEP 1: START → A
   tl.add(() => {
-    // this block cycles words and animates highlight/button as you had before
-    const wordsToCycle = words.slice(1); // skip first since typed already shows "impress."
+    const A = center(anchorA);
+    gsap.to(mouse, { duration: 1.5, ease: "power2.inOut", left: A.left, top: A.top });
+  });
+  tl.to({}, { duration: 0.4 });
+
+  // STEP 2: A → B
+  tl.add(() => {
+    const B = center(anchorB);
+    const t = 0.5;
+    const targetWidth = changingWord.offsetWidth + "px";
+    gsap.to(mouse, { duration: t, ease: "power2.inOut", left: B.left, top: B.top });
+    gsap.to(highlight, { duration: t, width: targetWidth, ease: "power2.inOut" });
+  });
+  tl.to({}, { duration: 0.4 });
+
+  // STEP 3: B → L1 → L2 → C
+  tl.add(() => {
+    const L1 = center(anchorL1);
+    const L2 = center(anchorL2);
+    const C  = center(anchorC);
+    const wordsToCycle = words.slice(1);
     const wordDuration = 0.9;
     const totalTime = wordsToCycle.length * wordDuration;
+
+    gsap.to(mouse, {
+      duration: totalTime,
+      ease: "linear",
+      keyframes: [
+        { left: L1.left, top: L1.top, duration: wordDuration },
+        { left: L2.left, top: L2.top, duration: wordDuration },
+        { left: C.left,  top: C.top,  duration: wordDuration }
+      ]
+    });
 
     wordsToCycle.forEach((w, idx) => {
       const isLast = idx === wordsToCycle.length - 1;
@@ -179,67 +187,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-  }, typingDuration); // add after typing completes
+    gsap.delayedCall(totalTime - 0.05, () => gsap.to(highlight, { width: 0, duration: 0.4 }));
+    gsap.delayedCall(totalTime, () => tl.to({}, { duration: 0.8 }));
+  });
 
-  // ================================
-  // MOUSE MOVEMENT: compute anchors at time of run and run a dedicated timeline
-  // This is decoupled from the main timeline but scheduled to start after the typing cycle.
-  // ================================
-  const moveMouseAlongAnchors = () => {
-    // measure centers fresh
-    const P = {
-      A:  centerOf(anchorA),
-      B:  centerOf(anchorB),
-      L1: centerOf(anchorL1),
-      L2: centerOf(anchorL2),
-      C:  centerOf(anchorC),
-      D:  centerOf(anchorD)
-    };
-
-    // set a safe start position relative to A (offscreen-left)
-    gsap.set(mouse, { left: (P.A.left || 0) - 380, top: (P.A.top || 200) - 180, opacity: 1 });
-
-    // build a timeline for the mouse (easy to tweak)
-    const mouseTL = gsap.timeline({ defaults: { ease: "power2.inOut" } });
-
-    // OFFSCREEN → A
-    mouseTL.to(mouse, { duration: 1.3, left: P.A.left, top: P.A.top });
-
-    // A → B
-    mouseTL.to(mouse, { duration: 0.7, left: P.B.left, top: P.B.top }, "+=0.12");
-
-    // B → L1 → L2 → C (use chained tweens)
-    mouseTL.to(mouse, { duration: 0.9, left: P.L1.left, top: P.L1.top });
-    mouseTL.to(mouse, { duration: 0.9, left: P.L2.left, top: P.L2.top });
-    mouseTL.to(mouse, { duration: 0.85, left: P.C.left, top: P.C.top });
-
-    // small CTA pop animation is already triggered earlier; add slight pause
-    mouseTL.to(mouse, { duration: 0.45, left: P.D.left, top: P.D.top }, "+=0.18");
-
-    // exit to the right
-    mouseTL.to(mouse, { duration: 0.9, left: window.innerWidth + 300, top: P.D.top }, "+=0.06");
-
-    // return the timeline in case you want to play/pause externally
-    return mouseTL;
-  };
-
-  // schedule the mouse movement to start once the word-cycling finishes.
-  // We'll wait for: typingDuration + words cycle time
-  const wordsToCycleDuration = (words.length - 1) * 0.9; // matches earlier wordDuration
-  const mouseStartDelay = typingDuration + wordsToCycleDuration + 0.05;
-
-  // To ensure we measure layout after font rendering / highlight sizing etc,
-  // run in a requestAnimationFrame after the delay.
-  gsap.delayedCall(mouseStartDelay, () => {
-    // measure again on the next frame to be extra safe
-    requestAnimationFrame(() => {
-      moveMouseAlongAnchors();
+  // STEP 4: C → D exit
+  tl.add(() => {
+    const D = center(anchorD);
+    const exitX = window.innerWidth + 300;
+    gsap.to(mouse, {
+      duration: 1.05,
+      ease: "power2.inOut",
+      keyframes: [
+        { left: D.left, top: D.top, duration: 0.6 },
+        { left: exitX,  top: D.top, duration: 0.45 }
+      ]
     });
   });
 
-  // OPTIONAL: expose a small function to re-run the mouse sequence for debugging
-  window.__playMouseDemo = () => {
-    requestAnimationFrame(() => moveMouseAlongAnchors());
-  };
-
 });
+
+
+Can you take a look at this code and await further instructions?
