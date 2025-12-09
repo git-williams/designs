@@ -23,40 +23,42 @@
 
 
 
-  <section class="hero">
+<section class="hero">
   <div class="hero-inner">
 
     <div class="hero-text">
       <h1>
+        <!-- word-container holds the visible word, the highlight, and the anchors that follow it -->
         <span class="word-container">
-
-          <!-- ANCHORS THAT FOLLOW THE WORD -->
-          <div id="mouse-point-a" class="mouse-anchor"></div>
-          <div id="mouse-point-b" class="mouse-anchor"></div>
+          <!-- anchors that are visually tied to the changing word -->
+          <div id="mouse-point-a"  class="mouse-anchor"></div>
+          <div id="mouse-point-b"  class="mouse-anchor"></div>
           <div id="mouse-point-l1" class="mouse-anchor"></div>
           <div id="mouse-point-l2" class="mouse-anchor"></div>
 
+          <!-- typed prefix is injected by JS -->
+          <span class="typed-prefix"></span>
           <span class="changing-word"></span>
           <span class="highlight"></span>
-
         </span>
       </h1>
     </div>
 
     <div class="hero-cta">
+      <!-- CTA button contains its own anchors (so they track button position) -->
       <button class="cta-btn">
         Contact Me
-
-        <!-- ANCHORS THAT FOLLOW THE BUTTON -->
         <div id="mouse-point-c" class="mouse-anchor"></div>
         <div id="mouse-point-d" class="mouse-anchor"></div>
       </button>
     </div>
 
-    <div class="mouse-cursor"></div>
+    <!-- mouse cursor element -->
+    <div class="mouse-cursor" aria-hidden="true"></div>
 
   </div>
 </section>
+
 
 
 
