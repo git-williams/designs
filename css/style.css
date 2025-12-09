@@ -18,6 +18,23 @@ footer {
 }
 
 
+.mouse-anchor {
+  width: 10px !important;
+  height: 10px !important;
+  background: red !important;
+  border-radius: 50% !important;
+  position: absolute !important;
+  z-index: 99999 !important;
+}
+
+.mouse-cursor {
+  position: absolute !important;
+  transform: none !important;
+  left: 0;
+  top: 0;
+}
+
+
 
 
 
@@ -62,6 +79,93 @@ footer {
 }
 
 
+.mouse-anchor {
+  display: block;
+}
+
+
+/* IMPORTANT: anchors are positioned relative to their parent containers.
+   We place A and B relative to the word-container1 (so they follow the word),
+   and C/CTA are relative to .hero-cta (so they follow the button). */
+
+/* word anchors: visible guesses — adjust these using percentages to fine tune */
+.word-container1 {
+  position: relative;
+  display: inline-block;
+  z-index: 5;
+}
+
+/* A & B: follow the width of the word */
+#mouse-point-a {
+  top: 0;
+  left: 0;
+}
+
+#mouse-point-b {
+  top: 0;
+  right: 0;
+}
+
+/* Loop points relative to the word container */
+#mouse-point-l1 {
+  top: 40px;   /* adjust dramatic curve height */
+  left: 20%;
+}
+
+#mouse-point-l2 {
+  top: -30px;  /* opposite direction for swoop */
+  left: 60%;
+}
+
+/* C: CTA center */
+#mouse-point-c {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* D: offscreen exit */
+#mouse-point-d {
+  top: 50%;
+  left: 120%; /* flies off to the right */
+}
+
+
+
+
+
+
+
+.hero {
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: yellow;
+  overflow: hidden;
+}
+
+.hero-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 85%;
+  max-width: 1200px;
+  position: relative;
+}
+
+.hero-text {
+  flex: 0 0 65%;
+  position: relative;
+}
+
+
+.hero-cta {
+  flex: 0 0 30%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
 
 h1 {
   font-size: 3rem;
@@ -69,115 +173,52 @@ h1 {
   line-height: 1.2;
 }
 
-
-/* hero */
-.hero {
-  height: 100dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffd400;
-  overflow: hidden;
-  padding-top: 70px; /* keep header safety */
-}
-.hero-inner {
-  width: 85%;
-  max-width: 1200px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  position:relative;
-}
-
-/* hero text & container */
-.hero-text { flex: 0 0 65%; position: relative; }
-h1 { font-size: 3rem; line-height:1.12; margin:0; position:relative; }
-
-.word-container {
-  position: relative;             /* anchors inside here will be positioned relative to the word */
-  display: inline-block;
-  z-index: 20;
-  padding: 0.05em 0.15em;         /* small padding to make highlight visible */
-}
-
-/* typed prefix & changing word */
-.typed-prefix { font-weight: 500; }
-.changing-word { font-weight: 700; display:inline-block; }
-
-/* highlight */
 .highlight {
   position: absolute;
-  left: 0; bottom: 0;
+  left: 0;
+  bottom: 0;
   height: 1.2em;
   width: 0;
-  background: rgba(100,150,255,0.5);
-  z-index: 10;
+  background: rgba(100, 150, 255, 0.5);
+  z-index: -1;
+  transition: width 0.3s ease;
 }
 
-/* hero cta */
-.hero-cta { flex: 0 0 30%; display:flex; align-items:center; justify-content:center; position:relative; }
+
 .cta-btn {
-  position: relative; /* anchors inside the button will be positioned relative to it */
   padding: 1em 2em;
   background: #000;
   color: #fff;
-  border-radius: 10px;
   border: none;
-  font-size: 1.05rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
   cursor: pointer;
-  z-index: 30;
-  overflow: visible;
+  transform-origin: center;
+  transition: all 0.2s ease;
 }
-
-/* ==========================
-   Mouse cursor and anchors
-   ========================== */
 
 .mouse-cursor {
   position: absolute;
-  width: 36px;
-  height: 56px;
-  left: 0;
-  top: 0;
-  transform: none;
+  width: 25px;
+  height: 40px;
+  background: url('../images/mouse.avif') no-repeat center/contain;
   pointer-events: none;
-  z-index: 2000;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="56"><rect rx="8" width="36" height="56" fill="%23000"/><path d="M18 10 L18 30" stroke="%23fff" stroke-width="2" stroke-linecap="round"/></svg>') no-repeat center/contain;
 }
 
-/* debug anchors (visible red dots) */
-.mouse-anchor {
-  --size: 10px;
-  width: var(--size);
-  height: var(--size);
-  background: rgba(255,0,0,0.95);
-  border-radius: 50%;
-  position: absolute;
-  z-index: 1200;
-  transform: translate(-50%, -50%); /* center the dot on its left/top coordinates */
-  pointer-events: none;
-  display: var(--debug-anchors, block);
-  box-shadow: 0 0 3px rgba(0,0,0,0.25);
+.word-container {
+  position: relative;
+  display: inline-block;
+  z-index: 5;
 }
 
-/* sensible default placements for anchors (you can tweak these) */
-#mouse-point-a  { left: 8%;  top: 45%; } /* relative to .word-container */
-#mouse-point-b  { left: 92%; top: 45%; } /* relative to .word-container */
-#mouse-point-l1 { left: 25%; top: 140%; } /* loop points relative to the word */
-#mouse-point-l2 { left: 70%; top: -45%; }
-
-#mouse-point-c  { left: 50%; top: 50%; } /* center of button */
-#mouse-point-d  { left: 140%; top: 50%; } /* off to the right of button for exit */
-
-/* Scroll reveal example wrapper2 (keeps your existing reveal) */
-.wrapper2 { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
-.wrapper2.visible2 { opacity: 1; transform: translateY(0); }
-
-/* small responsive adjustments */
-@media (max-width: 800px) {
-  h1 { font-size: 2.25rem; }
-  .hero-inner { width: 92%; }
+.word-container1 {
+  position: relative;
+  display: inline-block;
+  z-index: 5;
 }
+
+
+
 
 
 /* =============== WRAPPER SECTIONS =============== */
