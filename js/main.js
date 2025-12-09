@@ -206,6 +206,3 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
-
-
-Can you take a look at this code and await further instructions?
