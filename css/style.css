@@ -34,6 +34,9 @@ footer {
   top: 0;
 }
 
+.word-container, .cta-btn {
+  position: relative !important;
+}
 
 
 
