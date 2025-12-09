@@ -106,103 +106,81 @@ document.addEventListener("DOMContentLoaded", () => {
   // ================================
   // MASTER TIMELINE
   // ================================
-  const tl = gsap.timeline();
+ // ================================
+// CLEAN MOUSE MOVEMENT (A → B → L1 → L2 → C → D → exit)
+// ================================
 
-  // H1 slide + fade
-  gsap.set(heroH1, { x: -28, opacity: 0 });
-  tl.to(heroH1, { duration: 0.6, x: 0, opacity: 1, ease: "power2.out" }, 0);
+// Ensure anchors have rendered before measuring
+const getCenters = () => ({
+  A:  center(anchorA),
+  B:  center(anchorB),
+  L1: center(anchorL1),
+  L2: center(anchorL2),
+  C:  center(anchorC),
+  D:  center(anchorD)
+});
 
-  // Typing animation
-  const fullText = "Designs that impress.";
-  const prefix   = "Designs that ";
-  const perChar  = 0.05;
-  const driver = { i: 0 };
-  const totalChars = fullText.length;
+// Build a sub-timeline JUST for mouse movement
+const mouseTL = gsap.timeline({ defaults: { ease: "power2.inOut" } });
 
-  tl.to(driver, {
-    i: totalChars,
-    duration: totalChars * perChar,
-    ease: "none",
-    onUpdate: () => {
-      const idx = Math.floor(driver.i);
-      if (idx <= prefix.length) {
-        typedPrefix.textContent = fullText.slice(0, idx);
-        changingWord.textContent = "";
-      } else {
-        typedPrefix.textContent = prefix;
-        changingWord.textContent = fullText.slice(prefix.length, idx);
-      }
-    }
-  }, 0);
+// Add to main timeline at the correct moment
+tl.add(() => {
 
-  // STEP 1: START → A
-  tl.add(() => {
-    const A = center(anchorA);
-    gsap.to(mouse, { duration: 1.5, ease: "power2.inOut", left: A.left, top: A.top });
-  });
-  tl.to({}, { duration: 0.4 });
+  const P = getCenters();   // get fresh coordinates AFTER layout is stable
 
-  // STEP 2: A → B
-  tl.add(() => {
-    const B = center(anchorB);
-    const t = 0.5;
-    const targetWidth = changingWord.offsetWidth + "px";
-    gsap.to(mouse, { duration: t, ease: "power2.inOut", left: B.left, top: B.top });
-    gsap.to(highlight, { duration: t, width: targetWidth, ease: "power2.inOut" });
-  });
-  tl.to({}, { duration: 0.4 });
+  // reset mouse start for safety  
+  gsap.set(mouse, { left: P.A.left - 380, top: P.A.top - 180 });
 
-  // STEP 3: B → L1 → L2 → C
-  tl.add(() => {
-    const L1 = center(anchorL1);
-    const L2 = center(anchorL2);
-    const C  = center(anchorC);
-    const wordsToCycle = words.slice(1);
-    const wordDuration = 0.9;
-    const totalTime = wordsToCycle.length * wordDuration;
+  mouseTL
+    // OFFSCREEN → A
+    .to(mouse, {
+      duration: 1.5,
+      left: P.A.left,
+      top:  P.A.top
+    })
 
-    gsap.to(mouse, {
-      duration: totalTime,
-      ease: "linear",
-      keyframes: [
-        { left: L1.left, top: L1.top, duration: wordDuration },
-        { left: L2.left, top: L2.top, duration: wordDuration },
-        { left: C.left,  top: C.top,  duration: wordDuration }
-      ]
+    // A → B
+    .to(mouse, {
+      duration: 0.8,
+      left: P.B.left,
+      top:  P.B.top
+    }, "+=0.2")
+
+    // B → L1
+    .to(mouse, {
+      duration: 0.9,
+      left: P.L1.left,
+      top:  P.L1.top
+    })
+
+    // L1 → L2
+    .to(mouse, {
+      duration: 0.9,
+      left: P.L2.left,
+      top:  P.L2.top
+    })
+
+    // L2 → C
+    .to(mouse, {
+      duration: 0.9,
+      left: P.C.left,
+      top:  P.C.top
+    })
+
+    // C → D
+    .to(mouse, {
+      duration: 1,
+      left: P.D.left,
+      top:  P.D.top
+    }, "+=0.2")
+
+    // D → EXIT
+    .to(mouse, {
+      duration: 1,
+      left: window.innerWidth + 300,
+      top:  P.D.top
     });
 
-    wordsToCycle.forEach((w, idx) => {
-      const isLast = idx === wordsToCycle.length - 1;
-      gsap.delayedCall(idx * wordDuration, () => {
-        changingWord.textContent = w;
-        highlight.style.width = changingWord.offsetWidth + "px";
-      });
-      if (isLast) {
-        gsap.delayedCall(idx * wordDuration + 0.1, () => {
-          gsap.to(button, { scale: 1.08, duration: 0.09 });
-          gsap.to(button, { scale: 1.0, duration: 0.12, delay: 0.09 });
-          gsap.to(button, { backgroundColor: "#ff4081", duration: 0.07 });
-          gsap.to(button, { backgroundColor: "#000", duration: 0.14, delay: 0.07 });
-        });
-      }
-    });
-
-    gsap.delayedCall(totalTime - 0.05, () => gsap.to(highlight, { width: 0, duration: 0.4 }));
-    gsap.delayedCall(totalTime, () => tl.to({}, { duration: 0.8 }));
-  });
-
-  // STEP 4: C → D exit
-  tl.add(() => {
-    const D = center(anchorD);
-    const exitX = window.innerWidth + 300;
-    gsap.to(mouse, {
-      duration: 1.05,
-      ease: "power2.inOut",
-      keyframes: [
-        { left: D.left, top: D.top, duration: 0.6 },
-        { left: exitX,  top: D.top, duration: 0.45 }
-      ]
-    });
-  });
+});
 
 });
