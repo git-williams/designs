@@ -106,81 +106,106 @@ document.addEventListener("DOMContentLoaded", () => {
   // ================================
   // MASTER TIMELINE
   // ================================
- // ================================
-// CLEAN MOUSE MOVEMENT (A → B → L1 → L2 → C → D → exit)
-// ================================
+  const tl = gsap.timeline();
 
-// Ensure anchors have rendered before measuring
-const getCenters = () => ({
-  A:  center(anchorA),
-  B:  center(anchorB),
-  L1: center(anchorL1),
-  L2: center(anchorL2),
-  C:  center(anchorC),
-  D:  center(anchorD)
-});
+  // H1 slide + fade
+  gsap.set(heroH1, { x: -28, opacity: 0 });
+  tl.to(heroH1, { duration: 0.6, x: 0, opacity: 1, ease: "power2.out" }, 0);
 
-// Build a sub-timeline JUST for mouse movement
-const mouseTL = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+  // Typing animation
+  const fullText = "Designs that impress.";
+  const prefix   = "Designs that ";
+  const perChar  = 0.05;
+  const driver = { i: 0 };
+  const totalChars = fullText.length;
 
-// Add to main timeline at the correct moment
-tl.add(() => {
+  tl.to(driver, {
+    i: totalChars,
+    duration: totalChars * perChar,
+    ease: "none",
+    onUpdate: () => {
+      const idx = Math.floor(driver.i);
+      if (idx <= prefix.length) {
+        typedPrefix.textContent = fullText.slice(0, idx);
+        changingWord.textContent = "";
+      } else {
+        typedPrefix.textContent = prefix;
+        changingWord.textContent = fullText.slice(prefix.length, idx);
+      }
+    }
+  }, 0);
 
-  const P = getCenters();   // get fresh coordinates AFTER layout is stable
+  // ================================
+  // CLEAN MOUSE MOVEMENT (A → B → L1 → L2 → C → D → exit)
+  // ================================
+  const getCenters = () => ({
+    A:  center(anchorA),
+    B:  center(anchorB),
+    L1: center(anchorL1),
+    L2: center(anchorL2),
+    C:  center(anchorC),
+    D:  center(anchorD)
+  });
 
-  // reset mouse start for safety  
-  gsap.set(mouse, { left: P.A.left - 380, top: P.A.top - 180 });
+  const mouseTL = gsap.timeline({ defaults: { ease: "power2.inOut" } });
 
-  mouseTL
-    // OFFSCREEN → A
-    .to(mouse, {
-      duration: 1.5,
-      left: P.A.left,
-      top:  P.A.top
-    })
+  tl.add(() => {
 
-    // A → B
-    .to(mouse, {
-      duration: 0.8,
-      left: P.B.left,
-      top:  P.B.top
-    }, "+=0.2")
+    const P = getCenters();
 
-    // B → L1
-    .to(mouse, {
-      duration: 0.9,
-      left: P.L1.left,
-      top:  P.L1.top
-    })
+    // Reset start
+    gsap.set(mouse, { left: P.A.left - 380, top: P.A.top - 180 });
 
-    // L1 → L2
-    .to(mouse, {
-      duration: 0.9,
-      left: P.L2.left,
-      top:  P.L2.top
-    })
+    mouseTL
+      // OFFSCREEN → A
+      .to(mouse, {
+        duration: 1.5,
+        left: P.A.left,
+        top:  P.A.top
+      })
 
-    // L2 → C
-    .to(mouse, {
-      duration: 0.9,
-      left: P.C.left,
-      top:  P.C.top
-    })
+      // A → B
+      .to(mouse, {
+        duration: 0.8,
+        left: P.B.left,
+        top:  P.B.top
+      }, "+=0.2")
 
-    // C → D
-    .to(mouse, {
-      duration: 1,
-      left: P.D.left,
-      top:  P.D.top
-    }, "+=0.2")
+      // B → L1
+      .to(mouse, {
+        duration: 0.9,
+        left: P.L1.left,
+        top:  P.L1.top
+      })
 
-    // D → EXIT
-    .to(mouse, {
-      duration: 1,
-      left: window.innerWidth + 300,
-      top:  P.D.top
-    });
+      // L1 → L2
+      .to(mouse, {
+        duration: 0.9,
+        left: P.L2.left,
+        top:  P.L2.top
+      })
 
-});
+      // L2 → C
+      .to(mouse, {
+        duration: 0.9,
+        left: P.C.left,
+        top:  P.C.top
+      })
+
+      // C → D
+      .to(mouse, {
+        duration: 1,
+        left: P.D.left,
+        top:  P.D.top
+      }, "+=0.2")
+
+      // D → EXIT
+      .to(mouse, {
+        duration: 1,
+        left: window.innerWidth + 300,
+        top:  P.D.top
+      });
+
+  });
 
 });
