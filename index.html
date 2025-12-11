@@ -23,6 +23,82 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+    <style>
+
+.points-wrapper {
+display: flex;
+gap: 60px;
+position: relative;
+}
+
+
+.point {
+width: 30px;
+height: 30px;
+background: #ddd;
+border-radius: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 14px;
+border: 2px solid #aaa;
+}
+
+
+#cursor {
+width: 25px;
+height: 25px;
+background: black;
+border-radius: 4px;
+position: absolute;
+top: 0;
+left: 0;
+transform: translate(-50%, -50%);
+opacity: 0;
+transition: transform 0.5s ease, opacity 0.3s ease;
+}
+</style>
+
+
+<div class="points-wrapper">
+<div id="cursor" class="mouse-cursor"></div>
+<div id="A" class="point">A</div>
+<div id="B" class="point">B</div>
+<div id="C" class="point">C</div>
+<div id="D" class="point">D</div>
+</div>
+
+
+<script>
+window.addEventListener("load", () => {
+const cursor = document.getElementById("cursor");
+const pointIds = ["A", "B", "C", "D"]; // chronological order
+const delays = {
+before: 500, // delay before starting animation
+between: 600, // delay between arriving and moving to next
+atPoint: 400 // delay at each point before continuing
+};
+
+
+function getPosition(el) {
+</script>
+
+
+
+
+
+
+
  <section class="hero">
   <div class="hero-inner">
 <div class="anchor-container" style="position:relative">
