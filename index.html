@@ -36,9 +36,10 @@
     <style>
 
 .points-wrapper {
-display: flex;
-gap: 60px;
-position: relative;
+  display: flex;
+  gap: 60px;
+  position: relative;
+  padding: 40px; /* IMPORTANT */
 }
 
 
@@ -108,13 +109,6 @@ cursor.style.transform = `translate(${x}px, ${y}px)`;
 setTimeout(resolve, delays.atPoint);
 });
 }
-
-
-async function runAnimation() {
-await new Promise(res => setTimeout(res, delays.before));
-
-
-cursor.style.opacity = 1;
 
 
 for (let i = 0; i < pointIds.length; i++) {
