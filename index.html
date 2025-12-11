@@ -91,6 +91,46 @@ atPoint: 400 // delay at each point before continuing
 
 
 function getPosition(el) {
+const rect = el.getBoundingClientRect();
+return {
+x: rect.left + rect.width / 2 + window.scrollX,
+y: rect.top + rect.height / 2 + window.scrollY
+};
+}
+
+
+async function moveCursorToPoint(pointEl) {
+return new Promise(resolve => {
+const { x, y } = getPosition(pointEl);
+cursor.style.transform = `translate(${x}px, ${y}px)`;
+
+
+setTimeout(resolve, delays.atPoint);
+});
+}
+
+
+async function runAnimation() {
+await new Promise(res => setTimeout(res, delays.before));
+
+
+cursor.style.opacity = 1;
+
+
+for (let i = 0; i < pointIds.length; i++) {
+const point = document.getElementById(pointIds[i]);
+await moveCursorToPoint(point);
+
+
+if (i < pointIds.length - 1) {
+await new Promise(res => setTimeout(res, delays.between));
+}
+}
+}
+
+
+runAnimation();
+});
 </script>
 
 
