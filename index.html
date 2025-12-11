@@ -84,48 +84,46 @@ transition: transform 0.5s ease, opacity 0.3s ease;
 
 <script>
 window.addEventListener("load", () => {
-const cursor = document.getElementById("cursor");
-const pointIds = ["A", "B", "C", "D"]; // chronological order
-const delays = {
-before: 500, // delay before starting animation
-between: 600, // delay between arriving and moving to next
-atPoint: 400 // delay at each point before continuing
-};
+  const cursor = document.getElementById("cursor");
+  const pointIds = ["A", "B", "C", "D"]; // chronological order
+  const delays = {
+    before: 500,
+    between: 600,
+    atPoint: 400
+  };
 
+  function getPosition(el) {
+    const rect = el.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2 + window.scrollX,
+      y: rect.top + rect.height / 2 + window.scrollY
+    };
+  }
 
-function getPosition(el) {
-const rect = el.getBoundingClientRect();
-return {
-x: rect.left + rect.width / 2 + window.scrollX,
-y: rect.top + rect.height / 2 + window.scrollY
-};
-}
+  async function moveCursorToPoint(pointEl) {
+    return new Promise(resolve => {
+      const { x, y } = getPosition(pointEl);
+      cursor.style.transform = `translate(${x}px, ${y}px)`;
 
+      setTimeout(resolve, delays.atPoint);
+    });
+  }
 
-async function moveCursorToPoint(pointEl) {
-return new Promise(resolve => {
-const { x, y } = getPosition(pointEl);
-cursor.style.transform = `translate(${x}px, ${y}px)`;
+  async function runAnimation() {
+    // optional: delay before starting
+    await new Promise(res => setTimeout(res, delays.before));
 
+    for (let i = 0; i < pointIds.length; i++) {
+      const point = document.getElementById(pointIds[i]);
+      await moveCursorToPoint(point);
 
-setTimeout(resolve, delays.atPoint);
-});
-}
+      if (i < pointIds.length - 1) {
+        await new Promise(res => setTimeout(res, delays.between));
+      }
+    }
+  }
 
-
-for (let i = 0; i < pointIds.length; i++) {
-const point = document.getElementById(pointIds[i]);
-await moveCursorToPoint(point);
-
-
-if (i < pointIds.length - 1) {
-await new Promise(res => setTimeout(res, delays.between));
-}
-}
-}
-
-
-runAnimation();
+  runAnimation();
 });
 </script>
 
