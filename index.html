@@ -33,100 +33,6 @@
 
 
 
-    <style>
-
-.points-wrapper {
-  margin-top: 200px;
-  display: flex;
-  gap: 60px;
-  position: relative;
-  padding: 40px; /* IMPORTANT */
-  border: 2px solid #000;
-}
-
-
-.point {
-width: 30px;
-height: 30px;
-background: #ddd;
-border-radius: 50%;
-display: flex;
-justify-content: center;
-align-items: center;
-font-size: 14px;
-border: 2px solid #aaa;
-}
-
-
-#cursor {
-width: 25px;
-height: 25px;
-background: black;
-border-radius: 4px;
-position: absolute;
-top: 0;
-left: 0;
-transform: translate(-50%, -50%);
-opacity: 1;
-transition: transform 0.5s ease, opacity 0.3s ease;
-}
-</style>
-
-
-<div class="points-wrapper">
-<div id="cursor"></div>
-<div id="A" class="point">A</div>
-<div id="B" class="point">B</div>
-<div id="C" class="point">C</div>
-<div id="D" class="point">D</div>
-</div>
-
-
-<script>
-window.addEventListener("load", () => {
-  const cursor = document.getElementById("cursor");
-  const pointIds = ["A", "B", "C", "D"]; // chronological order
-  const delays = {
-    before: 500,
-    between: 600,
-    atPoint: 400
-  };
-
-  function getPosition(el) {
-    const rect = el.getBoundingClientRect();
-    return {
-      x: rect.left + rect.width / 2 + window.scrollX,
-      y: rect.top + rect.height / 2 + window.scrollY
-    };
-  }
-
-  async function moveCursorToPoint(pointEl) {
-    return new Promise(resolve => {
-      const { x, y } = getPosition(pointEl);
-      cursor.style.transform = `translate(${x}px, ${y}px)`;
-
-      setTimeout(resolve, delays.atPoint);
-    });
-  }
-
-  async function runAnimation() {
-    // optional: delay before starting
-    await new Promise(res => setTimeout(res, delays.before));
-
-    for (let i = 0; i < pointIds.length; i++) {
-      const point = document.getElementById(pointIds[i]);
-      await moveCursorToPoint(point);
-
-      if (i < pointIds.length - 1) {
-        await new Promise(res => setTimeout(res, delays.between));
-      }
-    }
-  }
-
-  runAnimation();
-});
-</script>
-
 
 
 
@@ -175,6 +81,108 @@ window.addEventListener("load", () => {
 
   </div>
 </section>
+
+       <section>
+
+      
+<div class="points-wrapper">
+<div id="cursor"></div>
+<div id="A" class="point">A</div>
+<div id="B" class="point">B</div>
+<div id="C" class="point">C</div>
+<div id="D" class="point">D</div>
+</div>
+
+
+
+
+      
+    <style>
+
+.points-wrapper {
+ 
+  display: flex;
+  gap: 60px;
+  position: relative;
+  padding: 40px; /* IMPORTANT */
+  border: 2px solid #000;
+}
+
+
+.point {
+width: 30px;
+height: 30px;
+background: #ddd;
+border-radius: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 14px;
+border: 2px solid #aaa;
+}
+
+
+#cursor {
+width: 25px;
+height: 25px;
+background: black;
+border-radius: 4px;
+position: absolute;
+top: 0;
+left: 0;
+transform: translate(-50%, -50%);
+opacity: 1;
+transition: transform 0.5s ease, opacity 0.3s ease;
+}
+</style>
+
+
+<script>
+window.addEventListener("load", () => {
+  const cursor = document.getElementById("cursor");
+  const pointIds = ["A", "B", "C", "D"]; // chronological order
+  const delays = {
+    before: 500,
+    between: 600,
+    atPoint: 400
+  };
+
+  function getPosition(el) {
+    const rect = el.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2 + window.scrollX,
+      y: rect.top + rect.height / 2 + window.scrollY
+    };
+  }
+
+  async function moveCursorToPoint(pointEl) {
+    return new Promise(resolve => {
+      const { x, y } = getPosition(pointEl);
+      cursor.style.transform = `translate(${x}px, ${y}px)`;
+
+      setTimeout(resolve, delays.atPoint);
+    });
+  }
+
+  async function runAnimation() {
+    // optional: delay before starting
+    await new Promise(res => setTimeout(res, delays.before));
+
+    for (let i = 0; i < pointIds.length; i++) {
+      const point = document.getElementById(pointIds[i]);
+      await moveCursorToPoint(point);
+
+      if (i < pointIds.length - 1) {
+        await new Promise(res => setTimeout(res, delays.between));
+      }
+    }
+  }
+
+  runAnimation();
+});
+</script>
+
+    </section>
 
 
 
@@ -234,6 +242,8 @@ window.addEventListener("load", () => {
         </div>
       </div>
     </section>
+
+ 
 
     <!-- =============================
          FOOTER (blue placeholder)
