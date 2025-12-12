@@ -1,4 +1,4 @@
-// Requires GSAP core + TextPlugin + MotionPathPlugin to be loaded on the page
+// Requires GSAP core + TextPlugin to be loaded on the page (MotionPathPlugin removed from mouse usage)
 document.addEventListener("DOMContentLoaded", () => {
 
   // ================================
@@ -41,19 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // ================================
   // HERO ANIMATION SETUP
   // ================================
-  gsap.registerPlugin(TextPlugin, MotionPathPlugin);
+  // keep TextPlugin in case other parts of the site use it
+  gsap.registerPlugin(TextPlugin);
 
   const words = ["impress.", "convert.", "inspire.", "grow.", "lead."];
-  const mouse = document.querySelector(".mouse-cursor");
   const button = document.querySelector(".cta-btn");
-
-  // Anchors
-  const anchorA  = document.getElementById("mouse-point-a");
-  const anchorB  = document.getElementById("mouse-point-b");
-  const anchorL1 = document.getElementById("mouse-point-l1");
-  const anchorL2 = document.getElementById("mouse-point-l2");
-  const anchorC  = document.getElementById("mouse-point-c");
-  const anchorD  = document.getElementById("mouse-point-d");
 
   // H1 setup
   const heroH1 = document.querySelector(".hero-text h1");
@@ -78,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // UTILITY: GET ABSOLUTE CENTER COORDS
   // ================================
   const center = el => {
+    if (!el) return null;
     const r = el.getBoundingClientRect();
     return {
       left: r.left + window.scrollX + r.width / 2,
@@ -86,25 +79,69 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ================================
-  // MOUSE INITIAL SETUP
+  // REPLACEMENT MOUSE CURSOR (simple, robust)
+  // - This replaces all previous GSAP mouse/anchor behavior.
+  // - It will try to use the anchor elements if present:
+  //     mouse-point-a, mouse-point-b, mouse-point-l1, mouse-point-l2, mouse-point-c, mouse-point-d
+  //   and will gracefully no-op if an anchor is missing.
+  // - Cursor is appended to document.body and positioned using page coordinates
   // ================================
-  if (mouse) {
-    mouse.style.position = "absolute";
-    mouse.style.transform = "none";
-    mouse.style.willChange = "left, top";
-    mouse.style.opacity = 1;
-    mouse.style.left = "0px";
-    mouse.style.top  = "0px";
+  // Create cursor element if it doesn't exist
+  let cursor = document.querySelector(".simple-mouse-cursor");
+  if (!cursor) {
+    cursor = document.createElement("div");
+    cursor.className = "simple-mouse-cursor";
+    // basic styles (you can override in site CSS)
+    cursor.style.width = "25px";
+    cursor.style.height = "25px";
+    cursor.style.background = "black";
+    cursor.style.borderRadius = "4px";
+    cursor.style.position = "absolute";    // position relative to page
+    cursor.style.transform = "translate(-50%, -50%)";
+    cursor.style.willChange = "transform, opacity";
+    cursor.style.opacity = "1";
+    cursor.style.pointerEvents = "none";
+    document.body.appendChild(cursor);
   }
 
-  const setMouseStart = () => {
-    const A = center(anchorA);
-    gsap.set(mouse, { left: A.left - 380, top: A.top - 180, opacity: 1 });
+  // helper to move cursor to page coordinates (using CSS transition)
+  const moveCursorTo = (targetEl, durationSec = 0.5) => {
+    return new Promise(resolve => {
+      if (!targetEl) return resolve(); // nothing to move to
+
+      const pos = center(targetEl);
+      if (!pos) return resolve();
+
+      // set transition for this movement
+      cursor.style.transition = `transform ${durationSec}s ease`;
+      // set transform to page coords (translate centers the element)
+      // NOTE: translate expects pixel values; construct translate(xpx, ypx)
+      cursor.style.transform = `translate(${pos.left}px, ${pos.top}px) translate(-50%, -50%)`;
+
+      // resolve after duration (plus tiny buffer)
+      setTimeout(resolve, Math.max(50, durationSec * 1000 + 30));
+    });
   };
-  setMouseStart();
+
+  // helper to move cursor offscreen to the right (exit)
+  const moveCursorOffscreen = (durationSec = 0.45) => {
+    return new Promise(resolve => {
+      const exitX = window.innerWidth + 300;
+      // keep vertical center where it is (read current top from transform)
+      // reading exact transform values is messy; we'll just keep top same as last computed using getBoundingClientRect of cursor
+      const rect = cursor.getBoundingClientRect();
+      const top = rect.top + window.scrollY + rect.height / 2;
+
+      cursor.style.transition = `transform ${durationSec}s ease`;
+      cursor.style.transform = `translate(${exitX}px, ${top}px) translate(-50%, -50%)`;
+
+      setTimeout(resolve, Math.max(50, durationSec * 1000 + 30));
+    });
+  };
 
   // ================================
-  // MASTER TIMELINE
+  // MASTER TIMELINE (keeps all original timing / text behavior)
+  // but we replace the GSAP mouse movement steps with calls to the simple cursor above
   // ================================
   const tl = gsap.timeline();
 
@@ -135,42 +172,51 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, 0);
 
+  // --------------------
   // STEP 1: START → A
+  // --------------------
+  // (originally moved mouse here via GSAP; now call our moveCursorTo at this point in the timeline)
   tl.add(() => {
-    const A = center(anchorA);
-    gsap.to(mouse, { duration: 1.5, ease: "power2.inOut", left: A.left, top: A.top });
+    const A = document.getElementById("mouse-point-a") || document.getElementById("A");
+    // original GSAP used duration 1.5 for this movement
+    moveCursorTo(A, 1.5).catch(() => {});
   });
+  // preserve the original short gap
   tl.to({}, { duration: 0.4 });
 
+  // --------------------
   // STEP 2: A → B
+  // --------------------
   tl.add(() => {
-    const B = center(anchorB);
+    const B = document.getElementById("mouse-point-b") || document.getElementById("B");
     const t = 0.5;
     const targetWidth = changingWord.offsetWidth + "px";
-    gsap.to(mouse, { duration: t, ease: "power2.inOut", left: B.left, top: B.top });
+
+    moveCursorTo(B, t).catch(() => {});
+    // keep highlight animation exactly as original
     gsap.to(highlight, { duration: t, width: targetWidth, ease: "power2.inOut" });
   });
   tl.to({}, { duration: 0.4 });
 
+  // --------------------
   // STEP 3: B → L1 → L2 → C
+  // --------------------
   tl.add(() => {
-    const L1 = center(anchorL1);
-    const L2 = center(anchorL2);
-    const C  = center(anchorC);
-    const wordsToCycle = words.slice(1);
+    const L1 = document.getElementById("mouse-point-l1") || document.getElementById("L1");
+    const L2 = document.getElementById("mouse-point-l2") || document.getElementById("L2");
+    const C  = document.getElementById("mouse-point-c")  || document.getElementById("C");
+
+    const wordsToCycle = words.slice(1); // keep existing word cycling logic
     const wordDuration = 0.9;
     const totalTime = wordsToCycle.length * wordDuration;
 
-    gsap.to(mouse, {
-      duration: totalTime,
-      ease: "linear",
-      keyframes: [
-        { left: L1.left, top: L1.top, duration: wordDuration },
-        { left: L2.left, top: L2.top, duration: wordDuration },
-        { left: C.left,  top: C.top,  duration: wordDuration }
-      ]
-    });
+    // Chain cursor moves with timed setTimeouts to match the word cycling timing:
+    // move to L1, then after wordDuration -> L2, then after 2*wordDuration -> C
+    if (L1) moveCursorTo(L1, wordDuration).catch(() => {});
+    if (L2) setTimeout(() => moveCursorTo(L2, wordDuration).catch(() => {}), wordDuration * 1000);
+    if (C)  setTimeout(() => moveCursorTo(C,  wordDuration).catch(() => {}), wordDuration * 1000 * 2);
 
+    // Keep existing word cycling and button micro animations
     wordsToCycle.forEach((w, idx) => {
       const isLast = idx === wordsToCycle.length - 1;
       gsap.delayedCall(idx * wordDuration, () => {
@@ -188,22 +234,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     gsap.delayedCall(totalTime - 0.05, () => gsap.to(highlight, { width: 0, duration: 0.4 }));
+    // keep the original extra pause after this block
     gsap.delayedCall(totalTime, () => tl.to({}, { duration: 0.8 }));
   });
 
+  // --------------------
   // STEP 4: C → D exit
+  // --------------------
   tl.add(() => {
-    const D = center(anchorD);
-    const exitX = window.innerWidth + 300;
-    gsap.to(mouse, {
-      duration: 1.05,
-      ease: "power2.inOut",
-      keyframes: [
-        { left: D.left, top: D.top, duration: 0.6 },
-        { left: exitX,  top: D.top, duration: 0.45 }
-      ]
-    });
+    const D = document.getElementById("mouse-point-d") || document.getElementById("D");
+    // original exit used keyframes: first 0.6s to D, then 0.45s to offscreen
+    const firstDuration = 0.6;
+    const secondDuration = 0.45;
+
+    if (D) {
+      moveCursorTo(D, firstDuration).catch(() => {});
+      // wait firstDuration then move offscreen
+      setTimeout(() => {
+        moveCursorOffscreen(secondDuration).catch(() => {});
+      }, firstDuration * 1000);
+    } else {
+      // if D missing, still try to move offscreen gently
+      moveCursorOffscreen(firstDuration + secondDuration).catch(() => {});
+    }
   });
 
+  // (end of DOMContentLoaded)
 });
-
