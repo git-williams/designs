@@ -82,90 +82,81 @@
   </div>
 </section>
 
-       <section>
-
-      
-<div class="points-wrapper">
-<div id="cursor"></div>
-<div id="A" class="point">A</div>
-<div id="B" class="point">B</div>
-<div id="C" class="point">C</div>
-<div id="D" class="point">D</div>
-</div>
-
-
-
-
-      
-    <style>
-
+      <style>
 .points-wrapper {
- 
   display: flex;
   gap: 60px;
-  position: relative;
-  padding: 40px; /* IMPORTANT */
+  position: relative;  /* cursor positions relative to this */
+  padding: 40px;
   border: 2px solid #000;
 }
 
-
 .point {
-width: 30px;
-height: 30px;
-background: #ddd;
-border-radius: 50%;
-display: flex;
-justify-content: center;
-align-items: center;
-font-size: 14px;
-border: 2px solid #aaa;
+  width: 30px;
+  height: 30px;
+  background: #ddd;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  border: 2px solid #aaa;
 }
 
-
 #cursor {
-width: 25px;
-height: 25px;
-background: black;
-border-radius: 4px;
-position: absolute;
-top: 0;
-left: 0;
-transform: translate(-50%, -50%);
-opacity: 1;
-transition: transform 0.5s ease, opacity 0.3s ease;
+  width: 25px;
+  height: 25px;
+  background: black;
+  border-radius: 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  transition: transform 0.5s ease, opacity 0.3s ease;
 }
 </style>
 
+<div class="points-wrapper">
+  <div id="cursor"></div>
+
+  <div class="point" id="A">A</div>
+  <div class="point" id="B">B</div>
+  <div class="point" id="C">C</div>
+  <div class="point" id="D">D</div>
+</div>
 
 <script>
 window.addEventListener("load", () => {
   const cursor = document.getElementById("cursor");
+  const wrapper = document.querySelector(".points-wrapper");
   const pointIds = ["A", "B", "C", "D"]; // chronological order
+
   const delays = {
     before: 500,
     between: 600,
     atPoint: 400
   };
 
-  function getPosition(el) {
+  function getLocalPosition(el) {
+    const wrapperRect = wrapper.getBoundingClientRect();
     const rect = el.getBoundingClientRect();
+
     return {
-      x: rect.left + rect.width / 2 + window.scrollX,
-      y: rect.top + rect.height / 2 + window.scrollY
+      x: rect.left - wrapperRect.left + rect.width / 2,
+      y: rect.top - wrapperRect.top + rect.height / 2
     };
   }
 
   async function moveCursorToPoint(pointEl) {
     return new Promise(resolve => {
-      const { x, y } = getPosition(pointEl);
+      const { x, y } = getLocalPosition(pointEl);
       cursor.style.transform = `translate(${x}px, ${y}px)`;
-
       setTimeout(resolve, delays.atPoint);
     });
   }
 
   async function runAnimation() {
-    // optional: delay before starting
     await new Promise(res => setTimeout(res, delays.before));
 
     for (let i = 0; i < pointIds.length; i++) {
@@ -181,8 +172,6 @@ window.addEventListener("load", () => {
   runAnimation();
 });
 </script>
-
-    </section>
 
 
 
