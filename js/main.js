@@ -1,4 +1,6 @@
-// Requires GSAP core + TextPlugin to be loaded on the page (MotionPathPlugin removed from mouse usage)
+// ================================
+// CORE PAGE LOGIC (UNCHANGED)
+// ================================
 document.addEventListener("DOMContentLoaded", () => {
 
   // ================================
@@ -39,9 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
   toggleHeader();
 
   // ================================
-  // HERO ANIMATION SETUP
+  // HERO TEXT ANIMATION (UNCHANGED)
   // ================================
-  // keep TextPlugin in case other parts of the site use it
   gsap.registerPlugin(TextPlugin);
 
   const words = ["impress.", "convert.", "inspire.", "grow.", "lead."];
@@ -66,93 +67,15 @@ document.addEventListener("DOMContentLoaded", () => {
   highlight.style.width = "0px";
   highlight.style.background = "rgba(100,150,255,0.5)";
 
-  // ================================
-  // UTILITY: GET ABSOLUTE CENTER COORDS
-  // ================================
-  const center = el => {
-    if (!el) return null;
-    const r = el.getBoundingClientRect();
-    return {
-      left: r.left + window.scrollX + r.width / 2,
-      top:  r.top  + window.scrollY + r.height / 2
-    };
-  };
-
-  // ================================
-  // REPLACEMENT MOUSE CURSOR (simple, robust)
-  // - This replaces all previous GSAP mouse/anchor behavior.
-  // - It will try to use the anchor elements if present:
-  //     mouse-point-a, mouse-point-b, mouse-point-l1, mouse-point-l2, mouse-point-c, mouse-point-d
-  //   and will gracefully no-op if an anchor is missing.
-  // - Cursor is appended to document.body and positioned using page coordinates
-  // ================================
-  // Create cursor element if it doesn't exist
-  let cursor = document.querySelector(".simple-mouse-cursor");
-  if (!cursor) {
-    cursor = document.createElement("div");
-    cursor.className = "simple-mouse-cursor";
-    // basic styles (you can override in site CSS)
-    cursor.style.width = "25px";
-    cursor.style.height = "25px";
-    cursor.style.background = "black";
-    cursor.style.borderRadius = "4px";
-    cursor.style.position = "absolute";    // position relative to page
-    cursor.style.transform = "translate(-50%, -50%)";
-    cursor.style.willChange = "transform, opacity";
-    cursor.style.opacity = "1";
-    cursor.style.pointerEvents = "none";
-    document.body.appendChild(cursor);
-  }
-
-  // helper to move cursor to page coordinates (using CSS transition)
-  const moveCursorTo = (targetEl, durationSec = 0.5) => {
-    return new Promise(resolve => {
-      if (!targetEl) return resolve(); // nothing to move to
-
-      const pos = center(targetEl);
-      if (!pos) return resolve();
-
-      // set transition for this movement
-      cursor.style.transition = `transform ${durationSec}s ease`;
-      // set transform to page coords (translate centers the element)
-      // NOTE: translate expects pixel values; construct translate(xpx, ypx)
-      cursor.style.transform = `translate(${pos.left}px, ${pos.top}px) translate(-50%, -50%)`;
-
-      // resolve after duration (plus tiny buffer)
-      setTimeout(resolve, Math.max(50, durationSec * 1000 + 30));
-    });
-  };
-
-  // helper to move cursor offscreen to the right (exit)
-  const moveCursorOffscreen = (durationSec = 0.45) => {
-    return new Promise(resolve => {
-      const exitX = window.innerWidth + 300;
-      // keep vertical center where it is (read current top from transform)
-      // reading exact transform values is messy; we'll just keep top same as last computed using getBoundingClientRect of cursor
-      const rect = cursor.getBoundingClientRect();
-      const top = rect.top + window.scrollY + rect.height / 2;
-
-      cursor.style.transition = `transform ${durationSec}s ease`;
-      cursor.style.transform = `translate(${exitX}px, ${top}px) translate(-50%, -50%)`;
-
-      setTimeout(resolve, Math.max(50, durationSec * 1000 + 30));
-    });
-  };
-
-  // ================================
-  // MASTER TIMELINE (keeps all original timing / text behavior)
-  // but we replace the GSAP mouse movement steps with calls to the simple cursor above
-  // ================================
+  // HERO typing timeline
   const tl = gsap.timeline();
 
-  // H1 slide + fade
   gsap.set(heroH1, { x: -28, opacity: 0 });
   tl.to(heroH1, { duration: 0.6, x: 0, opacity: 1, ease: "power2.out" }, 0);
 
-  // Typing animation
   const fullText = "Designs that impress.";
-  const prefix   = "Designs that ";
-  const perChar  = 0.05;
+  const prefix = "Designs that ";
+  const perChar = 0.05;
   const driver = { i: 0 };
   const totalChars = fullText.length;
 
@@ -172,92 +95,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, 0);
 
-  // --------------------
-  // STEP 1: START → A
-  // --------------------
-  // (originally moved mouse here via GSAP; now call our moveCursorTo at this point in the timeline)
-  tl.add(() => {
-    const A = document.getElementById("mouse-point-a") || document.getElementById("A");
-    // original GSAP used duration 1.5 for this movement
-    moveCursorTo(A, 1.5).catch(() => {});
-  });
-  // preserve the original short gap
-  tl.to({}, { duration: 0.4 });
+}); // END DOMContentLoaded
 
-  // --------------------
-  // STEP 2: A → B
-  // --------------------
-  tl.add(() => {
-    const B = document.getElementById("mouse-point-b") || document.getElementById("B");
-    const t = 0.5;
-    const targetWidth = changingWord.offsetWidth + "px";
 
-    moveCursorTo(B, t).catch(() => {});
-    // keep highlight animation exactly as original
-    gsap.to(highlight, { duration: t, width: targetWidth, ease: "power2.inOut" });
-  });
-  tl.to({}, { duration: 0.4 });
 
-  // --------------------
-  // STEP 3: B → L1 → L2 → C
-  // --------------------
-  tl.add(() => {
-    const L1 = document.getElementById("mouse-point-l1") || document.getElementById("L1");
-    const L2 = document.getElementById("mouse-point-l2") || document.getElementById("L2");
-    const C  = document.getElementById("mouse-point-c")  || document.getElementById("C");
+// ==========================================================
+// SIMPLE ABCD CURSOR ANIMATION — FULLY REPLACES OLD SYSTEM
+// ==========================================================
+window.addEventListener("load", () => {
+  const cursor = document.getElementById("cursor");
+  const wrapper = document.querySelector(".points-wrapper");
+  const pointIds = ["A", "B", "C", "D"];
 
-    const wordsToCycle = words.slice(1); // keep existing word cycling logic
-    const wordDuration = 0.9;
-    const totalTime = wordsToCycle.length * wordDuration;
+  const delays = {
+    before: 500,
+    between: 600,
+    atPoint: 400
+  };
 
-    // Chain cursor moves with timed setTimeouts to match the word cycling timing:
-    // move to L1, then after wordDuration -> L2, then after 2*wordDuration -> C
-    if (L1) moveCursorTo(L1, wordDuration).catch(() => {});
-    if (L2) setTimeout(() => moveCursorTo(L2, wordDuration).catch(() => {}), wordDuration * 1000);
-    if (C)  setTimeout(() => moveCursorTo(C,  wordDuration).catch(() => {}), wordDuration * 1000 * 2);
+  function getLocalPosition(el) {
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const rect = el.getBoundingClientRect();
+    return {
+      x: rect.left - wrapperRect.left + rect.width / 2,
+      y: rect.top - wrapperRect.top + rect.height / 2
+    };
+  }
 
-    // Keep existing word cycling and button micro animations
-    wordsToCycle.forEach((w, idx) => {
-      const isLast = idx === wordsToCycle.length - 1;
-      gsap.delayedCall(idx * wordDuration, () => {
-        changingWord.textContent = w;
-        highlight.style.width = changingWord.offsetWidth + "px";
-      });
-      if (isLast) {
-        gsap.delayedCall(idx * wordDuration + 0.1, () => {
-          gsap.to(button, { scale: 1.08, duration: 0.09 });
-          gsap.to(button, { scale: 1.0, duration: 0.12, delay: 0.09 });
-          gsap.to(button, { backgroundColor: "#ff4081", duration: 0.07 });
-          gsap.to(button, { backgroundColor: "#000", duration: 0.14, delay: 0.07 });
-        });
-      }
+  function moveCursorToPoint(pointEl) {
+    return new Promise(resolve => {
+      const { x, y } = getLocalPosition(pointEl);
+      cursor.style.transform = `translate(${x}px, ${y}px)`;
+      setTimeout(resolve, delays.atPoint);
     });
+  }
 
-    gsap.delayedCall(totalTime - 0.05, () => gsap.to(highlight, { width: 0, duration: 0.4 }));
-    // keep the original extra pause after this block
-    gsap.delayedCall(totalTime, () => tl.to({}, { duration: 0.8 }));
-  });
+  async function runAnimation() {
+    await new Promise(res => setTimeout(res, delays.before));
 
-  // --------------------
-  // STEP 4: C → D exit
-  // --------------------
-  tl.add(() => {
-    const D = document.getElementById("mouse-point-d") || document.getElementById("D");
-    // original exit used keyframes: first 0.6s to D, then 0.45s to offscreen
-    const firstDuration = 0.6;
-    const secondDuration = 0.45;
-
-    if (D) {
-      moveCursorTo(D, firstDuration).catch(() => {});
-      // wait firstDuration then move offscreen
-      setTimeout(() => {
-        moveCursorOffscreen(secondDuration).catch(() => {});
-      }, firstDuration * 1000);
-    } else {
-      // if D missing, still try to move offscreen gently
-      moveCursorOffscreen(firstDuration + secondDuration).catch(() => {});
+    for (let i = 0; i < pointIds.length; i++) {
+      const point = document.getElementById(pointIds[i]);
+      await moveCursorToPoint(point);
+      if (i < pointIds.length - 1) {
+        await new Promise(res => setTimeout(res, delays.between));
+      }
     }
-  });
+  }
 
-  // (end of DOMContentLoaded)
+  runAnimation();
 });
