@@ -134,55 +134,6 @@
 </style>
 
 
-<script>
-window.addEventListener("load", () => {
-  const cursor = document.getElementById("cursor");
-  const wrapper = document.querySelector(".points-wrapper");
-  const pointIds = ["A", "B", "C", "D"]; // chronological order
-
-  const delays = {
-    before: 500,
-    between: 600,
-    atPoint: 400
-  };
-
-  function getLocalPosition(el) {
-    const wrapperRect = wrapper.getBoundingClientRect();
-    const rect = el.getBoundingClientRect();
-
-    return {
-      x: rect.left - wrapperRect.left + rect.width / 2,
-      y: rect.top - wrapperRect.top + rect.height / 2
-    };
-  }
-
-  async function moveCursorToPoint(pointEl) {
-    return new Promise(resolve => {
-      const { x, y } = getLocalPosition(pointEl);
-      cursor.style.transform = `translate(${x}px, ${y}px)`;
-      setTimeout(resolve, delays.atPoint);
-    });
-  }
-
-  async function runAnimation() {
-    await new Promise(res => setTimeout(res, delays.before));
-
-    for (let i = 0; i < pointIds.length; i++) {
-      const point = document.getElementById(pointIds[i]);
-      await moveCursorToPoint(point);
-
-      if (i < pointIds.length - 1) {
-        await new Promise(res => setTimeout(res, delays.between));
-      }
-    }
-  }
-
-  runAnimation();
-});
-</script>
-
-
-
 
     
     <!-- =============================
