@@ -75,11 +75,8 @@
 
       <style>
 .points-wrapper {
-  display: flex;
-  gap: 60px;
-  position: relative;  /* cursor positions relative to this */
-  padding: 40px;
-  border: 2px solid #000;
+  position: relative;
+  width: 100%;
 }
 
 .point {
@@ -94,10 +91,11 @@
   border: 2px solid #aaa;
 }
 
-        .pointA{
-          position: absolute !important;
-          top: 50px;
-        }
+/* Responsive positioning */
+#A { top: 20%; left: 15%; }
+#B { top: 35%; left: 70%; }
+#C { top: 65%; left: 55%; }
+#D { top: 80%; left: 25%; }
 
 #cursor {
   width: 25px;
