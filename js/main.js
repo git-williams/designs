@@ -178,50 +178,113 @@ function wait(ms) {
 
 
 // ==========================================================
-// SIMPLE ABCD CURSOR (unchanged)
+// CURSOR PATH ANIMATION (GSAP, STABLE)
 // ==========================================================
 window.addEventListener("load", () => {
   const cursor = document.getElementById("cursor");
   const wrapper = document.querySelector(".points-wrapper");
-  if (!cursor || !wrapper) return;
 
-  const pointIds = ["A", "B", "C", "D"];
+  if (!cursor || !wrapper || typeof gsap === "undefined") return;
 
-  const delays = {
-    before: 500,
-    between: 600,
-    atPoint: 400
-  };
+  gsap.registerPlugin(MotionPathPlugin);
 
+  // ------------------------------------------
+  // ROUTE CONFIG
+  // ------------------------------------------
+  const route = [
+    {
+      id: "A",
+      pause: 2000
+    },
+    {
+      id: "B",
+      duration: 3,
+      pause: 600,
+      curve: [
+        { x: -60, y: -40 },
+        { x: -30, y: 0 }
+      ]
+    },
+    {
+      id: "C",
+      duration: 2,
+      pause: 500,
+      curve: [
+        { x: 40, y: 60 },
+        { x: 20, y: 20 }
+      ]
+    },
+    {
+      id: "D",
+      duration: 1.5
+    }
+  ];
+
+  // ------------------------------------------
+  // HELPERS
+  // ------------------------------------------
   function getLocalPosition(el) {
     const wrapperRect = wrapper.getBoundingClientRect();
     const rect = el.getBoundingClientRect();
+
     return {
       x: rect.left - wrapperRect.left + rect.width / 2,
       y: rect.top - wrapperRect.top + rect.height / 2
     };
   }
 
-  function moveCursorToPoint(pointEl) {
-    return new Promise(resolve => {
-      const { x, y } = getLocalPosition(pointEl);
-      cursor.style.transform = `translate(${x}px, ${y}px)`;
-      setTimeout(resolve, delays.atPoint);
+  // ------------------------------------------
+  // MAIN ANIMATION
+  // ------------------------------------------
+  function runCursorPath() {
+    const tl = gsap.timeline({
+      defaults: { ease: "power2.inOut" }
+    });
+
+    route.forEach((step, index) => {
+      const point = document.getElementById(step.id);
+      if (!point) return;
+
+      const { x, y } = getLocalPosition(point);
+
+      // First point: snap instantly
+      if (index === 0) {
+        tl.set(cursor, { x, y });
+      } else {
+        if (step.curve) {
+          // Curved motion (relative to target)
+          const path = step.curve.map(p => ({
+            x: x + p.x,
+            y: y + p.y
+          }));
+
+          // Ensure final point is exact
+          path.push({ x, y });
+
+          tl.to(cursor, {
+            duration: step.duration || 1,
+            motionPath: {
+              path,
+              curviness: 1.25
+            }
+          });
+        } else {
+          // Straight motion
+          tl.to(cursor, {
+            duration: step.duration || 1,
+            x,
+            y
+          });
+        }
+      }
+
+      // Pause at point
+      if (step.pause) {
+        tl.to({}, { duration: step.pause / 1000 });
+      }
     });
   }
 
-  async function runAnimation() {
-    await wait(delays.before);
-
-    for (let i = 0; i < pointIds.length; i++) {
-      const point = document.getElementById(pointIds[i]);
-      await moveCursorToPoint(point);
-
-      if (i < pointIds.length - 1) {
-        await wait(delays.between);
-      }
-    }
-  }
-
-  runAnimation();
+  runCursorPath();
 });
+
