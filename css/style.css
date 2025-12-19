@@ -452,24 +452,28 @@ footer {
     margin-top: 1rem;
   }
 
+  /* Make CTA feel more substantial */
   .cta-card {
-    max-width: 90%;
-    margin: 0 auto;
-    padding: 1.4rem;
+    max-width: 100%;
+    width: 100%;
+    padding: 1.8rem;
+    border-radius: 22px;
   }
 
-  .cta-title {
-    font-size: 0.95rem;
-  }
-
+  /* Bigger, clearer input area */
   .cta-fields input,
   .cta-fields textarea,
   .cta-primary,
   .cta-secondary {
-    font-size: 0.9rem;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.95rem;
   }
-}
 
+  /* Slightly larger primary button */
+  .cta-primary {
+    font-size: 1rem;
+    padding: 1rem 1.1rem;
+  }
 
 /* ================= CURSOR ================= */
 
