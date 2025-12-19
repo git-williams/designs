@@ -376,8 +376,8 @@ footer {
 
 /* ================= TABLET / SMALL DESKTOP ================= */
 
-@media (max-width: 920px) {
-
+@media (min-width: 676px) and (max-width: 920px) {
+  
   .hero {
     /* Account for fixed header + visual breathing room */
     padding-top: calc(70px + 2.5rem);
@@ -411,7 +411,7 @@ footer {
 
 
 /* ================= MOBILE HERO REWORK ================= */
-@media (max-width: 600px) {
+@media (max-width: 675px) {
 
   /* Full-height hero again */
   .hero {
