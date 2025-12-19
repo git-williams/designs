@@ -399,29 +399,77 @@ footer {
   }
 }
 
+
+
+/* ================= MOBILE HERO REWORK ================= */
 @media (max-width: 600px) {
+
+  /* Full-height hero again */
   .hero {
-    padding: 3rem 0 4rem;
+    min-height: 100vh;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-inner {
+    height: 100%;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+
+  /* ---------- TEXT ---------- */
+
+  .hero-text {
+    width: 100%;
   }
 
   .hero-heading {
     align-items: flex-start;
   }
 
+  /* Prefix above changing word */
   .typed-prefix {
-    font-size: 2.8rem;
+    font-size: clamp(3.2rem, 9vw, 4rem);
+    line-height: 1.05;
+  }
+
+  /* Lock width so longest word spans screen */
+  .word-frame {
+    width: 7ch;
+    max-width: 100%;
   }
 
   .word-container {
-    font-size: 3.4rem;
+    font-size: clamp(4.8rem, 14vw, 6rem);
+    line-height: 1;
+  }
+
+  /* ---------- CTA ---------- */
+
+  .hero-cta {
+    width: 100%;
+    margin-top: 1rem;
   }
 
   .cta-card {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 20px;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 1.4rem;
+  }
+
+  .cta-title {
+    font-size: 0.95rem;
+  }
+
+  .cta-fields input,
+  .cta-fields textarea,
+  .cta-primary,
+  .cta-secondary {
+    font-size: 0.9rem;
   }
 }
+
 
 /* ================= CURSOR ================= */
 
