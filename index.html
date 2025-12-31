@@ -37,7 +37,7 @@
 
 
 
-<section class="hero">
+<section class="hero hero-stage">
   <div class="hero-inner">
 
     <!-- HERO TEXT -->
@@ -80,14 +80,6 @@
     <div class="mouse-cursor"></div>
 
   </div>
-</section>
-
-
-
-
-
-
-    
 
     <div class="points-wrapper">
   <div id="cursor"></div>
@@ -97,12 +89,36 @@
   <div class="pointC point" id="C">C</div>
   <div class="pointC point" id="D">D</div>
 </div>
+</section>
+
+
+
+
+
+
+    
+
+  
 
       <style>
-.points-wrapper {
+.hero-stage {
   position: relative;
-  width: 100%;
 }
+
+
+
+
+
+        
+.points-wrapper {
+  position: absolute;
+  inset: 0;               /* covers hero exactly */
+  width: 100%;
+  height: 100%;
+  pointer-events: none;   /* feels like decoration, not UI */
+  z-index: 3;             /* above hero content, below header */
+}
+
 
 .point {
   width: 30px;
