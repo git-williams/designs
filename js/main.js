@@ -182,6 +182,10 @@ function wait(ms) {
 // ==========================================================
 window.addEventListener("load", () => {
   const cursor = document.getElementById("cursor");
+  gsap.set(cursor, {
+  xPercent: -50,
+  yPercent: -50
+});
   const wrapper = document.querySelector(".points-wrapper");
 
   if (!cursor || !wrapper || typeof gsap === "undefined") return;
