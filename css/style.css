@@ -381,7 +381,7 @@ footer {
   .hero {
     /* Account for fixed header + breathing room */
   padding-top: 70px; /* header only */
-  padding-bottom: 0;
+  padding-bottom: 20px;
 
     /* Stop true vertical centering on tablets */
     align-items: flex-start;
