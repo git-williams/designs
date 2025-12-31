@@ -138,10 +138,10 @@ function startHighlightCycle() {
     // --- Step 1: Slide highlight IN ---
     const targetWidth = changingWord.offsetWidth + "px";
     highlight.style.width = targetWidth;
-    highlight.style.height = "1.2em";
+    highlight.style.height = "1em";
 
     // slide in = animate height (slide upward)
-    highlight.style.height = "1.2em";
+    highlight.style.height = "1em";
 
     await wait(timings.slideDuration);
 
