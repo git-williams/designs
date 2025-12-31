@@ -409,6 +409,12 @@ footer {
   }
 }
 
+.points-wrapper {
+  top: 3.5rem;
+  bottom: 3.5rem;
+}
+
+
 
 /* ================= MOBILE HERO REWORK (PHONES ONLY) ================= */
 /* Small touch devices */
