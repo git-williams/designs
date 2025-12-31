@@ -57,6 +57,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const changingWord = heroH1.querySelector(".changing-word");
   const highlight = heroH1.querySelector(".highlight");
 
+  const heroHeading = document.querySelector(".hero-heading");
+const wordFrame = heroHeading.querySelector(".word-frame");
+
+// Reserve height equal to hero heading to prevent layout shift
+const headingHeight = heroHeading.getBoundingClientRect().height;
+wordFrame.style.height = `${headingHeight}px`;
+
+
   highlight.style.position = "absolute";
   highlight.style.left = "0";
   highlight.style.bottom = "0";
