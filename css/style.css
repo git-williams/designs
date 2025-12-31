@@ -413,6 +413,8 @@ footer {
   top: 3.5rem;
   bottom: 3.5rem;
 }
+.points-wrapper { outline: 2px dashed red; }
+
 
 
 
