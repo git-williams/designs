@@ -374,14 +374,14 @@ footer {
 }
 
 
-/* ================= TABLET / SMALL DESKTOP ================= */
-
-@media (max-width: 920px) {
+/* ================= TABLET / SMALL DESKTOP (iPAD RANGE) ================= */
+/* Touch tablets only — covers iPad Mini, Air, Pro */
+@media (hover: none) and (pointer: coarse) and (max-width: 1024px) {
 
   .hero {
-    /* Account for fixed header + visual breathing room */
-    padding-top: calc(70px + 2.5rem);
-    padding-bottom: 2.5rem;
+    /* Account for fixed header + breathing room */
+    padding-top: calc(70px + 3.5rem);
+    padding-bottom: 3.5rem;
 
     /* Stop true vertical centering on tablets */
     align-items: flex-start;
@@ -390,33 +390,39 @@ footer {
   .hero-inner {
     flex-direction: column;
     align-items: stretch;
-    margin-top: 0; /* remove manual offset */
+    margin-top: 0;
   }
 
   .hero-text {
     text-align: left;
   }
 
+  /* Push CTA downward on iPad */
   .hero-cta {
     width: 100%;
-    margin-top: 2rem;
+    margin-top: 4rem;
   }
 
   .cta-card {
-    max-width: 420px;
+    max-width: 460px;
     margin: 0 auto;
   }
 }
 
 
+/* ================= MOBILE HERO REWORK (PHONES ONLY) ================= */
+/* Small touch devices */
+@media (hover: none) and (pointer: coarse) and (max-width: 540px) {
 
-/* ================= MOBILE HERO REWORK ================= */
-@media (max-width: 600px) {
+  /* Thinner header on phones */
+  .main-header {
+    height: 54px;
+  }
 
-  /* Full-height hero again */
   .hero {
     min-height: 100vh;
-    padding: 0;
+    padding-top: 54px;
+    padding-bottom: 0;
     display: flex;
     align-items: center;
   }
@@ -426,6 +432,28 @@ footer {
     justify-content: center;
     gap: 2.5rem;
   }
+
+  .hero-text {
+    width: 100%;
+  }
+
+  .hero-heading {
+    align-items: flex-start;
+  }
+
+  /* CTA tighter on phones */
+  .hero-cta {
+    width: 100%;
+    margin-top: 1.25rem;
+  }
+
+  .cta-card {
+    max-width: 100%;
+    width: 100%;
+    padding: 1.6rem;
+    border-radius: 20px;
+  }
+}
 
   /* ---------- TEXT ---------- */
 
