@@ -54,32 +54,404 @@
 
     </div>
 
-    <!-- CTA -->
-    <div class="hero-cta">
-      <div class="cta-card">
 
-        <h3 class="cta-title">Bring your site to life</h3>
 
-        <div class="cta-fields">
-          <input type="email" placeholder="Email" />
-          <input type="text" placeholder="Project type" />
-          <textarea placeholder="Tell me about your project"></textarea>
-        </div>
+    
+<!--====================== CAT MEOW ========================-->
+<div class="cat-wrapper">
+  <div class="cat-square">
 
-        <button class="cta-primary">Submit</button>
+    <!-- LEFT SIDE -->
+    <div class="cat-left">
 
-        <div class="cta-divider">
-          <span>or</span>
-        </div>
-
-        <button class="cta-secondary">Other contacts</button>
-
+      <div class="cat-left-top cat-section" data-cat="left-top">
+        <!-- intentionally blank -->
       </div>
+
+      <div class="cat-left-bottom cat-section" data-cat="left-bottom">
+        <!-- intentionally blank -->
+      </div>
+
     </div>
 
-    <div class="mouse-cursor"></div>
+    <!-- RIGHT SIDE -->
+    <div class="cat-right cat-section" data-cat="right">
+
+      <!-- Big logo (background state) -->
+      <div class="cat-right-logo">
+        <img src="" alt="" />
+      </div>
+
+      <!-- Glass cover -->
+      <div class="cat-right-cover">
+        <div class="cat-cover-content">
+          <h2>
+            <span>Learn</span>
+            <span>More</span>
+          </h2>
+
+          <p>Learn more about your new design provider</p>
+
+          <div class="cat-cover-footer">
+            <div class="cat-cover-mini-logo">
+              <img src="" alt="" />
+            </div>
+            <small>About the studio</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expanded content -->
+      <div class="cat-right-expanded">
+
+        <h3 class="cat-right-title">Designed With Intent</h3>
+
+        <div class="cat-right-list">
+          <!-- Item -->
+          <div class="cat-right-item">
+            <div class="cat-item-icon"></div>
+            <div class="cat-item-text">
+              <strong>Custom Design</strong>
+              <span>Built specifically around your brand and goals.</span>
+            </div>
+          </div>
+
+          <div class="cat-right-item">
+            <div class="cat-item-icon"></div>
+            <div class="cat-item-text">
+              <strong>Conversion Focused</strong>
+              <span>Design that guides users toward action.</span>
+            </div>
+          </div>
+
+          <div class="cat-right-item">
+            <div class="cat-item-icon"></div>
+            <div class="cat-item-text">
+              <strong>Performance First</strong>
+              <span>Fast, smooth, and responsive everywhere.</span>
+            </div>
+          </div>
+
+          <div class="cat-right-item">
+            <div class="cat-item-icon"></div>
+            <div class="cat-item-text">
+              <strong>Collaborative Process</strong>
+              <span>You’re involved at every meaningful step.</span>
+            </div>
+          </div>
+
+          <div class="cat-right-item">
+            <div class="cat-item-icon"></div>
+            <div class="cat-item-text">
+              <strong>Built to Scale</strong>
+              <span>Ready for growth, SEO, and future features.</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="cat-learn-more">Learn More</button>
+
+      </div>
+
+    </div>
 
   </div>
+</div>
+
+
+
+
+<style>
+
+  :root {
+  /* sizing */
+  --cat-square-size: min(90vw, 700px);
+  --cat-gap: clamp(12px, 2vw, 20px);
+  --cat-radius: 22px;
+
+  /* colors */
+  --cat-right-bg: #1f2933;
+  --cat-left-top-bg: #2e3a46;
+  --cat-left-bottom-bg: #394754;
+
+  --cat-cover-bg: rgba(255,255,255,0.18);
+  --cat-text-light: #ffffff;
+  --cat-muted: rgba(255,255,255,0.75);
+
+  --cat-accent: #ffffff;
+
+  /* motion */
+  --cat-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* wrapper centers everything */
+.cat-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5vw 0;
+}
+
+/* imaginary square */
+.cat-square {
+  width: var(--cat-square-size);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--cat-gap);
+}
+
+/* left side stack */
+.cat-left {
+  display: grid;
+  grid-template-rows: 3fr 1fr;
+  gap: var(--cat-gap);
+}
+
+/* shared section styles */
+.cat-section {
+  border-radius: var(--cat-radius);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s var(--cat-ease);
+}
+
+/* scale on select */
+.cat-section.is-active {
+  transform: scale(1.035);
+  z-index: 2;
+}
+
+/* left colors */
+.cat-left-top {
+  background: var(--cat-left-top-bg);
+}
+
+.cat-left-bottom {
+  background: var(--cat-left-bottom-bg);
+}
+
+/* RIGHT SECTION */
+.cat-right {
+  background: var(--cat-right-bg);
+  color: var(--cat-text-light);
+}
+
+/* big logo */
+.cat-right-logo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transition: opacity 0.25s ease, transform 0.35s var(--cat-ease);
+}
+
+.cat-right-logo::before {
+  content: "";
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+
+/* glass cover */
+.cat-right-cover {
+  position: absolute;
+  top: var(--cat-gap);
+  left: var(--cat-gap);
+  width: calc(50% - var(--cat-gap));
+  height: calc(100% - var(--cat-gap) * 2);
+  background: var(--cat-cover-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: calc(var(--cat-radius) - 4px);
+  transition: transform 0.45s var(--cat-ease), opacity 0.35s ease;
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+  .cat-right-cover {
+    background: rgba(255,255,255,0.28);
+  }
+}
+
+.cat-cover-content {
+  height: 100%;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.cat-cover-content h2 span {
+  display: block;
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 600;
+}
+
+.cat-cover-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.cat-cover-mini-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+}
+
+/* expanded content */
+.cat-right-expanded {
+  position: absolute;
+  inset: 0;
+  padding: 28px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.cat-right.is-active .cat-right-expanded {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cat-right-title {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+/* list */
+.cat-right-list {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.cat-right-item {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 999px;
+  transition: background 0.25s ease;
+}
+
+.cat-right-item:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.cat-item-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  flex-shrink: 0;
+}
+
+.cat-item-text strong {
+  display: block;
+  font-size: 14px;
+}
+
+.cat-item-text span {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* learn more button */
+.cat-learn-more {
+  position: absolute;
+  bottom: 22px;
+  right: 22px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.cat-learn-more:hover {
+  transform: scale(1.08);
+}
+
+/* ACTIVE STATE TRANSITIONS */
+.cat-right.is-active .cat-right-cover {
+  transform: translateX(60%);
+  opacity: 0;
+}
+
+.cat-right.is-active .cat-right-logo {
+  opacity: 0;
+  transform: scale(1.08);
+}
+
+</style>
+
+
+<script>
+const catSections = document.querySelectorAll('.cat-section');
+
+function deactivateAll() {
+  catSections.forEach(sec => sec.classList.remove('is-active'));
+}
+
+catSections.forEach(section => {
+  const isRight = section.classList.contains('cat-right');
+
+  // desktop hover
+  section.addEventListener('mouseenter', () => {
+    if (window.matchMedia('(hover: hover)').matches) {
+      deactivateAll();
+      section.classList.add('is-active');
+    }
+  });
+
+  section.addEventListener('mouseleave', () => {
+    if (window.matchMedia('(hover: hover)').matches) {
+      deactivateAll();
+    }
+  });
+
+  // mobile tap
+  section.addEventListener('click', e => {
+    if (!window.matchMedia('(hover: hover)').matches) {
+      e.stopPropagation();
+      deactivateAll();
+      section.classList.add('is-active');
+    }
+  });
+});
+
+// tap outside to close (mobile)
+document.addEventListener('click', () => {
+  if (!window.matchMedia('(hover: hover)').matches) {
+    deactivateAll();
+  }
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
     <div class="points-wrapper">
   <div id="cursor"></div>
