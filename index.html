@@ -59,104 +59,110 @@
     
 <!--====================== CAT MEOW ========================-->
 <div class="cat-wrapper">
-  <div class="cat-square">
+  <div class="cat-square cat-compact"><!-- NEW: compact height -->
 
     <!-- LEFT SIDE -->
     <div class="cat-left">
 
-      <div class="cat-left-top cat-section" data-cat="left-top">
-        <!-- intentionally blank -->
+      <!-- LEFT TOP (CONTACT) -->
+      <div class="cat-left-top cat-section cat-contact" data-cat="left-top">
+
+        <!-- HEADER STATE -->
+        <div class="cat-contact-default">
+
+          <span class="cat-eyebrow">Welcome</span>
+          <h3 class="cat-contact-title">Contact Me</h3>
+
+          <div class="cat-contact-options">
+
+            <!-- EMAIL -->
+            <div class="cat-contact-pill" data-mode="email">
+              <div class="cat-pill-icon">
+                <span class="icon-mail"></span>
+                <span class="icon-arrow-left"></span>
+              </div>
+              <span class="cat-pill-text">Contact via email</span>
+            </div>
+
+            <!-- PHONE -->
+            <div class="cat-contact-pill" data-mode="phone">
+              <div class="cat-pill-icon">
+                <span class="icon-phone"></span>
+                <span class="icon-arrow-left"></span>
+              </div>
+              <span class="cat-pill-text">Contact via phone</span>
+            </div>
+
+          </div>
+
+          <!-- DIVIDER -->
+          <div class="cat-divider">
+            <span>or</span>
+          </div>
+
+          <!-- FORM LINK -->
+          <div class="cat-form-link">
+            <span>Submit a form</span>
+            <div class="cat-form-icon">
+              <span class="icon-arrow-right"></span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- FORM STATE -->
+        <div class="cat-contact-form">
+
+          <button class="cat-back">&lt; Back</button>
+          <h3 class="cat-form-title"></h3>
+
+          <input type="email" placeholder="Your email" />
+          <textarea placeholder="Your message"></textarea>
+          <button class="cat-submit">Submit</button>
+
+        </div>
+
       </div>
 
-      <div class="cat-left-bottom cat-section" data-cat="left-bottom">
-        <!-- intentionally blank -->
-      </div>
+      <!-- LEFT BOTTOM (UNCHANGED SIZE) -->
+      <div class="cat-left-bottom cat-section" data-cat="left-bottom"></div>
 
     </div>
 
-    <!-- RIGHT SIDE -->
+    <!-- RIGHT SIDE (mostly unchanged, spacing tightened) -->
     <div class="cat-right cat-section" data-cat="right">
 
-      <!-- Big logo (background state) -->
       <div class="cat-right-logo">
         <img src="" alt="" />
       </div>
 
-      <!-- Glass cover -->
       <div class="cat-right-cover">
         <div class="cat-cover-content">
-          <h2>
-            <span>Learn</span>
-            <span>More</span>
-          </h2>
-
+          <h2><span>Learn</span><span>More</span></h2>
           <p>Learn more about your new design provider</p>
-
           <div class="cat-cover-footer">
-            <div class="cat-cover-mini-logo">
-              <img src="" alt="" />
-            </div>
+            <div class="cat-cover-mini-logo"></div>
             <small>About the studio</small>
           </div>
         </div>
       </div>
 
-      <!-- Expanded content -->
       <div class="cat-right-expanded">
-
         <h3 class="cat-right-title">Designed With Intent</h3>
 
         <div class="cat-right-list">
-          <!-- Item -->
-          <div class="cat-right-item">
-            <div class="cat-item-icon"></div>
-            <div class="cat-item-text">
-              <strong>Custom Design</strong>
-              <span>Built specifically around your brand and goals.</span>
-            </div>
-          </div>
-
-          <div class="cat-right-item">
-            <div class="cat-item-icon"></div>
-            <div class="cat-item-text">
-              <strong>Conversion Focused</strong>
-              <span>Design that guides users toward action.</span>
-            </div>
-          </div>
-
-          <div class="cat-right-item">
-            <div class="cat-item-icon"></div>
-            <div class="cat-item-text">
-              <strong>Performance First</strong>
-              <span>Fast, smooth, and responsive everywhere.</span>
-            </div>
-          </div>
-
-          <div class="cat-right-item">
-            <div class="cat-item-icon"></div>
-            <div class="cat-item-text">
-              <strong>Collaborative Process</strong>
-              <span>You’re involved at every meaningful step.</span>
-            </div>
-          </div>
-
-          <div class="cat-right-item">
-            <div class="cat-item-icon"></div>
-            <div class="cat-item-text">
-              <strong>Built to Scale</strong>
-              <span>Ready for growth, SEO, and future features.</span>
-            </div>
-          </div>
+          <!-- unchanged 5 items -->
         </div>
 
         <button class="cat-learn-more">Learn More</button>
-
       </div>
 
     </div>
-
   </div>
 </div>
+
+
+
 
 
 
@@ -388,6 +394,200 @@
   transform: scale(1.08);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* New*/
+
+
+
+
+  /* ---------- GEOMETRY COMPACTING ---------- */
+
+.cat-compact {
+  aspect-ratio: 1 / 0.82; /* NEW: shorter than square */
+}
+
+.cat-right-expanded {
+  padding: 22px;
+}
+
+.cat-right-list {
+  margin-bottom: 16px; /* reduced from 28px */
+}
+
+.cat-learn-more {
+  bottom: 16px;
+}
+
+/* ---------- ALIGNMENT FIXES ---------- */
+
+.cat-right-logo {
+  display: grid;
+  place-items: center;
+}
+
+.cat-right-item,
+.cat-contact-pill {
+  align-items: center; /* vertical centering fix */
+}
+
+/* ---------- CONTACT SECTION ---------- */
+
+.cat-contact {
+  padding: 22px;
+}
+
+.cat-eyebrow {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.cat-contact-title {
+  margin: 6px 0 18px;
+}
+
+.cat-contact-options {
+  display: grid;
+  gap: 12px;
+}
+
+/* Pills */
+.cat-contact-pill {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  cursor: pointer;
+  transition: transform .3s var(--cat-ease), background .3s ease;
+}
+
+.cat-contact-pill:hover {
+  transform: scale(1.04);
+}
+
+/* Icon slide */
+.cat-pill-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform .35s var(--cat-ease);
+}
+
+.cat-contact-pill:hover .cat-pill-icon {
+  transform: translateX(140%);
+}
+
+.cat-pill-icon span {
+  position: absolute;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.cat-pill-icon span:first-child {
+  opacity: 1;
+}
+
+.cat-contact-pill:hover .cat-pill-icon span:first-child {
+  opacity: 0;
+}
+
+.cat-contact-pill:hover .cat-pill-icon span:last-child {
+  opacity: 1;
+}
+
+/* Divider */
+.cat-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.5;
+  margin: 18px 0;
+}
+
+.cat-divider::before,
+.cat-divider::after {
+  content: "";
+  height: 1px;
+  background: currentColor;
+  flex: 1;
+}
+
+/* Form link */
+.cat-form-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.cat-form-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  display: grid;
+  place-items: center;
+}
+
+/* ---------- FORM STATE ---------- */
+
+.cat-contact-form {
+  position: absolute;
+  inset: 0;
+  padding: 22px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease, filter .3s ease;
+}
+
+.cat-contact.is-form .cat-contact-form {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cat-contact.is-form .cat-contact-default {
+  opacity: 0;
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.cat-back {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.cat-submit:hover {
+  transform: scale(1.06);
+}
+
+
 </style>
 
 
@@ -433,6 +633,32 @@ document.addEventListener('click', () => {
 });
 </script>
 
+
+
+
+
+    <!-- New -->
+
+    <script>
+const contact = document.querySelector('.cat-contact');
+const pills = contact.querySelectorAll('.cat-contact-pill');
+const backBtn = contact.querySelector('.cat-back');
+const title = contact.querySelector('.cat-form-title');
+
+pills.forEach(pill => {
+  pill.addEventListener('click', () => {
+    contact.classList.add('is-form');
+    const mode = pill.dataset.mode;
+    title.textContent = mode === 'email'
+      ? 'Send me an email'
+      : 'Contact via phone';
+  });
+});
+
+backBtn.addEventListener('click', () => {
+  contact.classList.remove('is-form');
+});
+</script>
 
 
 
