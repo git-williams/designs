@@ -100,14 +100,14 @@
             <span>or</span>
           </div>
 
-          <!-- FORM LINK -->
-          <div class="cat-form-link">
+         
+          <!-- SUBMIT FORM LINK -->
+          <a href="https://example.com" class="cat-form-link">
             <span>Submit a form</span>
             <div class="cat-form-icon">
               <span class="icon-arrow-right"></span>
             </div>
-          </div>
-
+          </a>
         </div>
 
         <!-- FORM STATE -->
@@ -459,72 +459,43 @@
 
 
 
-  /* ---------- GEOMETRY COMPACTING ---------- */
+ /* ---------- GLOBAL TEXT ---------- */
+* {
+  color: white;
+}
 
+/* ---------- COMPACT HEIGHT ---------- */
 .cat-compact {
-  aspect-ratio: 1 / 0.82; /* NEW: shorter than square */
+  aspect-ratio: 1 / 0.82;
 }
 
-.cat-right-expanded {
-  padding: 22px;
-}
+/* ---------- CONTACT PILL ---------- */
 
-.cat-right-list {
-  margin-bottom: 16px; /* reduced from 28px */
-}
-
-.cat-learn-more {
-  bottom: 16px;
-}
-
-/* ---------- ALIGNMENT FIXES ---------- */
-
-.cat-right-logo {
-  display: grid;
-  place-items: center;
-}
-
-.cat-right-item,
-.cat-contact-pill {
-  align-items: center; /* vertical centering fix */
-}
-
-/* ---------- CONTACT SECTION ---------- */
-
-.cat-contact {
-  padding: 22px;
-}
-
-.cat-eyebrow {
-  font-size: 12px;
-  opacity: 0.6;
-}
-
-.cat-contact-title {
-  margin: 6px 0 18px;
-}
-
-.cat-contact-options {
-  display: grid;
-  gap: 12px;
-}
-
-/* Pills */
 .cat-contact-pill {
   display: flex;
+  align-items: center;
   gap: 14px;
   padding: 14px;
   border-radius: 999px;
   background: rgba(255,255,255,0.12);
   cursor: pointer;
-  transition: transform .3s var(--cat-ease), background .3s ease;
+  transition: transform .3s ease, background .3s ease;
 }
 
 .cat-contact-pill:hover {
   transform: scale(1.04);
 }
 
-/* Icon slide */
+/* Fade text away on hover */
+.cat-pill-text {
+  transition: opacity .25s ease;
+}
+
+.cat-contact-pill:hover .cat-pill-text {
+  opacity: 0;
+}
+
+/* ICON SLIDE (2× distance) */
 .cat-pill-icon {
   width: 42px;
   height: 42px;
@@ -534,13 +505,14 @@
   place-items: center;
   position: relative;
   overflow: hidden;
-  transition: transform .35s var(--cat-ease);
+  transition: transform .35s cubic-bezier(.22,.61,.36,1);
 }
 
 .cat-contact-pill:hover .cat-pill-icon {
-  transform: translateX(140%);
+  transform: translateX(280%); /* doubled distance */
 }
 
+/* Icon swap */
 .cat-pill-icon span {
   position: absolute;
   opacity: 0;
@@ -559,38 +531,55 @@
   opacity: 1;
 }
 
-/* Divider */
+/* ---------- DIVIDER ---------- */
+
 .cat-divider {
   display: flex;
   align-items: center;
   gap: 10px;
-  opacity: 0.5;
+  opacity: .6;
   margin: 18px 0;
 }
 
 .cat-divider::before,
 .cat-divider::after {
   content: "";
-  height: 1px;
-  background: currentColor;
   flex: 1;
+  height: 1px;
+  background: white;
 }
 
-/* Form link */
+/* ---------- SUBMIT FORM LINK ---------- */
+
 .cat-form-link {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  cursor: pointer;
+  justify-content: space-between;
+  gap: 14px;
+  text-decoration: none;
+  transition: transform .25s ease, gap .25s ease;
 }
 
 .cat-form-icon {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: rgba(255,255,255,0.25);
   display: grid;
   place-items: center;
+  transition: transform .25s ease;
+}
+
+/* Desktop hover */
+@media (hover: hover) {
+  .cat-form-link:hover {
+    transform: scale(1.06);
+    gap: 8px; /* scrunch */
+  }
+
+  .cat-form-link:hover .cat-form-icon span {
+    content: "";
+  }
 }
 
 /* ---------- FORM STATE ---------- */
@@ -599,6 +588,10 @@
   position: absolute;
   inset: 0;
   padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
   opacity: 0;
   pointer-events: none;
   transition: opacity .3s ease, filter .3s ease;
@@ -615,15 +608,50 @@
   pointer-events: none;
 }
 
-.cat-back {
-  background: none;
+/* Inputs */
+.cat-contact-form input,
+.cat-contact-form textarea,
+.cat-submit {
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+  background: rgba(255,255,255,0.12);
   border: none;
-  color: inherit;
+  border-radius: 12px;
+  padding: 14px;
+  transition: transform .25s ease, background .25s ease;
+}
+
+.cat-contact-form input,
+.cat-submit {
+  height: 48px;
+}
+
+.cat-contact-form textarea {
+  min-height: 120px;
+  resize: none;
+}
+
+.cat-contact-form input:hover,
+.cat-contact-form textarea:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.cat-submit {
   cursor: pointer;
 }
 
 .cat-submit:hover {
   transform: scale(1.06);
+}
+
+/* Back button */
+.cat-back {
+  background: none;
+  border: none;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-bottom: 6px;
 }
 
 
@@ -687,15 +715,27 @@ const title = contact.querySelector('.cat-form-title');
 pills.forEach(pill => {
   pill.addEventListener('click', () => {
     contact.classList.add('is-form');
-    const mode = pill.dataset.mode;
-    title.textContent = mode === 'email'
-      ? 'Send me an email'
-      : 'Contact via phone';
+    title.textContent =
+      pill.dataset.mode === 'email'
+        ? 'Send me an email'
+        : 'Contact via phone';
   });
 });
 
 backBtn.addEventListener('click', () => {
   contact.classList.remove('is-form');
+});
+
+/* Mobile submit form interaction */
+const formLink = document.querySelector('.cat-form-link');
+let formArmed = false;
+
+formLink.addEventListener('click', e => {
+  if (window.matchMedia('(hover: none)').matches && !formArmed) {
+    e.preventDefault();
+    formArmed = true;
+    formLink.classList.add('is-armed');
+  }
 });
 </script>
 
