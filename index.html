@@ -413,6 +413,95 @@ if (window.matchMedia('(hover: none)').matches) {
   opacity: 1;
   transform: translate(0, 0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ================================
+   LEFT BOTTOM – FINAL REFINEMENTS
+================================ */
+
+/* --- Tighter default layout --- */
+.cat-work-default {
+  justify-content: flex-start; /* was space-between */
+}
+
+.cat-work-default h3 {
+  margin-top: 4px;
+}
+
+.cat-work-default p {
+  margin-top: 4px;
+}
+
+.cat-work-discover {
+  position: absolute;
+  bottom: 16px;
+  right: 18px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* --- Icons smaller + gap reduced --- */
+.cat-work-sites {
+  gap: clamp(14px, 3vw, 22px); /* reduced */
+}
+
+.cat-work-icon {
+  width: clamp(56px, 7.5vw, 82px); /* smaller */
+  height: clamp(56px, 7.5vw, 82px);
+}
+
+/* --- Text centered by default --- */
+.cat-work-name {
+  justify-content: center;
+  transform: translateX(0);
+  transition: transform .25s ease;
+}
+
+/* Arrow does NOT reserve space */
+.cat-work-name::after {
+  position: absolute;
+  left: 100%;
+  margin-left: 6px;
+}
+
+/* When active/hovered, scooch text left */
+@media (hover: hover) {
+  .cat-work-site:hover .cat-work-name {
+    transform: translateX(-6px);
+  }
+}
+
+.cat-work-site.is-armed .cat-work-name {
+  transform: translateX(-6px);
+}
+
+
+
+
+
+
+
+
+
+
+    
   </style>
 
 
