@@ -125,7 +125,42 @@
       </div>
 
       <!-- LEFT BOTTOM (UNCHANGED SIZE) -->
-      <div class="cat-left-bottom cat-section" data-cat="left-bottom"></div>
+<div class="cat-left-bottom cat-section cat-work" data-cat="left-bottom">
+
+  <!-- DEFAULT STATE -->
+  <div class="cat-work-default">
+    <h3>See my work</h3>
+    <p>View mock sites built by me</p>
+    <span class="cat-work-discover">Discover</span>
+  </div>
+
+  <!-- EXPANDED STATE -->
+  <div class="cat-work-sites">
+
+    <a href="#" class="cat-work-site" data-site="baseline">
+      <div class="cat-work-icon">
+        <img src="" alt="Baseline" />
+      </div>
+      <span class="cat-work-name">Baseline</span>
+    </a>
+
+    <a href="#" class="cat-work-site" data-site="expression">
+      <div class="cat-work-icon">
+        <img src="" alt="Expression" />
+      </div>
+      <span class="cat-work-name">Expression</span>
+    </a>
+
+    <a href="#" class="cat-work-site" data-site="ascension">
+      <div class="cat-work-icon">
+        <img src="" alt="Ascension" />
+      </div>
+      <span class="cat-work-name">Ascension</span>
+    </a>
+
+  </div>
+
+</div>
 
     </div>
 
@@ -203,7 +238,203 @@
 
 
 
+<script>
+const workSection = document.querySelector('.cat-work');
+const workSites = workSection.querySelectorAll('.cat-work-site');
 
+/* Desktop hover */
+if (window.matchMedia('(hover: hover)').matches) {
+  workSection.addEventListener('mouseenter', () => {
+    workSection.classList.add('is-active');
+  });
+
+  workSection.addEventListener('mouseleave', () => {
+    workSection.classList.remove('is-active');
+  });
+}
+
+/* Mobile click-to-expand */
+if (window.matchMedia('(hover: none)').matches) {
+  let expanded = false;
+
+  workSection.addEventListener('click', e => {
+    if (!expanded) {
+      e.preventDefault();
+      expanded = true;
+      workSection.classList.add('is-active');
+    }
+  });
+
+  document.addEventListener('click', e => {
+    if (!workSection.contains(e.target)) {
+      expanded = false;
+      workSection.classList.remove('is-active');
+      workSites.forEach(site => site.classList.remove('is-armed'));
+    }
+  });
+
+  /* Two-step site click */
+  workSites.forEach(site => {
+    let armed = false;
+
+    site.addEventListener('click', e => {
+      if (!armed) {
+        e.preventDefault();
+        armed = true;
+        site.classList.add('is-armed');
+      }
+    });
+  });
+}
+</script>
+    
+  <style>
+/* ================================
+   LEFT BOTTOM – SEE MY WORK
+================================ */
+
+/* Base */
+.cat-work {
+  background: var(--cat-left-bottom-bg);
+  cursor: pointer;
+}
+
+/* Default content */
+.cat-work-default {
+  position: absolute;
+  inset: 0;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: opacity .3s ease, filter .3s ease;
+}
+
+.cat-work-default h3 {
+  font-size: clamp(18px, 2vw, 22px);
+}
+
+.cat-work-default p {
+  opacity: .75;
+  margin-top: 6px;
+}
+
+.cat-work-discover {
+  align-self: flex-end;
+  font-size: 14px;
+  opacity: .85;
+}
+
+/* Expanded container */
+.cat-work-sites {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(18px, 4vw, 32px);
+  opacity: 0;
+  filter: blur(8px);
+  pointer-events: none;
+  transition: opacity .35s ease, filter .35s ease;
+}
+
+/* Expanded background */
+.cat-work.is-active {
+  background: #0f1720; /* custom hover color */
+}
+
+/* State switch */
+.cat-work.is-active .cat-work-default {
+  opacity: 0;
+  filter: blur(6px);
+}
+
+.cat-work.is-active .cat-work-sites {
+  opacity: 1;
+  filter: blur(0);
+  pointer-events: auto;
+}
+
+/* Individual site */
+.cat-work-site {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: transform .25s var(--cat-ease);
+}
+
+/* Icon */
+.cat-work-icon {
+  width: clamp(64px, 9vw, 96px);
+  height: clamp(64px, 9vw, 96px);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  display: grid;
+  place-items: center;
+}
+
+/* Name + arrow */
+.cat-work-name {
+  position: relative;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cat-work-name::after {
+  content: "↗";
+  opacity: 0;
+  transform: translate(-4px, 4px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+/* Desktop hover */
+@media (hover: hover) {
+  .cat-work-site:hover {
+    transform: scale(1.08);
+  }
+
+  .cat-work-site:hover .cat-work-name::after {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+/* Mobile armed state */
+.cat-work-site.is-armed {
+  transform: scale(1.1);
+}
+
+.cat-work-site.is-armed .cat-work-name::after {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+  </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
 
 <style>
