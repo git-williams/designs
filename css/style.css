@@ -27,6 +27,17 @@ header,
 footer {
   width: 100%;
 }
+/* =============== GLOBAL TAP COLOR STUFF =============== */
+button,
+a,
+.cat-section,
+.cat-work-site {
+  outline: none;
+}
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 
 /* =============== HEADER =============== */
 .main-header {
