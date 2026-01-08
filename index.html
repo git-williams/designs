@@ -235,307 +235,17 @@
 </div>
 
 
-
-
-<script>
-const workSection = document.querySelector('.cat-work');
-const workSites = workSection.querySelectorAll('.cat-work-site');
-
-/* Desktop hover */
-if (window.matchMedia('(hover: hover)').matches) {
-  workSection.addEventListener('mouseenter', () => {
-    workSection.classList.add('is-active');
-  });
-
-  workSection.addEventListener('mouseleave', () => {
-    workSection.classList.remove('is-active');
-  });
-}
-
-/* Mobile click-to-expand */
-if (window.matchMedia('(hover: none)').matches) {
-  let expanded = false;
-
-  workSection.addEventListener('click', e => {
-    if (!expanded) {
-      e.preventDefault();
-      expanded = true;
-      workSection.classList.add('is-active');
-    }
-  });
-
-  document.addEventListener('click', e => {
-    if (!workSection.contains(e.target)) {
-      expanded = false;
-      workSection.classList.remove('is-active');
-      workSites.forEach(site => site.classList.remove('is-armed'));
-    }
-  });
-
-  /* Two-step site click */
-  workSites.forEach(site => {
-    let armed = false;
-
-    site.addEventListener('click', e => {
-      if (!armed) {
-        e.preventDefault();
-        armed = true;
-        site.classList.add('is-armed');
-      }
-    });
-  });
-}
-</script>
     
   <style>
-/* ================================
-   LEFT BOTTOM – SEE MY WORK
+
+
+
+
+
+
+  /* ================================
+   GLOBAL – SIZING + COLORS
 ================================ */
-
-
-
-
-    .cat-work-site,
-.cat-work-site:visited,
-.cat-work-site:active,
-.cat-work-site:focus {
-  color: #ffffff;
-}
-
-/* Base */
-.cat-work {
-  background: var(--cat-left-bottom-bg);
-  cursor: pointer;
-}
-
-/* Default content */
-.cat-work-default {
-  position: absolute;
-  inset: 0;
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: opacity .3s ease, filter .3s ease;
-}
-
-.cat-work-default h3 {
-  font-size: clamp(18px, 2vw, 22px);
-}
-
-.cat-work-default p {
-  opacity: .75;
-  margin-top: 6px;
-}
-
-.cat-work-discover {
-  align-self: flex-end;
-  font-size: 14px;
-  opacity: .85;
-}
-
-/* Expanded container */
-.cat-work-sites {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: clamp(18px, 4vw, 32px);
-  opacity: 0;
-  filter: blur(8px);
-  pointer-events: none;
-  transition: opacity .35s ease, filter .35s ease;
-}
-
-/* Expanded background */
-.cat-work.is-active {
-  background: #0f1720; /* custom hover color */
-}
-
-/* State switch */
-.cat-work.is-active .cat-work-default {
-  opacity: 0;
-  filter: blur(6px);
-}
-
-.cat-work.is-active .cat-work-sites {
-  opacity: 1;
-  filter: blur(0);
-  pointer-events: auto;
-}
-
-/* Individual site */
-.cat-work-site {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  transition: transform .25s var(--cat-ease);
-}
-
-/* Icon */
-.cat-work-icon {
-  width: clamp(64px, 9vw, 96px);
-  height: clamp(64px, 9vw, 96px);
-  border-radius: 50%;
-  background: rgba(255,255,255,0.18);
-  display: grid;
-  place-items: center;
-}
-
-/* Name + arrow */
-.cat-work-name {
-  position: relative;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.cat-work-name::after {
-  content: "↗";
-  opacity: 0;
-  transform: translate(-4px, 4px);
-  transition: opacity .2s ease, transform .2s ease;
-}
-
-/* Desktop hover */
-@media (hover: hover) {
-  .cat-work-site:hover {
-    transform: scale(1.08);
-  }
-
-  .cat-work-site:hover .cat-work-name::after {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-}
-
-/* Mobile armed state */
-.cat-work-site.is-armed {
-  transform: scale(1.1);
-}
-
-.cat-work-site.is-armed .cat-work-name::after {
-  opacity: 1;
-  transform: translate(0, 0);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ================================
-   LEFT BOTTOM – FINAL REFINEMENTS
-================================ */
-
-/* --- Tighter default layout --- */
-.cat-work-default {
-  justify-content: flex-start; /* was space-between */
-}
-
-.cat-work-default h3 {
-  margin-top: 4px;
-}
-
-.cat-work-default p {
-  margin-top: 4px;
-}
-
-.cat-work-discover {
-  position: absolute;
-  bottom: 16px;
-  right: 18px;
-  font-size: 12px;
-  opacity: 0.7;
-}
-
-/* --- Icons smaller + gap reduced --- */
-.cat-work-sites {
-  gap: clamp(14px, 3vw, 22px); /* reduced */
-}
-
-.cat-work-icon {
-  width: clamp(56px, 7.5vw, 82px); /* smaller */
-  height: clamp(56px, 7.5vw, 82px);
-}
-
-/* --- Text centered by default --- */
-.cat-work-name {
-  justify-content: center;
-  transform: translateX(0);
-  transition: transform .25s ease;
-}
-
-/* Arrow does NOT reserve space */
-.cat-work-name::after {
-  position: absolute;
-  left: 100%;
-  margin-left: 6px;
-}
-
-/* When active/hovered, scooch text left */
-@media (hover: hover) {
-  .cat-work-site:hover .cat-work-name {
-    transform: translateX(-6px);
-  }
-}
-
-.cat-work-site.is-armed .cat-work-name {
-  transform: translateX(-6px);
-}
-
-
-
-
-
-
-
-
-
-
-    
-  </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-<style>
 
   :root {
   /* sizing */
@@ -605,7 +315,60 @@ if (window.matchMedia('(hover: none)').matches) {
   background: var(--cat-left-bottom-bg);
 }
 
-/* RIGHT SECTION */
+
+/* ---------- COMPACTED HEIGHT ---------- */
+.cat-compact {
+  aspect-ratio: 1 / 0.82; /* NEW: shorter than square */
+}
+
+.cat-right-expanded {
+  padding: 22px;
+}
+
+.cat-right-list {
+  margin-bottom: 16px; /* reduced from 28px */
+}
+
+.cat-learn-more {
+  bottom: 16px;
+}
+
+
+/* -------------------------------------------------
+   CAT SECTION – Compacted Mobile Layout
+   Hides "Learn More" on small screens only
+   ------------------------------------------------- */
+
+@media (max-width: 768px) {
+  /* Remove the entire right section */
+  .cat-right {
+    display: none !important;
+  }
+
+  /* Ensure left side keeps its existing layout */
+  .cat-left {
+    width: 100% !important;
+  }
+
+  /* Prevent wrapper from reserving space for the right side */
+  .cat-square,
+  .cat-wrapper {
+    grid-template-columns: 1fr !important;
+    display: block;
+  }
+}
+
+
+
+
+    
+
+
+
+/* ================================
+   RIGHT SECTION – LEARN MORE
+================================ */
+  
 .cat-right {
   background: var(--cat-right-bg);
   color: var(--cat-text-light);
@@ -762,54 +525,9 @@ if (window.matchMedia('(hover: none)').matches) {
   transform: scale(1.08);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* New*/
-
-
-
-
- /* ---------- GLOBAL TEXT ---------- */
-
-
-/* ---------- COMPACT HEIGHT ---------- */
-.cat-compact {
-  aspect-ratio: 1 / 0.82; /* NEW: shorter than square */
-}
-
-.cat-right-expanded {
-  padding: 22px;
-}
-
-.cat-right-list {
-  margin-bottom: 16px; /* reduced from 28px */
-}
-
-.cat-learn-more {
-  bottom: 16px;
-}
-
-
-  /* ---------- CONTACT SECTION ---------- */
+/* ================================
+   UPPER LEFT SECTION – CONTACT
+================================ */
 
 .cat-contact {
   padding: 22px;
@@ -1050,10 +768,205 @@ if (window.matchMedia('(hover: none)').matches) {
 }
 
 
+/* ================================
+   DISCOVER SECTION – SEE MY WORK
+================================ */
+
+    .cat-work-site,
+.cat-work-site:visited,
+.cat-work-site:active,
+.cat-work-site:focus {
+  color: #ffffff;
+}
+
+/* Base */
+.cat-work {
+  background: var(--cat-left-bottom-bg);
+  cursor: pointer;
+}
+
+/* Default content */
+.cat-work-default {
+  position: absolute;
+  inset: 0;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: opacity .3s ease, filter .3s ease;
+}
+
+.cat-work-default h3 {
+  font-size: clamp(18px, 2vw, 22px);
+}
+
+.cat-work-default p {
+  opacity: .75;
+  margin-top: 6px;
+}
+
+.cat-work-discover {
+  align-self: flex-end;
+  font-size: 14px;
+  opacity: .85;
+}
+
+/* Expanded container */
+.cat-work-sites {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(18px, 4vw, 32px);
+  opacity: 0;
+  filter: blur(8px);
+  pointer-events: none;
+  transition: opacity .35s ease, filter .35s ease;
+}
+
+/* Expanded background */
+.cat-work.is-active {
+  background: #0f1720; /* custom hover color */
+}
+
+/* State switch */
+.cat-work.is-active .cat-work-default {
+  opacity: 0;
+  filter: blur(6px);
+}
+
+.cat-work.is-active .cat-work-sites {
+  opacity: 1;
+  filter: blur(0);
+  pointer-events: auto;
+}
+
+/* Individual site */
+.cat-work-site {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: transform .25s var(--cat-ease);
+}
+
+/* Icon */
+.cat-work-icon {
+  width: clamp(64px, 9vw, 96px);
+  height: clamp(64px, 9vw, 96px);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  display: grid;
+  place-items: center;
+}
+
+/* Name + arrow */
+.cat-work-name {
+  position: relative;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cat-work-name::after {
+  content: "↗";
+  opacity: 0;
+  transform: translate(-4px, 4px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+/* Desktop hover */
+@media (hover: hover) {
+  .cat-work-site:hover {
+    transform: scale(1.08);
+  }
+
+  .cat-work-site:hover .cat-work-name::after {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+/* Mobile armed state */
+.cat-work-site.is-armed {
+  transform: scale(1.1);
+}
+
+.cat-work-site.is-armed .cat-work-name::after {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* --- Tighter default layout --- */
+.cat-work-default {
+  justify-content: flex-start; /* was space-between */
+}
+
+.cat-work-default h3 {
+  margin-top: 4px;
+}
+
+.cat-work-default p {
+  margin-top: 4px;
+}
+
+.cat-work-discover {
+  position: absolute;
+  bottom: 16px;
+  right: 18px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* --- Icons smaller + gap reduced --- */
+.cat-work-sites {
+  gap: clamp(14px, 3vw, 22px); /* reduced */
+}
+
+.cat-work-icon {
+  width: clamp(56px, 7.5vw, 82px); /* smaller */
+  height: clamp(56px, 7.5vw, 82px);
+}
+
+/* --- Text centered by default --- */
+.cat-work-name {
+  justify-content: center;
+  transform: translateX(0);
+  transition: transform .25s ease;
+}
+
+/* Arrow does NOT reserve space */
+.cat-work-name::after {
+  position: absolute;
+  left: 100%;
+  margin-left: 6px;
+}
+
+/* When active/hovered, scooch text left */
+@media (hover: hover) {
+  .cat-work-site:hover .cat-work-name {
+    transform: translateX(-6px);
+  }
+}
+
+.cat-work-site.is-armed .cat-work-name {
+  transform: translateX(-6px);
+}
+
+
+
+
+
 </style>
 
-
 <script>
+  
+/* GLOBAL CAT SECTION - ClICK/HOVER LOGIC */
+/* ALSO LEARN MORE SECTION - ClICK/HOVER LOGIC */
+  
 const catSections = document.querySelectorAll('.cat-section');
 
 function deactivateAll() {
@@ -1093,15 +1006,8 @@ document.addEventListener('click', () => {
     deactivateAll();
   }
 });
-</script>
 
-
-
-
-
-    <!-- New -->
-
-    <script>
+/* CONTACT SECTION - ANIMATION/CLICK LOGIC */      
 const contact = document.querySelector('.cat-contact');
 const pills = contact.querySelectorAll('.cat-contact-pill');
 const backBtn = contact.querySelector('.cat-back');
@@ -1132,6 +1038,58 @@ formLink.addEventListener('click', e => {
     formLink.classList.add('is-armed');
   }
 });
+
+
+/* DISCOVER - ClICK/HOVER LOGIC */
+
+  
+const workSection = document.querySelector('.cat-work');
+const workSites = workSection.querySelectorAll('.cat-work-site');
+
+/* Desktop hover */
+if (window.matchMedia('(hover: hover)').matches) {
+  workSection.addEventListener('mouseenter', () => {
+    workSection.classList.add('is-active');
+  });
+
+  workSection.addEventListener('mouseleave', () => {
+    workSection.classList.remove('is-active');
+  });
+}
+
+/* Mobile click-to-expand */
+if (window.matchMedia('(hover: none)').matches) {
+  let expanded = false;
+
+  workSection.addEventListener('click', e => {
+    if (!expanded) {
+      e.preventDefault();
+      expanded = true;
+      workSection.classList.add('is-active');
+    }
+  });
+
+  document.addEventListener('click', e => {
+    if (!workSection.contains(e.target)) {
+      expanded = false;
+      workSection.classList.remove('is-active');
+      workSites.forEach(site => site.classList.remove('is-armed'));
+    }
+  });
+
+  /* Two-step site click */
+  workSites.forEach(site => {
+    let armed = false;
+
+    site.addEventListener('click', e => {
+      if (!armed) {
+        e.preventDefault();
+        armed = true;
+        site.classList.add('is-armed');
+      }
+    });
+  });
+}
 </script>
 
 
