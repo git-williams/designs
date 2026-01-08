@@ -28,15 +28,52 @@ footer {
   width: 100%;
 }
 /* =============== GLOBAL TAP COLOR STUFF =============== */
-button,
-a,
-.cat-section,
-.cat-work-site {
-  outline: none;
-}
+
+
+
+/* Remove mobile tap flashes */
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+/* Normalize links */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Normalize buttons */
+button {
+  background: none;
+  border: none;
+  font: inherit;
+}
+
+
+
+
+
+
+/* Custom UI elements only */
+.cat-section,
+.cat-work-site,
+.cat-pill,
+.cat-button {
+  user-select: none;
+}
+
+/* Remove outlines only where you replace them visually */
+.cat-section:focus,
+.cat-work-site:focus,
+.cat-pill:focus,
+.cat-button:focus {
+  outline: none;
+}
+
+
+
+
+
 
 
 /* =============== HEADER =============== */
