@@ -960,6 +960,53 @@
 
 
 
+/* Discover Section mobile sizing */
+
+/* -------------------------------------------------
+   CAT WORK (DISCOVER) – Mobile Spacing & Size
+   ------------------------------------------------- */
+
+@media (max-width: 768px) {
+
+  /* Expanded sites container */
+  .cat-work-sites {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;            /* more breathing room */
+    padding-top: 1rem;
+  }
+
+  /* Individual site */
+  .cat-work-site {
+    flex: 0 0 auto;
+    text-align: center;
+  }
+
+  /* Circular icon */
+  .cat-work-icon {
+    width: 64px;             /* larger tap target */
+    height: 64px;
+    margin: 0 auto 0.5rem;
+  }
+
+  /* Ensure image scales correctly */
+  .cat-work-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Label spacing */
+  .cat-work-name {
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+
+
+
+
 </style>
 
 <script>
