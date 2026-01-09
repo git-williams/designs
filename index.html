@@ -106,6 +106,64 @@
               <span class="icon-arrow-right"></span>
             </div>
           </a>
+
+          <!-- SOCIAL / PUBLICITY ICONS -->
+<div class="cat-contact-socials">
+  <a href="#" class="cat-social-icon" aria-label="Twitter">
+    <span class="icon-twitter"></span>
+  </a>
+  <a href="#" class="cat-social-icon" aria-label="LinkedIn">
+    <span class="icon-linkedin"></span>
+  </a>
+  <a href="#" class="cat-social-icon" aria-label="Blog">
+    <span class="icon-blog"></span>
+  </a>
+</div>
+          <style>
+
+/* --------------------------------
+   Contact – Social / Publicity Icons
+-------------------------------- */
+
+.cat-contact-default {
+  position: relative; /* anchor for absolute children */
+}
+
+/* container */
+.cat-contact-socials {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+/* individual icon */
+.cat-social-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 14px;
+  transition: 
+    background 0.25s ease,
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+/* hover polish (desktop) */
+.cat-social-icon:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+
+
+            
+          </style>
         </div>
 
         <!-- FORM STATE -->
