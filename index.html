@@ -11,8 +11,33 @@
          HEADER
          ============================= -->
     <header class="main-header"></header>
+<!-- Top --> 
 
+    <style>
 
+/* Mobile hover emulation for external link pills */
+.cat-contact-pill.is-armed-link {
+  transform: scale(1.04);
+}
+
+.cat-contact-pill.is-armed-link .cat-pill-text {
+  opacity: 0;
+}
+
+.cat-contact-pill.is-armed-link .cat-pill-icon {
+  transform: translateX(280%);
+}
+
+.cat-contact-pill.is-armed-link .cat-pill-icon span:first-child {
+  opacity: 0;
+}
+
+.cat-contact-pill.is-armed-link .cat-pill-icon span:last-child {
+  opacity: 1;
+}
+
+      
+    </style>
 
 
 
@@ -100,7 +125,7 @@
 
          
           <!-- SUBMIT FORM LINK -->
-          <div class="cat-contact-pill" data-mode="form">
+          <div class="cat-contact-pill" data-link="https://example.com">
               <div class="cat-pill-icon">
                 <span class="icon-form"></span>
                 <span class="icon-arrow-left"></span>
@@ -1187,6 +1212,65 @@ if (workSection) {
 
 
 
+
+
+
+
+    <script>
+
+  const contactPills = document.querySelectorAll('.cat-contact-pill[data-link]');
+const isTouch = window.matchMedia('(hover: none)').matches;
+
+if (isTouch) {
+  contactPills.forEach(pill => {
+    let armed = false;
+    const link = pill.dataset.link;
+
+    pill.addEventListener('click', e => {
+      if (!armed) {
+        e.preventDefault();
+        armed = true;
+
+        // clear other armed-link pills
+        contactPills.forEach(p => {
+          if (p !== pill) {
+            p.classList.remove('is-armed-link');
+            p._armed = false;
+          }
+        });
+
+        pill.classList.add('is-armed-link');
+
+        // optional auto-reset after 2.5s
+        setTimeout(() => {
+          armed = false;
+          pill.classList.remove('is-armed-link');
+        }, 2500);
+      } else {
+        window.location.href = link;
+      }
+    });
+
+    pill._armed = armed;
+  });
+
+  // tap outside resets armed-link pills
+  document.addEventListener('click', e => {
+    contactPills.forEach(pill => {
+      if (!pill.contains(e.target)) {
+        pill.classList.remove('is-armed-link');
+        pill._armed = false;
+      }
+    });
+  });
+}
+
+</script>
+
+
+
+
+<!--bottom-->
 
 
 
