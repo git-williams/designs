@@ -963,46 +963,46 @@
 /* Discover Section mobile sizing */
 
 /* -------------------------------------------------
-   CAT WORK (DISCOVER) – Mobile Spacing & Size
+   CAT WORK (DISCOVER) – Mobile Icon Size + Label Tightening
    ------------------------------------------------- */
 
 @media (max-width: 768px) {
 
-  /* Expanded sites container */
+  /* Space the three items evenly */
   .cat-work-sites {
     display: flex;
     justify-content: center;
-    gap: 1.25rem;            /* more breathing room */
+    gap: 1.5rem;                 /* slightly wider spacing */
     padding-top: 1rem;
   }
 
-  /* Individual site */
+  /* Individual site wrapper */
   .cat-work-site {
     flex: 0 0 auto;
     text-align: center;
   }
 
-  /* Circular icon */
+  /* 🔵 Circular icon – make it larger */
   .cat-work-icon {
-    width: 64px;             /* larger tap target */
-    height: 64px;
-    margin: 0 auto 0.5rem;
+    width: 76px;                 /* increased from ~60–64 */
+    height: 76px;
+    margin: 0 auto 0.25rem;      /* tighter space to label */
   }
 
-  /* Ensure image scales correctly */
+  /* Image inside the circle */
   .cat-work-icon img {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
 
-  /* Label spacing */
+  /* 🏷 Label – pull closer to circle */
   .cat-work-name {
+    margin-top: 0;               /* remove any default gap */
     font-size: 0.85rem;
-    letter-spacing: 0.02em;
+    line-height: 1.1;
   }
 }
-
 
 
 
