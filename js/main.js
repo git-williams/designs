@@ -20,25 +20,41 @@ document.addEventListener("DOMContentLoaded", () => {
   // ================================
   // HEADER SHOW/HIDE ON SCROLL
   // ================================
-  const header = document.querySelector(".main-header");
-  const hero = document.querySelector(".hero");
-  let lastScrollY = window.scrollY;
+ const header = document.querySelector(".main-header");
+const hero = document.querySelector(".hero");
 
-  const toggleHeader = () => {
-    const heroBottom = hero.offsetTop + hero.offsetHeight;
-    const currentScroll = window.scrollY;
+let lastScrollY = window.scrollY;
 
-    if (currentScroll > heroBottom) {
-      if (currentScroll < lastScrollY) header.classList.add("visible");
-      else header.classList.add("hidden"), header.classList.remove("visible");
+/* distance after which header is allowed to appear */
+const revealPoint = hero.offsetTop + hero.offsetHeight;
+
+const toggleHeader = () => {
+  const currentScroll = window.scrollY;
+
+  /* BEFORE reveal point → always hidden */
+  if (currentScroll < revealPoint) {
+    header.classList.add("hidden");
+    header.classList.remove("visible");
+  } 
+  /* AFTER reveal point */
+  else {
+    if (currentScroll < lastScrollY) {
+      // scrolling UP
+      header.classList.add("visible");
+      header.classList.remove("hidden");
     } else {
-      header.classList.add("visible"), header.classList.remove("hidden");
+      // scrolling DOWN
+      header.classList.add("hidden");
+      header.classList.remove("visible");
     }
+  }
 
-    lastScrollY = currentScroll;
-  };
-  window.addEventListener("scroll", toggleHeader);
-  toggleHeader();
+  lastScrollY = currentScroll;
+};
+
+window.addEventListener("scroll", toggleHeader);
+toggleHeader();
+
 
   // ================================
   // HERO TEXT ANIMATION (TYPING)
