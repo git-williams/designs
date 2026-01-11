@@ -36,18 +36,7 @@ const toggleHeader = () => {
     header.classList.add("hidden");
     header.classList.remove("visible");
   } 
-  /* AFTER reveal point */
-  else {
-    if (currentScroll < lastScrollY) {
-      // scrolling UP
-      header.classList.add("visible");
-      header.classList.remove("hidden");
-    } else {
-      // scrolling DOWN
-      header.classList.add("hidden");
-      header.classList.remove("visible");
-    }
-  }
+  
 
   lastScrollY = currentScroll;
 };
