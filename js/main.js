@@ -23,22 +23,18 @@ document.addEventListener("DOMContentLoaded", () => {
  const header = document.querySelector(".main-header");
 const hero = document.querySelector(".hero");
 
-let lastScrollY = window.scrollY;
-
-/* distance after which header is allowed to appear */
 const revealPoint = hero.offsetTop + hero.offsetHeight;
 
 const toggleHeader = () => {
   const currentScroll = window.scrollY;
 
-  /* BEFORE reveal point → always hidden */
-  if (currentScroll < revealPoint) {
+  if (currentScroll >= revealPoint) {
+    header.classList.add("visible");
+    header.classList.remove("hidden");
+  } else {
     header.classList.add("hidden");
     header.classList.remove("visible");
-  } 
-  
-
-  lastScrollY = currentScroll;
+  }
 };
 
 window.addEventListener("scroll", toggleHeader);
