@@ -1046,64 +1046,7 @@
 </style>
 
 
-<script>
-  const contactPills = document.querySelectorAll('.cat-contact-pill[data-link]');
-  const isTouch = window.matchMedia('(hover: none)').matches;
 
-  /* DESKTOP / HOVER DEVICES → immediate navigation */
-  if (!isTouch) {
-    contactPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        window.location.href = pill.dataset.link;
-      });
-    });
-  }
-
-  /* TOUCH DEVICES → armed interaction */
-  if (isTouch) {
-    contactPills.forEach(pill => {
-      let armed = false;
-      const link = pill.dataset.link;
-
-      pill.addEventListener('click', e => {
-        if (!armed) {
-          e.preventDefault();
-          armed = true;
-
-          // clear other armed-link pills
-          contactPills.forEach(p => {
-            if (p !== pill) {
-              p.classList.remove('is-armed-link');
-              p._armed = false;
-            }
-          });
-
-          pill.classList.add('is-armed-link');
-
-          // auto-reset after 2.5s
-          setTimeout(() => {
-            armed = false;
-            pill.classList.remove('is-armed-link');
-          }, 2500);
-        } else {
-          window.location.href = link;
-        }
-      });
-
-      pill._armed = armed;
-    });
-
-    // tap outside resets armed-link pills
-    document.addEventListener('click', e => {
-      contactPills.forEach(pill => {
-        if (!pill.contains(e.target)) {
-          pill.classList.remove('is-armed-link');
-          pill._armed = false;
-        }
-      });
-    });
-  }
-</script>
 
 
 
@@ -1301,54 +1244,62 @@ if (workSection) {
 
 
 
-    <script>
-
+<script>
   const contactPills = document.querySelectorAll('.cat-contact-pill[data-link]');
-      
-if (isTouch) {
-  contactPills.forEach(pill => {
-    let armed = false;
-    const link = pill.dataset.link;
 
-    pill.addEventListener('click', e => {
-      if (!armed) {
-        e.preventDefault();
-        armed = true;
-
-        // clear other armed-link pills
-        contactPills.forEach(p => {
-          if (p !== pill) {
-            p.classList.remove('is-armed-link');
-            p._armed = false;
-          }
-        });
-
-        pill.classList.add('is-armed-link');
-
-        // optional auto-reset after 2.5s
-        setTimeout(() => {
-          armed = false;
-          pill.classList.remove('is-armed-link');
-        }, 2500);
-      } else {
-        window.location.href = link;
-      }
-    });
-
-    pill._armed = armed;
-  });
-
-  // tap outside resets armed-link pills
-  document.addEventListener('click', e => {
+  /* DESKTOP / HOVER DEVICES → immediate navigation */
+  if (!isTouch) {
     contactPills.forEach(pill => {
-      if (!pill.contains(e.target)) {
-        pill.classList.remove('is-armed-link');
-        pill._armed = false;
-      }
+      pill.addEventListener('click', () => {
+        window.location.href = pill.dataset.link;
+      });
     });
-  });
-}
+  }
 
+  /* TOUCH DEVICES → armed interaction */
+  if (isTouch) {
+    contactPills.forEach(pill => {
+      let armed = false;
+      const link = pill.dataset.link;
+
+      pill.addEventListener('click', e => {
+        if (!armed) {
+          e.preventDefault();
+          armed = true;
+
+          // clear other armed-link pills
+          contactPills.forEach(p => {
+            if (p !== pill) {
+              p.classList.remove('is-armed-link');
+              p._armed = false;
+            }
+          });
+
+          pill.classList.add('is-armed-link');
+
+          // auto-reset after 2.5s
+          setTimeout(() => {
+            armed = false;
+            pill.classList.remove('is-armed-link');
+          }, 2500);
+        } else {
+          window.location.href = link;
+        }
+      });
+
+      pill._armed = armed;
+    });
+
+    // tap outside resets armed-link pills
+    document.addEventListener('click', e => {
+      contactPills.forEach(pill => {
+        if (!pill.contains(e.target)) {
+          pill.classList.remove('is-armed-link');
+          pill._armed = false;
+        }
+      });
+    });
+  }
 </script>
 
 
