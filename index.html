@@ -1116,7 +1116,7 @@ document.addEventListener('click', e => {
 
 const contact = document.querySelector('.cat-contact');
 if (contact) {
-  const pills = contact.querySelectorAll('.cat-contact-pill');
+const pills = contact.querySelectorAll('.cat-contact-pill[data-mode]');
   const backBtn = contact.querySelector('.cat-back');
   const title = contact.querySelector('.cat-form-title');
 
@@ -1135,16 +1135,26 @@ if (contact) {
   });
 }
 
-/* Mobile submit form interaction */
-const formLink = document.querySelector('.cat-form-link');
-let formArmed = false;
+const linkPill = contact.querySelector('.cat-contact-pill[data-link]');
+const isTouch = window.matchMedia('(hover: none)').matches;
 
-if (formLink) {
-  formLink.addEventListener('click', e => {
-    if (window.matchMedia('(hover: none)').matches && !formArmed) {
+if (linkPill && isTouch) {
+  let armed = false;
+  const link = linkPill.dataset.link;
+
+  linkPill.addEventListener('click', e => {
+    if (!armed) {
       e.preventDefault();
-      formArmed = true;
-      formLink.classList.add('is-armed');
+      armed = true;
+      linkPill.classList.add('is-armed-link');
+
+      // auto reset after delay
+      setTimeout(() => {
+        armed = false;
+        linkPill.classList.remove('is-armed-link');
+      }, 2500);
+    } else {
+      window.location.href = link;
     }
   });
 }
