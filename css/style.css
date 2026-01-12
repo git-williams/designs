@@ -128,11 +128,21 @@ button {
 /* ================= HERO TEXT ================= */
 
 /* wrapper aligns text with CAT section on stacked layout */
-.text-wrapper {
-  display: flex;
-  align-items: center;
-  padding: 5vw 0;
+@media (max-width: 1024px) {
+  .text-wrapper {
+    display: flex;
+    align-items: center;
+
+    /* Match CAT column behavior */
+    max-width: 1100px;        /* match hero / CAT column width */
+    margin: 0 auto;           /* center the column */
+    padding: 5vw var(--cat-gap);
+
+    /* Align text to the left edge of the column */
+    justify-content: flex-start;
+  }
 }
+
 
 .hero-text {
   flex: 1;
