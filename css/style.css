@@ -127,7 +127,7 @@ button {
 
 /* ================= HERO TEXT ================= */
 
-/* wrapper aligns text with CAT section on stacked layout */
+/* wrapper aligns text with CAT section on stacked layout + sizing */
 @media (max-width: 1024px) {
   .text-wrapper {
     display: flex;
@@ -140,6 +140,22 @@ button {
     /* align text to CAT's left edge */
     justify-content: flex-start;
   }
+
+/* Prefix line */
+.typed-prefix {
+  font-size: clamp(4.8rem, 7.5vw, 9rem);
+}
+
+/* Changing word */
+.word-container {
+  position: relative;
+  display: inline-block;
+  font-size: clamp(6.2rem, 10.5vw, 12rem);
+  white-space: nowrap;
+}
+
+
+  
 }
 /* desktop vertical alignment plus sizing */
 @media (min-width: 1025px) {
@@ -172,18 +188,6 @@ button {
   font-weight: 500;
 }
 
-/* Prefix line */
-.typed-prefix {
-  font-size: clamp(4.8rem, 7.5vw, 9rem);
-}
-
-/* Changing word */
-.word-container {
-  position: relative;
-  display: inline-block;
-  font-size: clamp(6.2rem, 10.5vw, 12rem);
-  white-space: nowrap;
-}
 
 
 
