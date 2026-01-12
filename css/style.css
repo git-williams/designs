@@ -137,9 +137,6 @@ button {
     width: var(--cat-square-size);
     margin-inline: auto;
 
-    /* internal spacing */
-    padding: 5vw 0;
-
     /* align text to CAT's left edge */
     justify-content: flex-start;
   }
@@ -442,9 +439,6 @@ button {
     gap: 2.5rem;
   }
 
-  .hero-text {
-    width: 100%;
-  }
 
   .hero-heading {
     align-items: flex-start;
