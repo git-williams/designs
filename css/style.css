@@ -125,7 +125,7 @@ button {
   gap: clamp(2rem, 4vw, 4rem);
 }
 
-/* ================= TEXT ================= */
+/* ================= HERO TEXT ================= */
 
 .hero-text {
   flex: 1;
@@ -180,83 +180,6 @@ button {
   .hero-heading {
     transform: translateX(clamp(36px, 7.5vw, 96px));
   }
-}
-
-
-
-/* ================= CTA ================= */
-
-.hero-cta {
-  flex: 0 0 360px;
-  display: flex;
-  justify-content: center;
-}
-
-.cta-card {
-  width: 100%;
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.cta-title {
-  font-size: 1.1rem;
-  font-weight: 500;
-  text-align: center;
-}
-
-.cta-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.cta-fields input,
-.cta-fields textarea,
-.cta-primary,
-.cta-secondary {
-  width: 100%;
-  max-width: 100%;
-  border-radius: 12px;
-  border: 1px solid #000;
-  padding: 0.75rem 0.9rem;
-  font-size: 0.95rem;
-}
-
-.cta-fields textarea {
-  resize: none;
-  min-height: 100px;
-}
-
-.cta-primary {
-  background: #000;
-  color: #fff;
-  cursor: pointer;
-}
-
-.cta-secondary {
-  background: transparent;
-  cursor: pointer;
-}
-
-.cta-divider {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  opacity: 0.6;
-}
-
-.cta-divider::before,
-.cta-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: #000;
-  opacity: 0.3;
 }
 
 
