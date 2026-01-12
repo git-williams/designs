@@ -127,6 +127,13 @@ button {
 
 /* ================= HERO TEXT ================= */
 
+/* wrapper aligns text with CAT section on stacked layout */
+.text-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 5vw 0;
+}
+
 .hero-text {
   flex: 1;
 }
