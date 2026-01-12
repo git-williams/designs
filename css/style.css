@@ -172,15 +172,6 @@ button {
 }
 
 
-@media (min-width: 768px) and (max-width: 1024px) {
-  .hero-text {
-    transform: translateX(clamp(36px, 7.5vw, 96px));
-  }
-
-  .hero-heading {
-    transform: translateX(clamp(36px, 7.5vw, 96px));
-  }
-}
 
 
 
