@@ -168,6 +168,7 @@ button {
   /* Changing word – still dominant, but reduced */
   .word-container {
     font-size: clamp(4.8rem, 7.8vw, 8.8rem);
+    position: relative;
   }
 }
 
@@ -191,7 +192,7 @@ button {
 /* Changing word line */
 .word-frame {
   display: block;
-  margin-top: 0.15em;
+  gap: 0.15em;
 }
 
 
@@ -201,6 +202,7 @@ button {
   bottom: 0;
   height: 1.05em;
   width: 0;
+   font-size: inherit;
   background: rgba(100, 150, 255, 0.5);
   z-index: -1;
   transition: width 0.25s ease, height 0.25s ease;
