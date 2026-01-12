@@ -69,7 +69,7 @@ wordFrame.style.height = `${headingHeight}px`;
   highlight.style.position = "absolute";
   highlight.style.left = "0";
   highlight.style.bottom = "0";
-  highlight.style.height = "4.2em";
+highlight.style.height = "1.05em";
   highlight.style.zIndex = "-1";
   highlight.style.width = "0px";
   highlight.style.background = "rgba(100,150,255,0.5)";
@@ -147,7 +147,7 @@ function startHighlightCycle() {
     // --- Step 1: Slide highlight IN ---
     const targetWidth = changingWord.offsetWidth + "px";
     highlight.style.width = targetWidth;
-    highlight.style.height = "1em";
+highlight.style.height = "1.05em";
 
     // slide in = animate height (slide upward)
     highlight.style.height = "1em";
