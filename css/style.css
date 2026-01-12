@@ -140,16 +140,17 @@ button {
 
 /* Prefix line */
 .typed-prefix {
-  font-size: clamp(4.5rem, 7vw, 7.5rem);
+  font-size: clamp(4.8rem, 7.5vw, 9rem);
 }
 
 /* Changing word */
 .word-container {
   position: relative;
   display: inline-block;
-  font-size: clamp(5.5rem, 9vw, 9.5rem);
+  font-size: clamp(6.2rem, 10.5vw, 12rem);
   white-space: nowrap;
 }
+
 
 
 /* Changing word line */
@@ -173,13 +174,14 @@ button {
 
 @media (min-width: 768px) and (max-width: 1024px) {
   .hero-text {
-    transform: translateX(clamp(24px, 5vw, 64px));
+    transform: translateX(clamp(36px, 7.5vw, 96px));
   }
 
   .hero-heading {
-    transform: translateX(clamp(24px, 5vw, 64px));
+    transform: translateX(clamp(36px, 7.5vw, 96px));
   }
 }
+
 
 
 /* ================= CTA ================= */
