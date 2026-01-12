@@ -159,9 +159,6 @@ button {
 }
 /* desktop vertical alignment plus sizing */
 @media (min-width: 1025px) {
-  .text-wrapper {
-    transform: translateY(-clamp(28px, 3.5vw, 64px));
-  }
 
   /* Prefix line – clearly smaller */
   .typed-prefix {
