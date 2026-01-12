@@ -133,12 +133,14 @@ button {
     display: flex;
     align-items: center;
 
-    /* Match CAT column behavior */
-    max-width: 1100px;        /* match hero / CAT column width */
-    margin: 0 auto;           /* center the column */
-    padding: 5vw var(--cat-gap);
+    /* EXACTLY match CAT geometry */
+    width: var(--cat-square-size);
+    margin-inline: auto;
 
-    /* Align text to the left edge of the column */
+    /* internal spacing */
+    padding: 5vw 0;
+
+    /* align text to CAT's left edge */
     justify-content: flex-start;
   }
 }
