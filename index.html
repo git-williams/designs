@@ -619,7 +619,17 @@
 
 .cat-contact-pill {
   position: relative; /* anchor for absolute icon */
+  height: 75px; /* fix for weird icon change*/
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
   padding: 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  cursor: pointer;
+  transition: transform .3s ease, background .3s ease;
+   color: white;
 }
 
 /* ICON */
