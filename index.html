@@ -1162,45 +1162,68 @@ document.addEventListener('click', e => {
    CONTACT SECTION - FORM LOGIC
    ================================================= */
 
+/* =================================================
+   CONTACT SECTION - FORM + LINK PILL LOGIC
+   ================================================= */
+
 const contact = document.querySelector('.cat-contact');
-if (contact) {
-const pills = contact.querySelectorAll('.cat-contact-pill[data-mode]');
-  const backBtn = contact.querySelector('.cat-back');
-  const title = contact.querySelector('.cat-form-title');
+if (!contact) return;
 
-  pills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      contact.classList.add('is-form');
-      title.textContent =
-        pill.dataset.mode === 'email'
-          ? 'Send me an email'
-          : 'Contact via phone';
-    });
+/* ---------------------------------
+   FORM PILLS (email / phone only)
+---------------------------------- */
+
+const formPills = contact.querySelectorAll(
+  '.cat-contact-pill[data-mode]'
+);
+const backBtn = contact.querySelector('.cat-back');
+const title = contact.querySelector('.cat-form-title');
+
+formPills.forEach(pill => {
+  pill.addEventListener('click', () => {
+    contact.classList.add('is-form');
+    title.textContent =
+      pill.dataset.mode === 'email'
+        ? 'Send me an email'
+        : 'Contact via phone';
   });
+});
 
-  backBtn.addEventListener('click', () => {
-    contact.classList.remove('is-form');
-  });
-}
+backBtn?.addEventListener('click', () => {
+  contact.classList.remove('is-form');
+});
 
-const linkPill = contact.querySelector('.cat-contact-pill[data-link]');
-const isTouch = window.matchMedia('(hover: none)').matches;
+/* ---------------------------------
+   LINK PILL (Submit a Form)
+---------------------------------- */
 
-if (linkPill && isTouch) {
-  let armed = false;
+const linkPill = contact.querySelector(
+  '.cat-contact-pill[data-link]'
+);
+
+if (linkPill) {
   const link = linkPill.dataset.link;
+  const isTouch = window.matchMedia('(hover: none)').matches;
+  let armed = false;
 
   linkPill.addEventListener('click', e => {
+    // DESKTOP → go straight to link
+    if (!isTouch) {
+      window.location.href = link;
+      return;
+    }
+
+    // MOBILE → two-step interaction
     if (!armed) {
       e.preventDefault();
       armed = true;
       linkPill.classList.add('is-armed-link');
 
-      // auto reset after delay
+      // auto-disarm
       setTimeout(() => {
         armed = false;
         linkPill.classList.remove('is-armed-link');
-      }, 1000);
+      }, 1200);
     } else {
       window.location.href = link;
     }
