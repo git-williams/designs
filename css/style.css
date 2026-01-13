@@ -209,6 +209,14 @@ button {
 }
 
 
+/* Shift upwards */
+.hero-text {
+  flex: 1;
+  transform: translateY(-clamp(2.5rem, 4vw, 5.5rem));
+}
+
+
+
 
 
 
