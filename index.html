@@ -612,7 +612,16 @@
   opacity: 0;
 }
 
-/* ICON SLIDE (2× distance) */
+/* ================================
+   CAT CONTACT PILL
+   ================================ */
+
+.cat-contact-pill {
+  position: relative; /* anchor for absolute icon */
+}
+
+
+/* ICON */
 .cat-pill-icon {
   width: 42px;
   height: 42px;
@@ -620,14 +629,22 @@
   background: rgba(255,255,255,0.3);
   display: grid;
   place-items: center;
-  position: relative;
+
+  position: absolute;
+  left: 12px; /* starting inset */
+  top: 50%;
+  transform: translateY(-50%);
+
   overflow: hidden;
-  transition: transform .5s cubic-bezier(.22,.61,.36,1);
+  transition: left .5s cubic-bezier(.22,.61,.36,1);
 }
 
+
+/* HOVER → MIRRORED POSITION */
 .cat-contact-pill:hover .cat-pill-icon {
-  transform: translateX(540%); /* doubled distance */
+  left: calc(100% - 42px - 12px);
 }
+
 
 /* Icon swap */
 .cat-pill-icon span {
