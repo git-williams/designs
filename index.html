@@ -1163,71 +1163,74 @@ document.addEventListener('click', e => {
    ================================================= */
 
 /* =================================================
-   CONTACT SECTION - FORM + LINK PILL LOGIC
+   CONTACT SECTION – SAFE FORM + LINK LOGIC
    ================================================= */
 
+// Detect touch once (global-safe)
+const isTouch = window.matchMedia('(hover: none)').matches;
+
 const contact = document.querySelector('.cat-contact');
-if (!contact) return;
 
-/* ---------------------------------
-   FORM PILLS (email / phone only)
----------------------------------- */
+if (contact) {
+  /* -------------------------------
+     FORM PILLS (email / phone)
+  -------------------------------- */
 
-const formPills = contact.querySelectorAll(
-  '.cat-contact-pill[data-mode]'
-);
-const backBtn = contact.querySelector('.cat-back');
-const title = contact.querySelector('.cat-form-title');
+  const formPills = contact.querySelectorAll(
+    '.cat-contact-pill[data-mode]'
+  );
+  const backBtn = contact.querySelector('.cat-back');
+  const title = contact.querySelector('.cat-form-title');
 
-formPills.forEach(pill => {
-  pill.addEventListener('click', () => {
-    contact.classList.add('is-form');
-    title.textContent =
-      pill.dataset.mode === 'email'
-        ? 'Send me an email'
-        : 'Contact via phone';
+  formPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      contact.classList.add('is-form');
+      title.textContent =
+        pill.dataset.mode === 'email'
+          ? 'Send me an email'
+          : 'Contact via phone';
+    });
   });
-});
 
-backBtn?.addEventListener('click', () => {
-  contact.classList.remove('is-form');
-});
-
-/* ---------------------------------
-   LINK PILL (Submit a Form)
----------------------------------- */
-
-const linkPill = contact.querySelector(
-  '.cat-contact-pill[data-link]'
-);
-
-if (linkPill) {
-  const link = linkPill.dataset.link;
-  const isTouch = window.matchMedia('(hover: none)').matches;
-  let armed = false;
-
-  linkPill.addEventListener('click', e => {
-    // DESKTOP → go straight to link
-    if (!isTouch) {
-      window.location.href = link;
-      return;
-    }
-
-    // MOBILE → two-step interaction
-    if (!armed) {
-      e.preventDefault();
-      armed = true;
-      linkPill.classList.add('is-armed-link');
-
-      // auto-disarm
-      setTimeout(() => {
-        armed = false;
-        linkPill.classList.remove('is-armed-link');
-      }, 1200);
-    } else {
-      window.location.href = link;
-    }
+  backBtn?.addEventListener('click', () => {
+    contact.classList.remove('is-form');
   });
+
+  /* -------------------------------
+     LINK PILL (Submit a Form)
+  -------------------------------- */
+
+  const linkPill = contact.querySelector(
+    '.cat-contact-pill[data-link]'
+  );
+
+  if (linkPill) {
+    let armed = false;
+    const link = linkPill.dataset.link;
+
+    linkPill.addEventListener('click', e => {
+      // DESKTOP: immediate navigation
+      if (!isTouch) {
+        window.location.href = link;
+        return;
+      }
+
+      // MOBILE: first tap arms, second tap navigates
+      if (!armed) {
+        e.preventDefault();
+        armed = true;
+        linkPill.classList.add('is-armed-link');
+
+        // auto-reset
+        setTimeout(() => {
+          armed = false;
+          linkPill.classList.remove('is-armed-link');
+        }, 1200);
+      } else {
+        window.location.href = link;
+      }
+    });
+  }
 }
 
 
