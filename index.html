@@ -1218,23 +1218,31 @@
     
 <script>
 /* =================================================
-   GLOBAL CAT SECTION - CLICK / HOVER LOGIC
-   (EXCLUDES DISCOVER ON MOBILE TO AVOID CONFLICT)
+   GLOBAL INTERACTION MODE
+   ================================================= */
+
+const isTouch = window.matchMedia('(hover: none)').matches;
+
+
+/* =================================================
+   GLOBAL CAT SECTIONS (EXCEPT DISCOVER ON MOBILE)
    ================================================= */
 
 const catSections = document.querySelectorAll('.cat-section');
 const workSection = document.querySelector('.cat-work');
-const workSites = workSection ? workSection.querySelectorAll('.cat-work-site') : [];
+const workSites = workSection
+  ? workSection.querySelectorAll('.cat-work-site')
+  : [];
 
 let workExpanded = false;
 
 function deactivateAll() {
   catSections.forEach(sec => sec.classList.remove('is-active'));
 
-  /* Reset Discover state safely */
   if (workSection) {
     workSection.classList.remove('is-active');
     workExpanded = false;
+
     workSites.forEach(site => {
       site.classList.remove('is-armed');
       site.dataset.armed = 'false';
@@ -1246,64 +1254,55 @@ catSections.forEach(section => {
   const isDiscover = section.classList.contains('cat-work');
 
   /* Desktop hover */
-  section.addEventListener('mouseenter', () => {
-    if (window.matchMedia('(hover: hover)').matches) {
+  if (!isTouch) {
+    section.addEventListener('mouseenter', () => {
       deactivateAll();
       section.classList.add('is-active');
-    }
-  });
+    });
 
-  section.addEventListener('mouseleave', () => {
-    if (window.matchMedia('(hover: hover)').matches) {
+    section.addEventListener('mouseleave', () => {
       deactivateAll();
-    }
-  });
+    });
+  }
 
-  /* Mobile tap (exclude Discover — it has its own logic) */
-  section.addEventListener('click', e => {
-    if (
-      !window.matchMedia('(hover: hover)').matches &&
-      !isDiscover
-    ) {
+  /* Mobile tap (exclude Discover) */
+  if (isTouch && !isDiscover) {
+    section.addEventListener('click', () => {
       deactivateAll();
       section.classList.add('is-active');
-    }
-  });
-});
-
-/* Tap outside to close (mobile) */
-document.addEventListener('click', e => {
-  if (!window.matchMedia('(hover: hover)').matches) {
-    if (!e.target.closest('.cat-section')) {
-      deactivateAll();
-    }
+    });
   }
 });
 
+/* Tap outside closes sections (mobile only) */
+if (isTouch) {
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.cat-section')) {
+      deactivateAll();
+    }
+  });
+}
+
 
 /* =================================================
-   CONTACT SECTION - FORM LOGIC
+   CONTACT SECTION
    ================================================= */
-
-/* =================================================
-   CONTACT SECTION – SAFE FORM + LINK LOGIC
-   ================================================= */
-
-// Detect touch once (global-safe)
-const isTouch = window.matchMedia('(hover: none)').matches;
 
 const contact = document.querySelector('.cat-contact');
 
 if (contact) {
-  /* -------------------------------
-     FORM PILLS (email / phone)
-  -------------------------------- */
-
   const formPills = contact.querySelectorAll(
     '.cat-contact-pill[data-mode]'
   );
+  const linkPills = contact.querySelectorAll(
+    '.cat-contact-pill[data-link]'
+  );
   const backBtn = contact.querySelector('.cat-back');
   const title = contact.querySelector('.cat-form-title');
+
+  /* -------------------------------
+     FORM MODE PILLS
+  -------------------------------- */
 
   formPills.forEach(pill => {
     pill.addEventListener('click', () => {
@@ -1320,51 +1319,65 @@ if (contact) {
   });
 
   /* -------------------------------
-     LINK PILL (Submit a Form)
+     LINK PILLS (Two-step on mobile)
   -------------------------------- */
 
-  const linkPill = contact.querySelector(
-    '.cat-contact-pill[data-link]'
-  );
+  linkPills.forEach(pill => {
+    const link = pill.dataset.link;
+    pill.dataset.armed = 'false';
 
-  if (linkPill) {
-    let armed = false;
-    const link = linkPill.dataset.link;
-
-    linkPill.addEventListener('click', e => {
-      // DESKTOP: immediate navigation
+    pill.addEventListener('click', e => {
+      /* Desktop: immediate */
       if (!isTouch) {
         window.location.href = link;
         return;
       }
 
-      // MOBILE: first tap arms, second tap navigates
-      if (!armed) {
+      /* Mobile: arm then navigate */
+      if (pill.dataset.armed !== 'true') {
         e.preventDefault();
-        armed = true;
-        linkPill.classList.add('is-armed-link');
 
-        // auto-reset
+        // disarm others
+        linkPills.forEach(p => {
+          p.dataset.armed = 'false';
+          p.classList.remove('is-armed-link');
+        });
+
+        pill.dataset.armed = 'true';
+        pill.classList.add('is-armed-link');
+
         setTimeout(() => {
-          armed = false;
-          linkPill.classList.remove('is-armed-link');
-        }, 1200);
+          pill.dataset.armed = 'false';
+          pill.classList.remove('is-armed-link');
+        }, 2500);
       } else {
         window.location.href = link;
       }
+    });
+  });
+
+  /* Tap outside disarms link pills */
+  if (isTouch) {
+    document.addEventListener('click', e => {
+      linkPills.forEach(pill => {
+        if (!pill.contains(e.target)) {
+          pill.dataset.armed = 'false';
+          pill.classList.remove('is-armed-link');
+        }
+      });
     });
   }
 }
 
 
 /* =================================================
-   DISCOVER SECTION - MOBILE + DESKTOP LOGIC
+   DISCOVER / WORK SECTION
    ================================================= */
 
 if (workSection) {
 
   /* Desktop hover */
-  if (window.matchMedia('(hover: hover)').matches) {
+  if (!isTouch) {
     workSection.addEventListener('mouseenter', () => {
       workSection.classList.add('is-active');
     });
@@ -1374,13 +1387,12 @@ if (workSection) {
     });
   }
 
-  /* Mobile click-to-expand */
-  if (window.matchMedia('(hover: none)').matches) {
-
+  /* Mobile expand */
+  if (isTouch) {
     workSection.addEventListener('click', e => {
       if (!workExpanded) {
         e.preventDefault();
-        deactivateAll();          // ensure clean state
+        deactivateAll();
         workExpanded = true;
         workSection.classList.add('is-active');
       }
@@ -1391,14 +1403,15 @@ if (workSection) {
       if (!workSection.contains(e.target)) {
         workExpanded = false;
         workSection.classList.remove('is-active');
+
         workSites.forEach(site => {
-          site.classList.remove('is-armed');
           site.dataset.armed = 'false';
+          site.classList.remove('is-armed');
         });
       }
     });
 
-    /* Two-step site tap */
+    /* Two-step site links */
     workSites.forEach(site => {
       site.dataset.armed = 'false';
 
@@ -1412,73 +1425,6 @@ if (workSection) {
     });
   }
 }
-</script>
-
-
-
-
-
-
-
-
-
-
-<script>
-  const contactPills = document.querySelectorAll('.cat-contact-pill[data-link]');
-
-  /* DESKTOP / HOVER DEVICES → immediate navigation */
-  if (!isTouch) {
-    contactPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        window.location.href = pill.dataset.link;
-      });
-    });
-  }
-
-  /* TOUCH DEVICES → armed interaction */
-  if (isTouch) {
-    contactPills.forEach(pill => {
-      let armed = false;
-      const link = pill.dataset.link;
-
-      pill.addEventListener('click', e => {
-        if (!armed) {
-          e.preventDefault();
-          armed = true;
-
-          // clear other armed-link pills
-          contactPills.forEach(p => {
-            if (p !== pill) {
-              p.classList.remove('is-armed-link');
-              p._armed = false;
-            }
-          });
-
-          pill.classList.add('is-armed-link');
-
-          // auto-reset after 2.5s
-          setTimeout(() => {
-            armed = false;
-            pill.classList.remove('is-armed-link');
-          }, 2500);
-        } else {
-          window.location.href = link;
-        }
-      });
-
-      pill._armed = armed;
-    });
-
-    // tap outside resets armed-link pills
-    document.addEventListener('click', e => {
-      contactPills.forEach(pill => {
-        if (!pill.contains(e.target)) {
-          pill.classList.remove('is-armed-link');
-          pill._armed = false;
-        }
-      });
-    });
-  }
 </script>
 
 
