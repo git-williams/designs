@@ -390,12 +390,7 @@
 /* new contact bg*/
 .cat-left-top{
     inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.55),
-      rgba(235, 236, 238, 0.75)
-    );
+  background: linear-gradient(180deg, rgb(77 42 42 / 55%), rgb(37 43 55 / 75%)) !important;
 
   
   backdrop-filter: blur(14px);
@@ -414,9 +409,8 @@
   --cat-gap: clamp(12px, 2vw, 20px);
   --cat-radius: 22px;
 
-  /* colors */
+  /* colors - replaced c@t-left-top, */
   --cat-right-bg: #1f2933;
-  /*--cat-left-top-bg: #2e3a46;*/
   --cat-left-bottom-bg: #394754;
 
   --cat-cover-bg: rgba(255,255,255,0.18);
@@ -474,10 +468,6 @@
   z-index: 2;
 }
 
-/* left colors */
-.cat-left-top {
-  background: var(--cat-left-top-bg);
-}
 
 .cat-left-bottom {
   background: var(--cat-left-bottom-bg);
