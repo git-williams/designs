@@ -477,7 +477,6 @@ button {
   }
 
   .hero {
-    min-height: 100vh;
     padding-top: 54px;
     padding-bottom: 0;
     display: flex;
