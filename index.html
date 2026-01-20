@@ -387,8 +387,20 @@
     
   <style>
 
+/* new contact bg*/
+.cat-left-top{
+    inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.55),
+      rgba(235, 236, 238, 0.75)
+    );
 
-
+  
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
 
 
 
@@ -404,7 +416,7 @@
 
   /* colors */
   --cat-right-bg: #1f2933;
-  --cat-left-top-bg: #2e3a46;
+  /*--cat-left-top-bg: #2e3a46;*/
   --cat-left-bottom-bg: #394754;
 
   --cat-cover-bg: rgba(255,255,255,0.18);
@@ -423,6 +435,17 @@
   justify-content: center;
   align-items: center;
   padding: 5vw 0;
+
+
+  border-radius: 60px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  inset: 0;
+  background-image: url("/your-image.jpg");
+  background-size: cover;
+  background-position: center;
+ /* optional effect: filter: saturate(0.9) contrast(0.95);*/
 }
 
 /* imaginary square */
@@ -725,16 +748,17 @@
 .cat-contact-pill:hover {
   transform: scale(1.04);
 }
-
-/* Fade text away on hover */
+/* grow on hover */
 .cat-pill-text {
-  transition: opacity .25s ease;
   padding-left: 50px;
+  transition: transform 0.25s ease, font-size 0.25s ease;
+  transform-origin: left center;
 }
 
 .cat-contact-pill:hover .cat-pill-text {
-  opacity: 0;
+  transform: scale(1.15);
 }
+
 
 /* ================================
    CAT CONTACT PILL
@@ -785,9 +809,9 @@
 .cat-pill-icon span {
   position: absolute;
   opacity: 0;
-  transition: opacity .25s ease;
+  transition: opacity .55s ease;
    color: white;
-    transition: transform .3s ease, background .3s ease;
+    transition: transform .55s ease, background .55s ease;
 
 }
 
