@@ -234,6 +234,8 @@ button {
 /* Shift upwards */
 .hero-text {
   transform: translateY(calc(-1 * clamp(2.5rem, 4vw, 5.5rem)));
+  padding-left: 20px;
+  text-wrap: nowrap;
 }
 
 
