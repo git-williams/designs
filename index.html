@@ -116,7 +116,7 @@ color: black;
           <div class="cat-contact-options">
 
             <!-- EMAIL -->
-            <div class="cat-contact-pill" data-mode="email">
+            <div class="cat-contact-pill not-form" data-mode="email">
   <div class="cat-pill-icon">
     <span class="icon-main">
       <!-- EMAIL -->
@@ -139,7 +139,7 @@ color: black;
 
 
             <!-- PHONE -->
-           <div class="cat-contact-pill" data-mode="phone">
+           <div class="cat-contact-pill not-form" data-mode="phone">
   <div class="cat-pill-icon">
     <span class="icon-main">
       <!-- PHONE -->
@@ -170,6 +170,9 @@ color: black;
 
           
 <style>
+  .not-form{
+        background: rgb(255 255 255 / 50%);
+  }
   .form{
      background: transparent;
     backdrop-filter: blur(12px);
@@ -775,12 +778,10 @@ inset: 0;
     gap: 14px;
     padding: 14px;
     border-radius: 999px;
-    background: rgb(255 255 255 / 50%);
     cursor: pointer;
     transition: transform .3s 
 ease, background .3s 
 ease;
-    color: black;
     border: 1px solid rgb(255 255 255 / 50%);
 }
 
