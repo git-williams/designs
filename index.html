@@ -1344,6 +1344,9 @@ background: rgba(255,255,255,0.50);
 
     
 <script>
+(() => {
+"use strict";
+
 /* =================================================
    GLOBAL INTERACTION MODE
    ================================================= */
@@ -1352,7 +1355,7 @@ const isTouch = window.matchMedia('(hover: none)').matches;
 
 
 /* =================================================
-   GLOBAL CAT SECTIONS (EXCEPT DISCOVER ON MOBILE)
+   GLOBAL CAT SECTIONS
    ================================================= */
 
 const catSections = document.querySelectorAll('.cat-section');
@@ -1377,22 +1380,21 @@ function deactivateAll() {
   }
 }
 
+/* Section hover / tap */
 catSections.forEach(section => {
   const isDiscover = section.classList.contains('cat-work');
 
-  /* Desktop hover */
+  // Desktop hover
   if (!isTouch) {
     section.addEventListener('mouseenter', () => {
       deactivateAll();
       section.classList.add('is-active');
     });
 
-    section.addEventListener('mouseleave', () => {
-      deactivateAll();
-    });
+    section.addEventListener('mouseleave', deactivateAll);
   }
 
-  /* Mobile tap (exclude Discover) */
+  // Mobile tap (exclude Discover)
   if (isTouch && !isDiscover) {
     section.addEventListener('click', () => {
       deactivateAll();
@@ -1404,9 +1406,7 @@ catSections.forEach(section => {
 /* Tap outside closes sections (mobile only) */
 if (isTouch) {
   document.addEventListener('click', e => {
-    if (!e.target.closest('.cat-section')) {
-      deactivateAll();
-    }
+    if (!e.target.closest('.cat-section')) deactivateAll();
   });
 }
 
@@ -1415,104 +1415,92 @@ if (isTouch) {
    CONTACT SECTION
    ================================================= */
 
-const contact = document.querySelector('.cat-contact');
+function initContact() {
+  const contact = document.querySelector('.cat-contact');
+  if (!contact) return;
 
-if (!contact) return;
+  const formPills = contact.querySelectorAll('.cat-contact-pill[data-mode]');
+  const linkPills = contact.querySelectorAll('.cat-contact-pill[data-link]');
+  const backBtn = contact.querySelector('.cat-back');
+  const title = contact.querySelector('.cat-form-title');
 
-const formPills = contact.querySelectorAll('.cat-contact-pill[data-mode]');
-const linkPills = contact.querySelectorAll('.cat-contact-pill[data-link]');
-const backBtn = contact.querySelector('.cat-back');
-const title = contact.querySelector('.cat-form-title');
+  /* Form mode switching */
+  formPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const mode = pill.dataset.mode;
 
-/* -------------------------------
-   FORM MODE PILLS
--------------------------------- */
+      contact.classList.add('is-form');
+      contact.classList.remove('is-form-email', 'is-form-phone');
+      contact.classList.add(`is-form-${mode}`);
 
-formPills.forEach(pill => {
-  pill.addEventListener('click', () => {
-    const mode = pill.dataset.mode;
-
-    // enter form state
-    contact.classList.add('is-form');
-
-    // reset form modes
-    contact.classList.remove('is-form-email', 'is-form-phone');
-
-    // activate mode
-    contact.classList.add(`is-form-${mode}`);
-
-    // update title
-    if (title) {
-      title.textContent =
-        mode === 'email'
-          ? 'Send me an email'
-          : 'Contact via phone';
-    }
-  });
-});
-
-backBtn?.addEventListener('click', () => {
-  contact.classList.remove('is-form', 'is-form-email', 'is-form-phone');
-});
-
-
-/* -------------------------------
-   LINK PILLS (Two-step on mobile)
--------------------------------- */
-
-linkPills.forEach(pill => {
-  const link = pill.dataset.link;
-  pill.dataset.armed = 'false';
-
-  pill.addEventListener('click', e => {
-    /* Desktop: immediate */
-    if (!isTouch) {
-      window.location.href = link;
-      return;
-    }
-
-    /* Mobile: arm then navigate */
-    if (pill.dataset.armed !== 'true') {
-      e.preventDefault();
-
-      // disarm others
-      linkPills.forEach(p => {
-        p.dataset.armed = 'false';
-        p.classList.remove('is-armed-link');
-      });
-
-      pill.dataset.armed = 'true';
-      pill.classList.add('is-armed-link');
-
-      setTimeout(() => {
-        pill.dataset.armed = 'false';
-        pill.classList.remove('is-armed-link');
-      }, 2500);
-    } else {
-      window.location.href = link;
-    }
-  });
-});
-
-
-/* Tap outside disarms link pills */
-if (isTouch) {
-  document.addEventListener('click', e => {
-    linkPills.forEach(pill => {
-      if (!pill.contains(e.target)) {
-        pill.dataset.armed = 'false';
-        pill.classList.remove('is-armed-link');
+      if (title) {
+        title.textContent =
+          mode === 'email'
+            ? 'Send me an email'
+            : 'Contact via phone';
       }
     });
   });
+
+  /* Back button */
+  backBtn?.addEventListener('click', () => {
+    contact.classList.remove('is-form', 'is-form-email', 'is-form-phone');
+  });
+
+  /* Link pills (two-step mobile confirm) */
+  linkPills.forEach(pill => {
+    const link = pill.dataset.link;
+    pill.dataset.armed = 'false';
+
+    pill.addEventListener('click', e => {
+      if (!isTouch) {
+        window.location.href = link;
+        return;
+      }
+
+      if (pill.dataset.armed !== 'true') {
+        e.preventDefault();
+
+        linkPills.forEach(p => {
+          p.dataset.armed = 'false';
+          p.classList.remove('is-armed-link');
+        });
+
+        pill.dataset.armed = 'true';
+        pill.classList.add('is-armed-link');
+
+        setTimeout(() => {
+          pill.dataset.armed = 'false';
+          pill.classList.remove('is-armed-link');
+        }, 2500);
+      } else {
+        window.location.href = link;
+      }
+    });
+  });
+
+  /* Tap outside disarms link pills */
+  if (isTouch) {
+    document.addEventListener('click', e => {
+      linkPills.forEach(pill => {
+        if (!pill.contains(e.target)) {
+          pill.dataset.armed = 'false';
+          pill.classList.remove('is-armed-link');
+        }
+      });
+    });
+  }
 }
+
+initContact();
 
 
 /* =================================================
    DISCOVER / WORK SECTION
    ================================================= */
 
-if (workSection) {
+function initWork() {
+  if (!workSection) return;
 
   /* Desktop hover */
   if (!isTouch) {
@@ -1563,6 +1551,10 @@ if (workSection) {
     });
   }
 }
+
+initWork();
+
+})();
 </script>
 
 
