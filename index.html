@@ -223,7 +223,14 @@ color: black;
 <!-- END .cat-contact-default -->
 
 
-
+<style>
+  .form-txt{
+  font-size: 18px;
+  text-align: right;
+  color: rgba(0 0 0 / 50%);
+  
+  }
+  </style>
 <!-- FORM STATE WRAPPER -->
 <div class="cat-contact-form">
 
@@ -231,9 +238,14 @@ color: black;
 
   <!-- EMAIL FORM -->
   <div class="cat-form cat-form-email">
-    <input type="email" placeholder="e-mail address" class="input email"/>
-    <input type="text" placeholder="subject" class="input subject"/>
-    <textarea placeholder="enter message" class="input-text"></textarea>
+    <h2 class="form-txt">e-mail address</h2>
+    <input type="email" placeholder="example@gmail.com" class="input email"/>
+
+    <h2 class="form-txt">subject line</h2>
+    <input type="text" placeholder="write something..." class="input subject"/>
+
+    <h2 class="form-txt">message</h2>
+    <textarea placeholder="write something..." class="input-text"></textarea>
     <button class="cat-submit">Send e-mail</button>
   </div>
 
