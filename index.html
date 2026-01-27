@@ -245,13 +245,15 @@ color: black;
 <!-- FORM STATE WRAPPER -->
 <div class="cat-contact-form">
 
- <button class="cat-back" aria-label="Back">
-<!-- ARROW -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="svg-back">
-        <path d="m15 18-6-6 6-6"/>
-      </svg>
-back</button>
+<button class="cat-back" aria-label="Back">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+    class="svg-back">
+    <path d="m15 18-6-6 6-6"/>
+  </svg>
+  <span class="back-text">Back</span>
+</button>
+
 
   <!-- EMAIL FORM -->
   <div class="cat-form cat-form-email">
@@ -1104,13 +1106,28 @@ background: rgba(255,255,255,0.50);
   padding: 6px; /* increases hit area */
   border-radius: 8px;
   transition: transform .25s ease, background .25s ease, color .25s ease;
+
+  position: absolute;
+  top:20px;
+  left:20px;
+
+  display: inline-flex;
+  align-items: center;   /* vertically align */
+  gap: 6px;               /* space between icon + text */
 }
+
+    
 
 .cat-back:hover {
   transform: scale(1.06);
   background: rgb(0 0 0 / 6%);
   color: rgb(0 0 0 / 85%);
 }
+
+.cat-back:hover .svg-back {
+  transform: translateX(-2px);
+}
+
 
 .cat-back:active {
   transform: scale(0.97);
@@ -1119,11 +1136,14 @@ background: rgba(255,255,255,0.50);
 
  /* Back icon */
 .svg-back {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   display: block;
+  flex-shrink: 0;
+
   color: currentColor; /* inherits button color */
   transition: transform .25s ease, opacity .25s ease;
+
 }
    
 
