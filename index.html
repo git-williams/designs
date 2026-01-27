@@ -219,20 +219,41 @@ color: black;
   <span class="cat-pill-text">Google form</span>
 </div>
 
-</div> <!-- END .cat-contact-default -->
+</div>
+<!-- END .cat-contact-default -->
 
 
-        <!-- FORM STATE -->
-        <div class="cat-contact-form">
 
-          <button class="cat-back">&lt; Back</button>
-       <!--   <h3 class="cat-form-title"></h3>-->
-          <input type="email" placeholder="e-mail address" class="input email"/>
-          <input type="text" placeholder="subject" class="input subject"/>
-          <textarea placeholder="enter message" class="input-text"></textarea>
-          <button class="cat-submit">Submit</button>
+<!-- FORM STATE WRAPPER -->
+<div class="cat-contact-form">
 
-        </div>
+  <button class="cat-back">&lt; Back</button>
+  <h3 class="cat-form-title"></h3>
+
+  <!-- EMAIL FORM -->
+  <div class="cat-form cat-form-email">
+    <input type="email" placeholder="e-mail address" class="input email"/>
+    <input type="text" placeholder="subject" class="input subject"/>
+    <textarea placeholder="enter message" class="input-text"></textarea>
+    <button class="cat-submit">Send Email</button>
+  </div>
+
+  <!-- PHONE FORM -->
+  <div class="cat-form cat-form-phone">
+    <input type="tel" placeholder="phone number" class="input phone"/>
+    <input type="text" placeholder="name" class="input name"/>
+    <button class="cat-submit">Request Call</button>
+  </div>
+  
+<!-- END FORM STATE -->
+
+
+
+
+  
+
+</div>
+
 
       </div>
 
@@ -927,7 +948,8 @@ ease;
 
 
   
-/* bruh*/
+/* FORM STATE TRANSITIONS ----------------------------------- */
+    
   .cat-contact-default {
   transition: opacity .3s ease, filter .3s ease;
     display:grid;
@@ -935,6 +957,39 @@ ease;
   .cat-contact-form {
   filter: blur(4px);
 }
+/*------------------------*/
+
+    /* Hide all sub-forms */
+.cat-form {
+  display: none;
+}
+
+/* Show correct form */
+.cat-contact.is-form-email .cat-form-email,
+.cat-contact.is-form-phone .cat-form-phone {
+  display: block;
+}
+
+/* Keep your existing blur transitions */
+.cat-contact-form {
+  transition: opacity .3s ease, filter .3s ease;
+}
+
+/* Optional: smooth form entrance */
+.cat-form {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.cat-contact.is-form-email .cat-form-email,
+.cat-contact.is-form-phone .cat-form-phone {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* -------------------------------------------------------------*/
+
+  
 
 
 
@@ -1356,83 +1411,94 @@ if (isTouch) {
 
 const contact = document.querySelector('.cat-contact');
 
-if (contact) {
-  const formPills = contact.querySelectorAll(
-    '.cat-contact-pill[data-mode]'
-  );
-  const linkPills = contact.querySelectorAll(
-    '.cat-contact-pill[data-link]'
-  );
-  const backBtn = contact.querySelector('.cat-back');
-  const title = contact.querySelector('.cat-form-title');
+if (!contact) return;
 
-  /* -------------------------------
-     FORM MODE PILLS
-  -------------------------------- */
+const formPills = contact.querySelectorAll('.cat-contact-pill[data-mode]');
+const linkPills = contact.querySelectorAll('.cat-contact-pill[data-link]');
+const backBtn = contact.querySelector('.cat-back');
+const title = contact.querySelector('.cat-form-title');
 
-  formPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      contact.classList.add('is-form');
+/* -------------------------------
+   FORM MODE PILLS
+-------------------------------- */
+
+formPills.forEach(pill => {
+  pill.addEventListener('click', () => {
+    const mode = pill.dataset.mode;
+
+    // enter form state
+    contact.classList.add('is-form');
+
+    // reset form modes
+    contact.classList.remove('is-form-email', 'is-form-phone');
+
+    // activate mode
+    contact.classList.add(`is-form-${mode}`);
+
+    // update title
+    if (title) {
       title.textContent =
-        pill.dataset.mode === 'email'
+        mode === 'email'
           ? 'Send me an email'
           : 'Contact via phone';
-    });
+    }
   });
+});
 
-  backBtn?.addEventListener('click', () => {
-    contact.classList.remove('is-form');
-  });
+backBtn?.addEventListener('click', () => {
+  contact.classList.remove('is-form', 'is-form-email', 'is-form-phone');
+});
 
-  /* -------------------------------
-     LINK PILLS (Two-step on mobile)
-  -------------------------------- */
 
-  linkPills.forEach(pill => {
-    const link = pill.dataset.link;
-    pill.dataset.armed = 'false';
+/* -------------------------------
+   LINK PILLS (Two-step on mobile)
+-------------------------------- */
 
-    pill.addEventListener('click', e => {
-      /* Desktop: immediate */
-      if (!isTouch) {
-        window.location.href = link;
-        return;
-      }
+linkPills.forEach(pill => {
+  const link = pill.dataset.link;
+  pill.dataset.armed = 'false';
 
-      /* Mobile: arm then navigate */
-      if (pill.dataset.armed !== 'true') {
-        e.preventDefault();
+  pill.addEventListener('click', e => {
+    /* Desktop: immediate */
+    if (!isTouch) {
+      window.location.href = link;
+      return;
+    }
 
-        // disarm others
-        linkPills.forEach(p => {
-          p.dataset.armed = 'false';
-          p.classList.remove('is-armed-link');
-        });
+    /* Mobile: arm then navigate */
+    if (pill.dataset.armed !== 'true') {
+      e.preventDefault();
 
-        pill.dataset.armed = 'true';
-        pill.classList.add('is-armed-link');
-
-        setTimeout(() => {
-          pill.dataset.armed = 'false';
-          pill.classList.remove('is-armed-link');
-        }, 2500);
-      } else {
-        window.location.href = link;
-      }
-    });
-  });
-
-  /* Tap outside disarms link pills */
-  if (isTouch) {
-    document.addEventListener('click', e => {
-      linkPills.forEach(pill => {
-        if (!pill.contains(e.target)) {
-          pill.dataset.armed = 'false';
-          pill.classList.remove('is-armed-link');
-        }
+      // disarm others
+      linkPills.forEach(p => {
+        p.dataset.armed = 'false';
+        p.classList.remove('is-armed-link');
       });
+
+      pill.dataset.armed = 'true';
+      pill.classList.add('is-armed-link');
+
+      setTimeout(() => {
+        pill.dataset.armed = 'false';
+        pill.classList.remove('is-armed-link');
+      }, 2500);
+    } else {
+      window.location.href = link;
+    }
+  });
+});
+
+
+/* Tap outside disarms link pills */
+if (isTouch) {
+  document.addEventListener('click', e => {
+    linkPills.forEach(pill => {
+      if (!pill.contains(e.target)) {
+        pill.dataset.armed = 'false';
+        pill.classList.remove('is-armed-link');
+      }
     });
-  }
+  });
 }
 
 
