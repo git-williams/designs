@@ -226,10 +226,10 @@ color: black;
         <div class="cat-contact-form">
 
           <button class="cat-back">&lt; Back</button>
-          <h3 class="cat-form-title"></h3>
-
-          <input type="email" placeholder="Your email" />
-          <textarea placeholder="Your message"></textarea>
+       <!--   <h3 class="cat-form-title"></h3>-->
+          <input type="email" placeholder="Enter your e-mail address" class="input email"/>
+          <input type="text" placeholder="Message subject line" class="input subject"/>
+          <textarea placeholder="Enter your message" class="input-text"></textarea>
           <button class="cat-submit">Submit</button>
 
         </div>
@@ -904,7 +904,6 @@ ease;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 14px;
   opacity: 0;
   pointer-events: none;
   transition: opacity .3s ease, filter .3s ease;
@@ -941,15 +940,16 @@ ease;
 .cat-contact-form input,
 .cat-contact-form textarea,
 .cat-submit {
-   color: white;
+  color: white;
   width: 100%;
   max-width: 420px;
   margin-inline: auto;
   background: rgba(255,255,255,0.12);
-  border: none;
   border-radius: 12px;
   padding: 14px;
   transition: transform .25s ease, background .25s ease;
+
+  border: 1px solid rgb(255 255 255 / 50%);
 }
 
 .cat-contact-form input,
@@ -957,18 +957,34 @@ ease;
   height: 48px;
 }
 
-.cat-contact-form textarea {
-  min-height: 120px;
+/* Form spacing ---------------------------*/    
+
+.email{
+  margin-top: 10px;
+}
+.input{
+  margin-bottom: 5px;
+  border-radius: 25px;
+}
+.input-text{
+  margin-bottom: 10px;
+}
+/* ----------------------------------------*/    
+    
+    
+.input-text {
+  min-height: 180px;
   resize: none;
+  color: black;
+  border-radius: 25px;
 }
 
 .cat-contact-form input:hover,
 .cat-contact-form textarea:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.8);
 }
 
 .cat-submit {
-   color: white;
   cursor: pointer;
 }
 
@@ -978,7 +994,7 @@ ease;
 
 /* Back button */
 .cat-back {
-   color: black;
+   color: rgb(255 255 255 / 50%);
   background: none;
   border: none;
   cursor: pointer;
