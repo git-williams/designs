@@ -912,8 +912,9 @@ ease;
 .cat-contact.is-form .cat-contact-form {
    color: black;
   opacity: 1;
-  filter: blur(0);
+  backdrop-filter: blur(20);
   pointer-events: auto;
+  
 }
 
 .cat-contact.is-form .cat-contact-default {
@@ -940,17 +941,25 @@ ease;
 .cat-contact-form input,
 .cat-contact-form textarea,
 .cat-submit {
-  color: white;
+  color: black;
   width: 100%;
   max-width: 420px;
   margin-inline: auto;
-  background: rgba(255,255,255,0.50);
   padding: 14px;
   transition: transform .25s ease, background .25s ease;
 
   border: 1px solid rgb(255 255 255 / 50%);
 }
 
+.cat-contact-form input,
+.cat-contact-form textarea{
+font-family: arial;
+font-size: 30px;
+background: rgba(255,255,255,0.50);
+
+
+}
+    
 .cat-contact-form input,
 .cat-submit {
   height: 48px;
@@ -982,10 +991,12 @@ ease;
 .cat-contact-form textarea:hover {
   background: rgba(255,255,255,0.8);
 }
-
+/* Submit button */
 .cat-submit {
   cursor: pointer;
   border-radius: 25px;
+  background: rgba(255,255,255,0.50);
+
 }
 
 .cat-submit:hover {
