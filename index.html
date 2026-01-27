@@ -15,9 +15,9 @@
 
     <style>
 
-::placeholder { color: rgba(0,0,255,.9); }
-::-webkit-input-placeholder { color: rgba(0,0,255,.9); }
-:-ms-input-placeholder { color: rgba(0,0,255,.9); }
+::placeholder { color: rgba(0,0,0,.3); }
+::-webkit-input-placeholder { color: rgba(0,0,0,.3); }
+:-ms-input-placeholder { color: rgba(0,0,0,.3); }
 
 
       
@@ -245,7 +245,15 @@ color: black;
 <!-- FORM STATE WRAPPER -->
 <div class="cat-contact-form">
 
-  <button class="cat-back">&lt; Back</button>
+ <button class="cat-back" aria-label="Back">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+    class="svg-back">
+    <path d="M15 3h6v6"/>
+    <path d="M10 14 21 3"/>
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+  </svg>
+</button>
 
   <!-- EMAIL FORM -->
   <div class="cat-form cat-form-email">
@@ -1089,19 +1097,37 @@ background: rgba(255,255,255,0.50);
 
 /* Back button */
 .cat-back {
-   color: rgb(0 0 0 / 50%);
+  color: rgb(0 0 0 / 55%);
   background: none;
   border: none;
   cursor: pointer;
   align-self: flex-start;
   margin-bottom: 6px;
-  transition: transform .25s ease, background .25s ease; 
+  padding: 6px; /* increases hit area */
+  border-radius: 8px;
+  transition: transform .25s ease, background .25s ease, color .25s ease;
 }
 
 .cat-back:hover {
-    transform: scale(1.06);
+  transform: scale(1.06);
+  background: rgb(0 0 0 / 6%);
+  color: rgb(0 0 0 / 85%);
 }
 
+.cat-back:active {
+  transform: scale(0.97);
+}
+
+
+ /* Back icon */
+.svg-back {
+  width: 18px;
+  height: 18px;
+  display: block;
+  color: currentColor; /* inherits button color */
+  transition: transform .25s ease, opacity .25s ease;
+}
+   
 
 /* ================================
    DISCOVER SECTION – SEE MY WORK
