@@ -228,7 +228,6 @@ color: black;
 <div class="cat-contact-form">
 
   <button class="cat-back">&lt; Back</button>
-  <h3 class="cat-form-title"></h3>
 
   <!-- EMAIL FORM -->
   <div class="cat-form cat-form-email">
@@ -1422,7 +1421,6 @@ function initContact() {
   const formPills = contact.querySelectorAll('.cat-contact-pill[data-mode]');
   const linkPills = contact.querySelectorAll('.cat-contact-pill[data-link]');
   const backBtn = contact.querySelector('.cat-back');
-  const title = contact.querySelector('.cat-form-title');
 
   /* Form mode switching */
   formPills.forEach(pill => {
@@ -1433,12 +1431,6 @@ function initContact() {
       contact.classList.remove('is-form-email', 'is-form-phone');
       contact.classList.add(`is-form-${mode}`);
 
-      if (title) {
-        title.textContent =
-          mode === 'email'
-            ? 'Send me an email'
-            : 'Contact via phone';
-      }
     });
   });
 
