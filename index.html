@@ -15,6 +15,13 @@
 
     <style>
 
+::placeholder { color: rgba(0,0,255,.9); }
+::-webkit-input-placeholder { color: rgba(0,0,255,.9); }
+:-ms-input-placeholder { color: rgba(0,0,255,.9); }
+
+
+      
+
 /* Mobile hover emulation for external link pills */
 .cat-contact-pill.is-armed-link {
   transform: scale(1.04);
@@ -225,11 +232,15 @@ color: black;
 
 <style>
   .form-txt{
-  font-size: 18px;
-  text-align: right;
-  color: rgba(0 0 0 / 50%);
-  
-  }
+ form-txt {
+    font-size: 18px;
+    text-align: left;
+    color: rgba(0 0 0 / 50%);
+    margin-top: 0;
+    margin-bottom: 2px;
+    margin-left: 10px;
+    font-weight: 500;
+}
   </style>
 <!-- FORM STATE WRAPPER -->
 <div class="cat-contact-form">
@@ -238,7 +249,7 @@ color: black;
 
   <!-- EMAIL FORM -->
   <div class="cat-form cat-form-email">
-    <h2 class="form-txt">e-mail address</h2>
+    <h2 class="form-txt top">e-mail address</h2>
     <input type="email" placeholder="example@gmail.com" class="input email"/>
 
     <h2 class="form-txt">subject line</h2>
@@ -1035,12 +1046,12 @@ background: rgba(255,255,255,0.50);
 
 /* Form spacing ---------------------------*/    
 
-.email{
+.top{
   margin-top: 10px;
 }
 .input{
   margin-bottom: 5px;
-  border-radius: 25px;
+  border-radius: 12px;
 }
 .input-text{
   margin-bottom: 10px;
@@ -1057,7 +1068,7 @@ background: rgba(255,255,255,0.50);
   min-height: 180px;
   resize: none;
   color: black;
-  border-radius: 25px;
+  border-radius: 12px;
 }
 
 .cat-contact-form input:hover,
@@ -1067,7 +1078,7 @@ background: rgba(255,255,255,0.50);
 /* Submit button */
 .cat-submit {
   cursor: pointer;
-  border-radius: 25px;
+  border-radius: 12px;
   background: rgba(255,255,255,0.50);
 
 }
