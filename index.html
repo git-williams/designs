@@ -263,11 +263,17 @@ color: black;
 
 
     
-  <h2 class="form-txt">name</h2>
-  <div class="name-row">
-  <input type="text" placeholder="First name" class="input name-first"/>
-  <input type="text" placeholder="Last name" class="input name-last"/>
+ <div class="name-row">
+  <div class="name-field">
+    <h2 class="form-txt">first name</h2>
+    <input type="text" placeholder="John" class="input name-first"/>
   </div>
+
+  <div class="name-field">
+    <h2 class="form-txt">last name</h2>
+    <input type="text" placeholder="Doe" class="input name-last"/>
+  </div>
+</div>
 
 
 
@@ -290,13 +296,18 @@ color: black;
     <input type="tel" placeholder="XXX-XXX-XXXX" class="input phone"/>
 
     
-
 <div class="name-row">
-  <h2 class="form-txt">name</h2>
-  <input type="text" placeholder="First name" class="input name-first"/>
-  <h2 class="form-txt">name</h2>
-  <input type="text" placeholder="Last name" class="input name-last"/>
+  <div class="name-field">
+    <h2 class="form-txt">first name</h2>
+    <input type="text" placeholder="John" class="input name-first"/>
+  </div>
+
+  <div class="name-field">
+    <h2 class="form-txt">last name</h2>
+    <input type="text" placeholder="Doe" class="input name-last"/>
+  </div>
 </div>
+
 
 
 
@@ -1010,7 +1021,6 @@ ease;
 
     
 /* First and last name*/
-
 /* Name row layout */
 .name-row {
   display: flex;
@@ -1020,10 +1030,17 @@ ease;
   margin-inline: auto;
 }
 
-/* Override 100% width for name inputs */
-.name-row input {
-  width: 100%;
+/* Each column */
+.name-field {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Override forced full width */
+.name-field input {
+  width: 100%;
 }
 
 
