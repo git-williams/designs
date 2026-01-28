@@ -257,23 +257,52 @@ color: black;
 
   <!-- EMAIL FORM -->
   <div class="cat-form cat-form-email">
+
     <h2 class="form-txt top">e-mail address</h2>
     <input type="email" placeholder="example@gmail.com" class="input email"/>
 
-    <h2 class="form-txt">subject line</h2>
-    <input type="text" placeholder="write something..." class="input subject"/>
 
+    
+  <h2 class="form-txt">name</h2>
+  <div class="name-row">
+  <input type="text" placeholder="First name" class="input name-first"/>
+  <input type="text" placeholder="Last name" class="input name-last"/>
+  </div>
+
+
+
+    
     <h2 class="form-txt">message</h2>
     <textarea placeholder="write something..." class="input-text"></textarea>
     <button class="cat-submit">Send e-mail</button>
+    
   </div>
+
+
+
+
+  
 
   <!-- PHONE FORM -->
   <div class="cat-form cat-form-phone">
-    <input type="tel" placeholder="phone number" class="input phone"/>
-    <input type="text" placeholder="first & last name" class="input name"/>
-     <textarea placeholder="enter message" class="input-text"></textarea>
+
+    <h2 class="form-txt top">phone number</h2>
+    <input type="tel" placeholder="XXX-XXX-XXXX" class="input phone"/>
+
+    
+<h2 class="form-txt">name</h2>
+<div class="name-row">
+  <input type="text" placeholder="First name" class="input name-first"/>
+  <input type="text" placeholder="Last name" class="input name-last"/>
+</div>
+
+
+
+    
+    <h2 class="form-txt">message</h2>
+    <textarea placeholder="enter message" class="input-text"></textarea>
     <button class="cat-submit">Send message</button>
+    
   </div>
   
 <!-- END FORM STATE -->
@@ -976,6 +1005,25 @@ ease;
   filter: blur(4px);
   pointer-events: none;
 }
+
+    
+/* First and last name*/
+
+/* Name row layout */
+.name-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+}
+
+/* Override 100% width for name inputs */
+.name-row input {
+  width: 100%;
+  flex: 1;
+}
+
 
 
   
