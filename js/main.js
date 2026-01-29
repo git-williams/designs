@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ================================
   // HERO SLIDE + FADE IN ON LOAD
   // ================================
-  const heroH1 = document.querySelector(".hero-text h1");
+  const heroH1 = document.querySelector(".hero-text");
   if (heroH1 && typeof gsap !== "undefined") {
 
     // Start state
