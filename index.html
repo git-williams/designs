@@ -113,11 +113,11 @@ color: black;
     
 <style>
 /* ================================
-   HERO WRAPPER LAYOUT
+   HERO LAYOUT
 ================================ */
 
-
 .hero-text {
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   padding: 0 2rem;
@@ -125,7 +125,7 @@ color: black;
 }
 
 /* ================================
-   HERO HEADING TYPOGRAPHY
+   HERO HEADING BASE STYLES
 ================================ */
 
 .hero-heading {
@@ -134,16 +134,32 @@ color: black;
   filter: blur(6px);
   will-change: transform, opacity, filter;
 
-  /* Force readable line length */
-  max-width: 22ch; /* desktop line length clamp */
-  line-height: 1.05;
   font-weight: 600;
+  line-height: 1.02;
+  text-wrap: balance;
 }
 
-  @media (max-width: 900px) {
+/* ================================
+   DESKTOP: FORCE VERTICAL WORD STACK
+   (~4ch width forces each word to break)
+================================ */
+
+@media (min-width: 901px) {
+  .hero-heading {
+    max-width: 4ch; /* forces vertical word stacking */
+    white-space: normal;
+    text-align: left;
+    font-size: clamp(3.5rem, 6vw, 6rem);
+  }
+}
+
+/* ================================
+   TABLET: CENTER, SINGLE LINE
+================================ */
+
+@media (max-width: 900px) {
   .hero-inner {
-    justify-content: center; /* center horizontally in viewport */
-    text-align: center;
+    justify-content: center;
   }
 
   .hero-text {
@@ -151,9 +167,23 @@ color: black;
   }
 
   .hero-heading {
-    max-width: 90vw; /* remove desktop line clamp */
+    max-width: none;
+    white-space: nowrap; /* force one line */
+    font-size: clamp(2.8rem, 5vw, 4rem);
   }
 }
+
+/* ================================
+   PHONE: CENTER, SINGLE LINE, SMALLER
+================================ */
+
+@media (max-width: 600px) {
+  .hero-heading {
+    font-size: clamp(2rem, 6vw, 2.6rem);
+    white-space: nowrap;
+  }
+}
+
 
 </style>
 
