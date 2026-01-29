@@ -25,24 +25,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ================================
-  // HERO SLIDE + FADE IN ON LOAD
+  // HERO SLIDE + FADE + BLUR IN
   // ================================
-  const heroH1 = document.querySelector(".hero-text");
-  if (heroH1 && typeof gsap !== "undefined") {
+  const hero = document.querySelector(".hero-heading");
+  if (hero && typeof gsap !== "undefined") {
 
-    // Start state
-    gsap.set(heroH1, {
-      x: -28,
-      opacity: 0
-    });
-
-    // Animate in
-    gsap.to(heroH1, {
-      duration: 0.6,
+    gsap.to(hero, {
+      delay: 0.12,
+      duration: 0.8,
       x: 0,
       opacity: 1,
-      ease: "power2.out"
+      filter: "blur(0px)",
+      ease: "power3.out"
     });
+
   }
 
 });
