@@ -112,12 +112,49 @@ color: black;
 
     
 <style>
+/* ================================
+   HERO WRAPPER LAYOUT
+================================ */
+
+
+.hero-text {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2rem;
+  text-align: left;
+}
+
+/* ================================
+   HERO HEADING TYPOGRAPHY
+================================ */
+
 .hero-heading {
   opacity: 0;
   transform: translateX(-28px);
   filter: blur(6px);
   will-change: transform, opacity, filter;
+
+  /* Force readable line length */
+  max-width: 22ch; /* desktop line length clamp */
+  line-height: 1.05;
+  font-weight: 600;
 }
+
+  @media (max-width: 900px) {
+  .hero-inner {
+    justify-content: center; /* center horizontally in viewport */
+    text-align: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .hero-heading {
+    max-width: 90vw; /* remove desktop line clamp */
+  }
+}
+
 </style>
 
 
