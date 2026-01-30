@@ -35,10 +35,70 @@ footer {
 
 
 
+/* ================= HERO ================= */
+
+.hero {
+  display: flex;
+  justify-content: center;
+  
+  padding: clamp(4rem, 8vw, 8rem) 0;
+  height:100vh;
+}
+
+.hero {
+
+
+  background-size: cover;
+  background-position: center;
+ /*optional effect:*/
+  filter: saturate(0.9) contrast(0.95);
+
+  /* fancy background image*/
+background-image: url("../images/ls2.jpg");
+  
+/* Old gradient
+  
+  background:
+    radial-gradient(
+      1200px 800px at 10% 10%,
+      rgba(255, 230, 240, 0.35),
+      transparent 60%
+    ),
+    radial-gradient(
+      1000px 700px at 90% 20%,
+      rgba(220, 235, 255, 0.45),
+      transparent 65%
+    ),
+    radial-gradient(
+      1400px 900px at 50% 80%,
+      rgba(255, 255, 255, 0.6),
+      transparent 70%
+    ),
+    #f4f6f8;
+}
+*/
+
+
+/* Desktop keeps full height */
+@media (min-width: 1100px) {
+  .hero {
+    min-height: 100vh;
+    align-items: center;
+    padding: 0;
+  }
+}
+
+.hero-inner {
+  width: 90%;
+  max-width: 1300px;
+  display: flex;
+  align-items: center;
+  gap: clamp(2rem, 4vw, 4rem);
+}
 
 
 
-
+/* =============== Wrapper / Hero Container (square element) =============*/
 .cat-wrapper{
 inset: 0;
   background-size: cover;
@@ -130,70 +190,6 @@ button {
   transform: translateY(0);
   opacity: 1
 }
-
-/* ================= HERO ================= */
-
-.hero {
-  display: flex;
-  justify-content: center;
-  
-  padding: clamp(4rem, 8vw, 8rem) 0;
-  height:100vh;
-}
-
-.hero {
-
-
-  background-size: cover;
-  background-position: center;
- /*optional effect:*/
-  filter: saturate(0.9) contrast(0.95);
-
-  /* fancy background image*/
-background-image: url("../images/ls3.jpg");
-  
-/* Old gradient
-  background:
-    radial-gradient(
-      1200px 800px at 10% 10%,
-      rgba(255, 230, 240, 0.35),
-      transparent 60%
-    ),
-    radial-gradient(
-      1000px 700px at 90% 20%,
-      rgba(220, 235, 255, 0.45),
-      transparent 65%
-    ),
-    radial-gradient(
-      1400px 900px at 50% 80%,
-      rgba(255, 255, 255, 0.6),
-      transparent 70%
-    ),
-    #f4f6f8;
-}
-*/
-
-
-/* Desktop keeps full height */
-@media (min-width: 1100px) {
-  .hero {
-    min-height: 100vh;
-    align-items: center;
-    padding: 0;
-  }
-}
-
-.hero-inner {
-  width: 90%;
-  max-width: 1300px;
-  display: flex;
-  align-items: center;
-  gap: clamp(2rem, 4vw, 4rem);
-}
-
-
-
-
 
 
 
