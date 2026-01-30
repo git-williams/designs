@@ -13,11 +13,10 @@ html, body {
 
 /* =============== GLOBAL =============== */
 body {
-  background: 
+  background: rgb( 34 34 34 );
     /* old gradient
     radial-gradient(1200px 800px at 10% 10%, rgba(255, 230, 240, 0.35), transparent 60%), radial-gradient(1000px 700px at 90% 20%, rgba(220, 235, 255, 0.45), transparent 65%), radial-gradient(1400px 900px at 50% 80%, rgba(255, 255, 255, 0.6), transparent 70%), #f4f6f8;
     */
-  rgb( 34 34 34 );
   
   color: #333;
   font-family: system-ui, sans-serif;
@@ -144,7 +143,6 @@ button {
 .hero {
 
 
-  inset: 0;
   background-size: cover;
   background-position: center;
  /*optional effect:*/
