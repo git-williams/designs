@@ -138,6 +138,7 @@ button {
   justify-content: center;
   
   padding: clamp(4rem, 8vw, 8rem) 0;
+  height:100vh;
 }
 
 .hero {
