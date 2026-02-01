@@ -613,15 +613,74 @@ color: black;
 
 
 
-[data-theme="sea"]   { --hero-bg: url("../images/sea.jpg"); }
-[data-theme="sand"]  { --hero-bg: url("../images/sand.jpg"); }
-[data-theme="field"] { --hero-bg: url("../images/field.jpg"); }
-[data-theme="fog"]   { --hero-bg: url("../images/fog.jpg"); }
-[data-theme="hill"]  { --hero-bg: url("../images/hill.jpg"); }
-[data-theme="mtn"]   { --hero-bg: url("../images/mtn.jpg"); }
+html[data-theme="sea"]   { --hero-bg: url("../images/sea.jpg"); }
+html[data-theme="sand"]  { --hero-bg: url("../images/sand.jpg"); }
+html[data-theme="field"] { --hero-bg: url("../images/field.jpg"); }
+html[data-theme="fog"]   { --hero-bg: url("../images/fog.jpg"); }
+html[data-theme="hill"]  { --hero-bg: url("../images/hill.jpg"); }
+html[data-theme="mtn"]   { --hero-bg: url("../images/mtn.jpg"); }
+
+
+html[data-theme="sea"] {
+  --contact-bg: linear-gradient(
+    190deg,
+    rgb(80 130 170 / 30%),
+    rgb(255 255 255 / 70%),
+    rgb(30 60 90 / 45%)
+  );
+}
+
+html[data-theme="sand"] {
+  --contact-bg: linear-gradient(
+    190deg,
+    rgb(210 190 140 / 35%),
+    rgb(255 255 255 / 70%),
+    rgb(150 120 80 / 45%)
+  );
+}
+
+html[data-theme="field"] {
+  --contact-bg: linear-gradient(
+    190deg,
+    rgb(80 130 170 / 30%),
+    rgb(255 255 255 / 70%),
+    rgb(30 60 90 / 45%)
+  );
+}
+
+html[data-theme="fog"] {
+  --contact-bg: linear-gradient(
+    190deg,
+    rgb(210 190 140 / 35%),
+    rgb(255 255 255 / 70%),
+    rgb(150 120 80 / 45%)
+  );
+}
+
+
+
+html[data-theme="hill"] {
+  --contact-bg: linear-gradient(
+    190deg,
+    rgb(80 130 170 / 30%),
+    rgb(255 255 255 / 70%),
+    rgb(30 60 90 / 45%)
+  );
+}
+
+html[data-theme="mtn"] {
+  --contact-bg: linear-gradient(
+    190deg,
+    rgb(210 190 140 / 35%),
+    rgb(255 255 255 / 70%),
+    rgb(150 120 80 / 45%)
+  );
+}
+    
+
 
     /* Bottom theme stuff - at the bottom so no class confusion on class addition */
-    .cat-contact-pill-sea   { background: rgba(80,130,170,0.6); }
+.cat-contact-pill-sea   { background: rgba(80,130,170,0.6); }
 .cat-contact-pill-sand  { background: rgba(210,190,140,0.6); }
 .cat-contact-pill-field { background: rgba(120,160,120,0.6); }
 .cat-contact-pill-fog   { background: rgba(180,180,180,0.6); }
@@ -643,85 +702,12 @@ color: black;
 }
 
 
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
 /*new contact bg*/
 .cat-left-top {
   inset: 0;
 
-background: linear-gradient(
-  190deg, 
-      rgb(111 144 172 / 25%), /* cool highlight top */ 
-      rgb(255 255 255 / 65%), /* dominant white core */ 
-      rgb(37 65 93 / 40%) /* cool depth bottom */
-  ) !important;
-
+ background: var(--contact-bg);
   backdrop-filter: blur(20px) saturate(1.05);
   -webkit-backdrop-filter: blur(20px) saturate(1.05);
 
@@ -740,8 +726,14 @@ background: linear-gradient(
 
 
 
- /* --hero-bg: none;*/
+  --hero-bg: none;
   --contact-pill-bg: rgba(255,255,255,0.6);
+  --contact-bg: linear-gradient(
+    190deg,
+    rgb(111 144 172 / 25%),
+    rgb(255 255 255 / 65%),
+    rgb(37 65 93 / 40%)
+  );
 
 
     
