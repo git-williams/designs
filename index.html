@@ -1470,7 +1470,7 @@ background: rgba(255,255,255,0.50);
 
 /* Expanded container (base) */
 .cat-work-sites {
-  position: relative; /* change from absolute for scroll space */
+  position: positive; /* change from absolute for scroll space */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1484,7 +1484,7 @@ background: rgba(255,255,255,0.50);
   overscroll-behavior-x: contain;
 
   gap: clamp(18px, 4vw, 32px);
-  padding-inline: 32px; /* horizontal padding to allow left/right scroll */
+  padding-inline: 24px; /* horizontal padding to allow left/right scroll */
   padding-block: 24px;
 
   opacity: 0;
@@ -1493,6 +1493,13 @@ background: rgba(255,255,255,0.50);
 
   transition: opacity .35s ease, filter .35s ease;
   scrollbar-width: none; /* hide scrollbar on Firefox */
+}
+
+    
+/* State switch */
+.cat-work.is-active .cat-work-default {
+  opacity: 0;
+  filter: blur(6px);
 }
 
 /* Expanded state */
