@@ -1524,6 +1524,10 @@ background: rgba(255,255,255,0.50);
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
 
+
+    scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+
   gap: 24px;
   padding: 24px 32px;
 
@@ -1905,45 +1909,32 @@ function initContact() {
 initContact();
 
 /* =================================================
-   DISCOVER / THEME SYSTEM
+   DISCOVER / THEME SYSTEM 
    ================================================= */
 
 const THEMES = ["sea", "sand", "field", "fog", "hill", "mtn"];
 let currentTheme = null;
 
-const scroller = document.querySelector(".cat-work-sites");
-if (!scroller) return;
-
-let sites = [...scroller.querySelectorAll(".cat-work-site")];
+const sites = document.querySelectorAll(".cat-work-site");
+if (!sites.length) return;
 
 /* -------------------------------
    THEME SETTER
 -------------------------------- */
 
-function setTheme(theme, { scroll = true } = {}) {
+function setTheme(theme) {
   if (!theme || theme === currentTheme) return;
 
+  // Set global theme
   document.documentElement.setAttribute("data-theme", theme);
 
+  // Update selected state
   sites.forEach(site => {
     const selected = site.dataset.theme === theme;
     site.classList.toggle("is-selected", selected);
     site.classList.remove("is-armed");
     site.dataset.armed = "false";
   });
-
-  if (scroll) {
-    const target = sites.find(s => s.dataset.theme === theme && !s.classList.contains("is-clone"));
-    if (target) {
-      scroller.scrollTo({
-        left:
-          target.offsetLeft -
-          scroller.offsetWidth / 2 +
-          target.offsetWidth / 2,
-        behavior: "smooth",
-      });
-    }
-  }
 
   currentTheme = theme;
 }
@@ -1952,7 +1943,7 @@ function setTheme(theme, { scroll = true } = {}) {
    RANDOM THEME ON LOAD
 -------------------------------- */
 
-setTheme(THEMES[Math.floor(Math.random() * THEMES.length)], { scroll: false });
+setTheme(THEMES[Math.floor(Math.random() * THEMES.length)]);
 
 /* -------------------------------
    CLICK / ARMED LOGIC
@@ -1966,7 +1957,13 @@ sites.forEach(site => {
 
     const theme = site.dataset.theme;
 
+    // Mobile: first tap arms, second tap commits
     if (isTouch && site.dataset.armed !== "true") {
+      sites.forEach(s => {
+        s.dataset.armed = "false";
+        s.classList.remove("is-armed");
+      });
+
       site.dataset.armed = "true";
       site.classList.add("is-armed");
       return;
@@ -1976,101 +1973,6 @@ sites.forEach(site => {
   });
 });
 
-/* -------------------------------
-   SCROLL → THEME SYNC
--------------------------------- */
-
-function getCenteredSite() {
-  const center = scroller.scrollLeft + scroller.offsetWidth / 2;
-
-  return sites.reduce((closest, site) => {
-    const siteCenter = site.offsetLeft + site.offsetWidth / 2;
-    const closestCenter = closest.offsetLeft + closest.offsetWidth / 2;
-
-    return Math.abs(siteCenter - center) <
-      Math.abs(closestCenter - center)
-      ? site
-      : closest;
-  }, sites[0]);
-}
-
-let scrollTimeout;
-
-scroller.addEventListener("scroll", () => {
-  clearTimeout(scrollTimeout);
-
-  scrollTimeout = setTimeout(() => {
-    const centered = getCenteredSite();
-    if (!centered) return;
-
-    const theme = centered.dataset.theme;
-    if (theme && theme !== currentTheme) {
-      setTheme(theme, { scroll: false });
-    }
-
-    correctLoopPosition();
-  }, 100);
-});
-
-/* -------------------------------
-   LOOPING (INFINITE ILLUSION)
--------------------------------- */
-
-function setupLooping() {
-  const clonesBefore = sites.map(s => {
-    const c = s.cloneNode(true);
-    c.classList.add("is-clone");
-    return c;
-  });
-
-  const clonesAfter = sites.map(s => {
-    const c = s.cloneNode(true);
-    c.classList.add("is-clone");
-    return c;
-  });
-
-  clonesBefore.forEach(c => scroller.prepend(c));
-  clonesAfter.forEach(c => scroller.append(c));
-
-  sites = [...scroller.querySelectorAll(".cat-work-site")];
-
-  const firstReal = sites.find(s => !s.classList.contains("is-clone"));
-  if (firstReal) {
-    scroller.scrollLeft =
-      firstReal.offsetLeft -
-      scroller.offsetWidth / 2 +
-      firstReal.offsetWidth / 2;
-  }
-}
-
-setupLooping();
-
-/* -------------------------------
-   LOOP CORRECTION (SAFE)
--------------------------------- */
-
-function correctLoopPosition() {
-  const real = sites.filter(s => !s.classList.contains("is-clone"));
-  if (!real.length) return;
-
-  const first = real[0];
-  const last = real[real.length - 1];
-
-  const center = scroller.scrollLeft + scroller.offsetWidth / 2;
-
-  const min = first.offsetLeft;
-  const max = last.offsetLeft + last.offsetWidth;
-
-  const span = last.offsetLeft - first.offsetLeft;
-
-  if (center < min) {
-    scroller.scrollLeft += span;
-  }
-
-  if (center > max) {
-    scroller.scrollLeft -= span;
-  }
-}
 
   
   /* =================================================
