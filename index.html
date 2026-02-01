@@ -409,42 +409,63 @@ color: black;
       <!-- LEFT BOTTOM (UNCHANGED SIZE) -->
 <div class="cat-left-bottom cat-section cat-work" data-cat="left-bottom">
 
-  <!-- DEFAULT STATE -->
   <div class="cat-work-default">
-    <h3>See my work</h3>
-    <p>View mock sites built by me</p>
-    <span class="cat-work-discover">Discover</span>
+    <h3>Discover themes</h3>
+    <p>Change the atmosphere</p>
+    <span class="cat-work-discover">Explore</span>
   </div>
 
-  <!-- EXPANDED STATE -->
-  <div class="cat-work-sites">
-
-    <a href="#" class="cat-work-site" data-site="baseline">
-      <div class="cat-work-icon">
+  <div class="cat-work-sites" id="themeScroller">
+    
+    <a class="cat-work-site" data-theme="sea">
+       <div class="cat-work-icon">
         <img src="" alt="Baseline" />
       </div>
-      <span class="cat-work-name">Baseline</span>
+   <span class="cat-work-name">Sea</span>
+    </a>
+    
+
+      <a class="cat-work-site" data-theme="sand">
+       <div class="cat-work-icon">
+        <img src="" alt="Field" />
+      </div>
+   <span class="cat-work-name">Sand</span>
     </a>
 
-    <a href="#" class="cat-work-site" data-site="expression">
-      <div class="cat-work-icon">
-        <img src="" alt="Expression" />
+      <a class="cat-work-site" data-theme="field">
+       <div class="cat-work-icon">
+        <img src="" alt="Field" />
       </div>
-      <span class="cat-work-name">Expression</span>
+   <span class="cat-work-name">Field</span>
     </a>
 
-    <a href="#" class="cat-work-site" data-site="ascension">
-      <div class="cat-work-icon">
-        <img src="" alt="Ascension" />
+      <a class="cat-work-site" data-theme="fog">
+       <div class="cat-work-icon">
+        <img src="" alt="Fog" />
       </div>
-      <span class="cat-work-name">Ascension</span>
+   <span class="cat-work-name">Fog</span>
     </a>
+
+      <a class="cat-work-site" data-theme="hill">
+       <div class="cat-work-icon">
+        <img src="" alt="Hill" />
+      </div>
+   <span class="cat-work-name">Hill</span>
+    </a>
+
+      <a class="cat-work-site" data-theme="mtn">
+       <div class="cat-work-icon">
+        <img src="" alt="Mountain" />
+      </div>
+   <span class="cat-work-name">Mountain</span>
+    </a>
+
+    
 
   </div>
 
 </div>
-
-    </div> <!-- END .cat-left -->
+<!-- END .cat-left -->
 
 
     <!-- RIGHT SIDE (mostly unchanged, spacing tightened) -->
@@ -580,6 +601,100 @@ color: black;
 
     
   <style>
+
+
+/* ================================
+  THEME STUFF
+================================ */
+
+
+
+
+
+
+[data-theme="sea"]   { --hero-bg: url("../images/sea.jpg"); }
+[data-theme="sand"]  { --hero-bg: url("../images/sand.jpg"); }
+[data-theme="field"] { --hero-bg: url("../images/field.jpg"); }
+[data-theme="fog"]   { --hero-bg: url("../images/fog.jpg"); }
+[data-theme="hill"]  { --hero-bg: url("../images/hill.jpg"); }
+[data-theme="mtn"]   { --hero-bg: url("../images/mtn.jpg"); }
+
+
+.hero {
+  background-image: var(--hero-bg);
+  background-size: cover;
+  background-position: center;
+  transition: background-image .6s ease;
+}
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 /*new contact bg*/
 .cat-left-top {
   inset: 0;
@@ -606,6 +721,14 @@ background: linear-gradient(
 ================================ */
 
   :root {
+
+
+
+  --hero-bg: none !important;
+  --contact-pill-bg: rgba(255,255,255,0.6);
+
+
+    
   /* sizing */
   --cat-square-size: min(90vw, 700px);
   --cat-gap: clamp(12px, 2vw, 20px);
@@ -1368,7 +1491,69 @@ background: rgba(255,255,255,0.50);
   pointer-events: auto;
 }
 
-/* Individual site */
+
+
+
+/* New Theme Stuff for cat-work-cites ------------------------------- */
+
+ .cat-work-sites {
+  display: flex;
+
+   /* scroll stuff */
+  flex-direction: row;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  gap: 24px;
+  padding: 24px 32px;
+
+  scrollbar-width: none;
+}
+
+    
+
+.cat-work-site {
+  scroll-snap-align: center;
+  flex: 0 0 auto;
+}
+
+
+.cat-work-site.is-selected {
+  filter: grayscale(1);
+  pointer-events: none;
+  transform: none !important;
+}
+
+.cat-work-site.is-selected .cat-work-name::after {
+  opacity: 1;
+  transform: translate(0,0);
+}
+
+.cat-work-site.is-selected:hover {
+  transform: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+/* Individual site (the icon) */
 .cat-work-site {
   display: flex;
   flex-direction: column;
@@ -1536,6 +1721,25 @@ background: rgba(255,255,255,0.50);
 
 
 
+
+
+
+
+
+
+
+
+
+    /* Bottom theme stuff - at the bottom so no class confusion on class addition */
+    .cat-contact-pill-sea   { background: rgba(80,130,170,0.6); }
+.cat-contact-pill-sand  { background: rgba(210,190,140,0.6); }
+.cat-contact-pill-field { background: rgba(120,160,120,0.6); }
+.cat-contact-pill-fog   { background: rgba(180,180,180,0.6); }
+.cat-contact-pill-hill  { background: rgba(120,140,130,0.6); }
+.cat-contact-pill-mtn   { background: rgba(90,110,140,0.6); }
+
+
+
 </style>
 
 
@@ -1699,6 +1903,164 @@ function initContact() {
 }
 
 initContact();
+
+  /* =================================================
+   DISCOVER / THEME SYSTEM
+   ================================================= */
+
+const THEMES = ["sea", "sand", "field", "fog", "hill", "mtn"];
+let currentTheme = null;
+
+const scroller = document.querySelector(".cat-work-sites");
+if (!scroller) return;
+
+let sites = [...scroller.querySelectorAll(".cat-work-site")];
+
+/* -------------------------------
+   THEME SETTER
+-------------------------------- */
+
+function setTheme(theme, { scroll = true } = {}) {
+  if (!theme || theme === currentTheme) return;
+
+  document.documentElement.setAttribute("data-theme", theme);
+
+  sites.forEach(site => {
+    const isSelected = site.dataset.theme === theme;
+    site.classList.toggle("is-selected", isSelected);
+    site.dataset.armed = "false";
+    site.classList.remove("is-armed");
+  });
+
+  if (scroll) {
+    const target = sites.find(s => s.dataset.theme === theme);
+    if (target) {
+      scroller.scrollTo({
+        left:
+          target.offsetLeft -
+          scroller.offsetWidth / 2 +
+          target.offsetWidth / 2,
+        behavior: "smooth",
+      });
+    }
+  }
+
+  currentTheme = theme;
+}
+
+/* -------------------------------
+   RANDOM THEME ON LOAD
+-------------------------------- */
+
+setTheme(THEMES[Math.floor(Math.random() * THEMES.length)], {
+  scroll: false,
+});
+
+/* -------------------------------
+   CLICK / ARMED LOGIC
+-------------------------------- */
+
+sites.forEach(site => {
+  site.dataset.armed = "false";
+
+  site.addEventListener("click", e => {
+    e.preventDefault();
+    const theme = site.dataset.theme;
+
+    if (isTouch && site.dataset.armed !== "true") {
+      site.dataset.armed = "true";
+      site.classList.add("is-armed");
+      return;
+    }
+
+    setTheme(theme);
+  });
+});
+
+/* -------------------------------
+   SCROLL → THEME SYNC
+-------------------------------- */
+
+function getCenteredSite() {
+  const center = scroller.scrollLeft + scroller.offsetWidth / 2;
+
+  return sites.reduce((closest, site) => {
+    const siteCenter = site.offsetLeft + site.offsetWidth / 2;
+    const closestCenter =
+      closest.offsetLeft + closest.offsetWidth / 2;
+
+    return Math.abs(siteCenter - center) <
+      Math.abs(closestCenter - center)
+      ? site
+      : closest;
+  }, sites[0]);
+}
+
+let scrollDebounce;
+
+scroller.addEventListener("scroll", () => {
+  clearTimeout(scrollDebounce);
+
+  scrollDebounce = setTimeout(() => {
+    const centered = getCenteredSite();
+    if (!centered) return;
+
+    const theme = centered.dataset.theme;
+    if (theme && theme !== currentTheme) {
+      setTheme(theme, { scroll: false });
+    }
+  }, 80);
+});
+
+/* -------------------------------
+   LOOPING (INFINITE ILLUSION)
+-------------------------------- */
+
+function setupLooping() {
+  const before = sites.map(s => s.cloneNode(true));
+  const after = sites.map(s => s.cloneNode(true));
+
+  before.forEach(c => {
+    c.classList.add("is-clone");
+    scroller.prepend(c);
+  });
+
+  after.forEach(c => {
+    c.classList.add("is-clone");
+    scroller.append(c);
+  });
+
+  // Refresh site list (real + clones)
+  sites = [...scroller.querySelectorAll(".cat-work-site")];
+
+  // Jump to the real set
+  const realStart = sites.find(s => !s.classList.contains("is-clone"));
+  if (realStart) {
+    scroller.scrollLeft =
+      realStart.offsetLeft -
+      scroller.offsetWidth / 2 +
+      realStart.offsetWidth / 2;
+  }
+}
+
+setupLooping();
+
+/* -------------------------------
+   LOOP CORRECTION ON SCROLL
+-------------------------------- */
+
+scroller.addEventListener("scroll", () => {
+  const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+  const buffer = scroller.clientWidth;
+
+  if (scroller.scrollLeft < buffer) {
+    scroller.scrollLeft += maxScroll / 3;
+  }
+
+  if (scroller.scrollLeft > maxScroll - buffer) {
+    scroller.scrollLeft -= maxScroll / 3;
+  }
+});
 
 
 /* =================================================
