@@ -620,13 +620,28 @@ color: black;
 [data-theme="hill"]  { --hero-bg: url("../images/hill.jpg"); }
 [data-theme="mtn"]   { --hero-bg: url("../images/mtn.jpg"); }
 
+    /* Bottom theme stuff - at the bottom so no class confusion on class addition */
+    .cat-contact-pill-sea   { background: rgba(80,130,170,0.6); }
+.cat-contact-pill-sand  { background: rgba(210,190,140,0.6); }
+.cat-contact-pill-field { background: rgba(120,160,120,0.6); }
+.cat-contact-pill-fog   { background: rgba(180,180,180,0.6); }
+.cat-contact-pill-hill  { background: rgba(120,140,130,0.6); }
+.cat-contact-pill-mtn   { background: rgba(90,110,140,0.6); }
+
 
 .hero {
-  background-image: var(--hero-bg);
+  background-image:
+    var(--hero-image);
+
   background-size: cover;
   background-position: center;
-  transition: background-image .6s ease;
+  background-repeat: no-repeat;
+
+  transition:
+    background-image 0.6s ease,
+    filter 0.6s ease;
 }
+
 
 
     
@@ -1711,7 +1726,7 @@ background: rgba(255,255,255,0.50);
     object-fit: contain;
   }
 
-  /* 🏷 Label – pull closer to circle */
+  /* Label, pull closer to circle */
   .cat-work-name {
     margin-top: 0;               /* remove any default gap */
     font-size: 0.85rem;
@@ -1722,22 +1737,6 @@ background: rgba(255,255,255,0.50);
 
 
 
-
-
-
-
-
-
-
-
-
-    /* Bottom theme stuff - at the bottom so no class confusion on class addition */
-    .cat-contact-pill-sea   { background: rgba(80,130,170,0.6); }
-.cat-contact-pill-sand  { background: rgba(210,190,140,0.6); }
-.cat-contact-pill-field { background: rgba(120,160,120,0.6); }
-.cat-contact-pill-fog   { background: rgba(180,180,180,0.6); }
-.cat-contact-pill-hill  { background: rgba(120,140,130,0.6); }
-.cat-contact-pill-mtn   { background: rgba(90,110,140,0.6); }
 
 
 
@@ -1905,7 +1904,7 @@ function initContact() {
 
 initContact();
 
-  /* =================================================
+/* =================================================
    DISCOVER / THEME SYSTEM
    ================================================= */
 
@@ -1927,14 +1926,14 @@ function setTheme(theme, { scroll = true } = {}) {
   document.documentElement.setAttribute("data-theme", theme);
 
   sites.forEach(site => {
-    const isSelected = site.dataset.theme === theme;
-    site.classList.toggle("is-selected", isSelected);
-    site.dataset.armed = "false";
+    const selected = site.dataset.theme === theme;
+    site.classList.toggle("is-selected", selected);
     site.classList.remove("is-armed");
+    site.dataset.armed = "false";
   });
 
   if (scroll) {
-    const target = sites.find(s => s.dataset.theme === theme);
+    const target = sites.find(s => s.dataset.theme === theme && !s.classList.contains("is-clone"));
     if (target) {
       scroller.scrollTo({
         left:
@@ -1953,9 +1952,7 @@ function setTheme(theme, { scroll = true } = {}) {
    RANDOM THEME ON LOAD
 -------------------------------- */
 
-setTheme(THEMES[Math.floor(Math.random() * THEMES.length)], {
-  scroll: false,
-});
+setTheme(THEMES[Math.floor(Math.random() * THEMES.length)], { scroll: false });
 
 /* -------------------------------
    CLICK / ARMED LOGIC
@@ -1966,6 +1963,7 @@ sites.forEach(site => {
 
   site.addEventListener("click", e => {
     e.preventDefault();
+
     const theme = site.dataset.theme;
 
     if (isTouch && site.dataset.armed !== "true") {
@@ -1987,8 +1985,7 @@ function getCenteredSite() {
 
   return sites.reduce((closest, site) => {
     const siteCenter = site.offsetLeft + site.offsetWidth / 2;
-    const closestCenter =
-      closest.offsetLeft + closest.offsetWidth / 2;
+    const closestCenter = closest.offsetLeft + closest.offsetWidth / 2;
 
     return Math.abs(siteCenter - center) <
       Math.abs(closestCenter - center)
@@ -1997,12 +1994,12 @@ function getCenteredSite() {
   }, sites[0]);
 }
 
-let scrollDebounce;
+let scrollTimeout;
 
 scroller.addEventListener("scroll", () => {
-  clearTimeout(scrollDebounce);
+  clearTimeout(scrollTimeout);
 
-  scrollDebounce = setTimeout(() => {
+  scrollTimeout = setTimeout(() => {
     const centered = getCenteredSite();
     if (!centered) return;
 
@@ -2010,7 +2007,9 @@ scroller.addEventListener("scroll", () => {
     if (theme && theme !== currentTheme) {
       setTheme(theme, { scroll: false });
     }
-  }, 80);
+
+    correctLoopPosition();
+  }, 100);
 });
 
 /* -------------------------------
@@ -2018,53 +2017,63 @@ scroller.addEventListener("scroll", () => {
 -------------------------------- */
 
 function setupLooping() {
-  const before = sites.map(s => s.cloneNode(true));
-  const after = sites.map(s => s.cloneNode(true));
-
-  before.forEach(c => {
+  const clonesBefore = sites.map(s => {
+    const c = s.cloneNode(true);
     c.classList.add("is-clone");
-    scroller.prepend(c);
+    return c;
   });
 
-  after.forEach(c => {
+  const clonesAfter = sites.map(s => {
+    const c = s.cloneNode(true);
     c.classList.add("is-clone");
-    scroller.append(c);
+    return c;
   });
 
-  // Refresh site list (real + clones)
+  clonesBefore.forEach(c => scroller.prepend(c));
+  clonesAfter.forEach(c => scroller.append(c));
+
   sites = [...scroller.querySelectorAll(".cat-work-site")];
 
-  // Jump to the real set
-  const realStart = sites.find(s => !s.classList.contains("is-clone"));
-  if (realStart) {
+  const firstReal = sites.find(s => !s.classList.contains("is-clone"));
+  if (firstReal) {
     scroller.scrollLeft =
-      realStart.offsetLeft -
+      firstReal.offsetLeft -
       scroller.offsetWidth / 2 +
-      realStart.offsetWidth / 2;
+      firstReal.offsetWidth / 2;
   }
 }
 
 setupLooping();
 
 /* -------------------------------
-   LOOP CORRECTION ON SCROLL
+   LOOP CORRECTION (SAFE)
 -------------------------------- */
 
-scroller.addEventListener("scroll", () => {
-  const maxScroll = scroller.scrollWidth - scroller.clientWidth;
-  const buffer = scroller.clientWidth;
+function correctLoopPosition() {
+  const real = sites.filter(s => !s.classList.contains("is-clone"));
+  if (!real.length) return;
 
-  if (scroller.scrollLeft < buffer) {
-    scroller.scrollLeft += maxScroll / 3;
+  const first = real[0];
+  const last = real[real.length - 1];
+
+  const center = scroller.scrollLeft + scroller.offsetWidth / 2;
+
+  const min = first.offsetLeft;
+  const max = last.offsetLeft + last.offsetWidth;
+
+  const span = last.offsetLeft - first.offsetLeft;
+
+  if (center < min) {
+    scroller.scrollLeft += span;
   }
 
-  if (scroller.scrollLeft > maxScroll - buffer) {
-    scroller.scrollLeft -= maxScroll / 3;
+  if (center > max) {
+    scroller.scrollLeft -= span;
   }
-});
+}
 
-
-/* =================================================
+  
+  /* =================================================
    DISCOVER / WORK SECTION
    ================================================= */
 
