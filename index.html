@@ -98,86 +98,6 @@ color: black;
   </div>
 
     
-<style>
-/* ================================
-   HERO LAYOUT
-================================ */
-
-.hero-text {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 2rem;
-  text-align: left;
-}
-
-/* ================================
-   HERO HEADING BASE STYLES
-================================ */
-
-.hero-heading {
-  opacity: 0;
-  transform: translateX(-28px);
-  filter: blur(6px);
-  will-change: transform, opacity, filter;
-
-  font-weight: 600;
-  line-height: 1.02;
-  text-wrap: balance;
-}
-
-/* ================================
-   DESKTOP: FORCE VERTICAL WORD STACK
-   (~4ch width forces each word to break)
-================================ */
-
-@media (min-width: 1025px) {
-  .hero-heading {
-    max-width: 4ch; /* forces vertical word stacking */
-    white-space: normal;
-    text-align: left;
-    font-size: clamp(3.5rem, 6vw, 6rem);
-  }
-}
-
-/* ================================
-   TABLET: CENTER, SINGLE LINE
-================================ */
-
-@media (max-width: 1024px) {
-  .hero-inner {
-    justify-content: center;
-  }
-
-  .hero-text {
-    text-align: center;
-    padding: none;
-  }
-
-  .hero-heading {
-    max-width: none;
-    white-space: nowrap; /* force one line */
-    font-size: clamp(2.8rem, 5vw, 4rem);
-  }
-
-  .cat-wrapper{
-    padding-left: none;
-    padding-right: none;
-}
-
-/* ================================
-   PHONE: CENTER, SINGLE LINE, SMALLER
-================================ */
-
-@media (max-width: 600px) {
-  .hero-heading {
-    font-size: clamp(2rem, 6vw, 2.6rem);
-    white-space: nowrap;
-  }
-}
-
-
-</style>
 
 
     
@@ -605,14 +525,12 @@ color: black;
 
 
 /* ================================
-  THEME STUFF
+  THEME CONTROL PANEL
+    for new styles: html[data-theme"theme"] {stylevariable}
 ================================ */
 
 
-
-
-
-
+/* Main backgrounds*/
 html[data-theme="sea"]   { --hero-bg: url("../images/sea.jpg"); }
 html[data-theme="sand"]  { --hero-bg: url("../images/sand.jpg"); }
 html[data-theme="field"] { --hero-bg: url("../images/field.jpg"); }
@@ -620,7 +538,7 @@ html[data-theme="fog"]   { --hero-bg: url("../images/fog.jpg"); }
 html[data-theme="hill"]  { --hero-bg: url("../images/hill.jpg"); }
 html[data-theme="mtn"]   { --hero-bg: url("../images/mtn.jpg"); }
 
-
+/*Contact section gradient*/
 html[data-theme="sea"] {
   --contact-bg: linear-gradient(
     190deg,
@@ -656,9 +574,7 @@ html[data-theme="fog"] {
     rgb(150 120 80 / 45%)
   );
 }
-
-
-
+    
 html[data-theme="hill"] {
   --contact-bg: linear-gradient(
     190deg,
@@ -679,7 +595,7 @@ html[data-theme="mtn"] {
     
 
 
-    /* Bottom theme stuff - at the bottom so no class confusion on class addition */
+/*Contact section pill coloring*/
 .cat-contact-pill-sea   { background: rgba(80,130,170,0.6); }
 .cat-contact-pill-sand  { background: rgba(210,190,140,0.6); }
 .cat-contact-pill-field { background: rgba(120,160,120,0.6); }
@@ -687,6 +603,58 @@ html[data-theme="mtn"] {
 .cat-contact-pill-hill  { background: rgba(120,140,130,0.6); }
 .cat-contact-pill-mtn   { background: rgba(90,110,140,0.6); }
 
+
+
+
+/* ================================
+ROOT: SIZING, COLORS, THEME DEFAULTS
+================================ */
+
+:root {
+
+/*theme defaults----------------------------------------*/
+  --hero-bg: none;
+    
+/* theme col0rs */
+  --cat-right-bg: #1f2933;
+  --cat-left-bottom-bg: #394754;
+  --cat-cover-bg: rgba(255,255,255,0.18);
+  --cat-text-light: #ffffff;
+  --cat-muted: rgba(255,255,255,0.75);
+ /*contact section*/
+  --contact-pill-bg: rgba(255,255,255,0.6);
+  --contact-bg: linear-gradient(
+    190deg,
+    rgb(111 144 172 / 25%),
+    rgb(255 255 255 / 65%),
+    rgb(37 65 93 / 40%)
+  );
+/*end theme defaults------------------------------------*/
+ 
+    
+  /* sizing */
+  --cat-square-size: min(90vw, 700px);
+  --cat-gap: clamp(12px, 2vw, 20px);
+  --cat-radius: 22px;
+
+  --cat-accent: #ffffff;
+
+  /* motion */
+  --cat-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+
+/* ================================
+   HERO LAYOUT + STYLES
+================================ */
+
+.hero-text {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2rem;
+  text-align: left;
+}
 
 .hero {
   background-image:
@@ -702,59 +670,76 @@ html[data-theme="mtn"] {
 }
 
 
-    
-/*new contact bg*/
-.cat-left-top {
-  inset: 0;
-
- background: var(--contact-bg);
-  backdrop-filter: blur(20px) saturate(1.05);
-  -webkit-backdrop-filter: blur(20px) saturate(1.05);
-
-  border: 1px solid rgb(255 255 255 / 45%);
-  box-shadow:
-    inset 0 0 40px rgba(255, 255, 255, 0.35),
-    0 20px 60px rgba(0, 0, 0, 0.08);
-}
-
-
-  /* ================================
-   GLOBAL – SIZING + COLORS
+/* ================================
+   HERO TEXXT BASE STYLES
 ================================ */
 
-  :root {
+.hero-heading {
+  opacity: 0;
+  transform: translateX(-28px);
+  filter: blur(6px);
+  will-change: transform, opacity, filter;
 
-
-
-  --hero-bg: none;
-  --contact-pill-bg: rgba(255,255,255,0.6);
-  --contact-bg: linear-gradient(
-    190deg,
-    rgb(111 144 172 / 25%),
-    rgb(255 255 255 / 65%),
-    rgb(37 65 93 / 40%)
-  );
-
-
-    
-  /* sizing */
-  --cat-square-size: min(90vw, 700px);
-  --cat-gap: clamp(12px, 2vw, 20px);
-  --cat-radius: 22px;
-
-  /* colors - replaced c@t-left-top, */
-  --cat-right-bg: #1f2933;
-  --cat-left-bottom-bg: #394754;
-
-  --cat-cover-bg: rgba(255,255,255,0.18);
-  --cat-text-light: #ffffff;
-  --cat-muted: rgba(255,255,255,0.75);
-
-  --cat-accent: #ffffff;
-
-  /* motion */
-  --cat-ease: cubic-bezier(.22,.61,.36,1);
+  font-weight: 600;
+  line-height: 1.02;
+  text-wrap: balance;
 }
+
+/* ================================
+   DESKTOP: FORCE VERTICAL WORD STACK
+   (~4ch width forces each word to break)
+================================ */
+
+@media (min-width: 1025px) {
+  .hero-heading {
+    max-width: 4ch; /* forces vertical word stacking */
+    white-space: normal;
+    text-align: left;
+    font-size: clamp(3.5rem, 6vw, 6rem);
+  }
+}
+
+/* ================================
+  HERO TITLE ON TABLET: CENTER, SINGLE LINE
+================================ */
+
+@media (max-width: 1024px) {
+  .hero-inner {
+    justify-content: center;
+  }
+
+  .hero-text {
+    text-align: center;
+    padding: none;
+  }
+
+  .hero-heading {
+    max-width: none;
+    white-space: nowrap; /* force one line */
+    font-size: clamp(2.8rem, 5vw, 4rem);
+  }
+
+  .cat-wrapper{
+    padding-left: none;
+    padding-right: none;
+}
+
+/* ================================
+   HERO TITLE ON PHONE: CENTER, SINGLE LINE, SMALLER
+================================ */
+
+@media (max-width: 600px) {
+  .hero-heading {
+    font-size: clamp(2rem, 6vw, 2.6rem);
+    white-space: nowrap;
+  }
+}
+
+
+
+ /* ================================
+   CAT LAYOUT STYLES
+================================ */   
 
 /* wrapper centers everything */
 .cat-wrapper {
@@ -822,8 +807,7 @@ html[data-theme="mtn"] {
 
 
 /* -------------------------------------------------
-   CAT SECTION – Compacted Mobile Layout
-   Hides "Learn More" on small screens only
+   CAT SECTION, Compacted Mobile Layout styles
    ------------------------------------------------- */
 
 @media (max-width: 767px) {
@@ -846,14 +830,8 @@ html[data-theme="mtn"] {
 }
 
 
-
-
-    
-
-
-
 /* ================================
-   RIGHT SECTION – LEARN MORE
+   RIGHT SECTION: LEARN MORE
 ================================ */
   
 .cat-right {
@@ -1025,8 +1003,22 @@ html[data-theme="mtn"] {
 }
 
 /* ================================
-   UPPER LEFT SECTION – CONTACT
+   UPPER LEFT SECTION: CONTACT
 ================================ */
+
+/*main gradient element (non-form*/
+.cat-left-top {
+  inset: 0;
+
+ background: var(--contact-bg);
+  backdrop-filter: blur(20px) saturate(1.05);
+  -webkit-backdrop-filter: blur(20px) saturate(1.05);
+
+  border: 1px solid rgb(255 255 255 / 45%);
+  box-shadow:
+    inset 0 0 40px rgba(255, 255, 255, 0.35),
+    0 20px 60px rgba(0, 0, 0, 0.08);
+}  
 
 .cat-contact {
   padding: 22px;
@@ -1055,28 +1047,9 @@ html[data-theme="mtn"] {
    color: black;
 }
 
-/* ---------- CONTACT PILL ---------- */
-
-
-.cat-contact-pill:hover {
-  transform: scale(1.04);
-}
-/* grow on hover */
-.cat-pill-text {
-  padding-left: 50px;
-  transition: transform 0.25s ease, font-size 0.25s ease;
-  transform-origin: left center;
-}
-
-.cat-contact-pill:hover .cat-pill-text {
-  transform: scale(1.15);
-}
-
-
 /* ================================
    CAT CONTACT PILL
    ================================ */
-
 
 .cat-contact-pill {
     position: relative;
@@ -1111,14 +1084,12 @@ ease;
   
 }
 
-
-/* HOVER → MIRRORED POSITION 
-.cat-contact-pill:hover .cat-pill-icon {
-  left: calc(100% - 42px - 12px);
+.cat-pill-text {
+  padding-left: 50px;
+  transition: transform 0.25s ease, font-size 0.25s ease;
+  transform-origin: left center;
 }
 
-
-/* Icon swap */
 .cat-pill-icon span {
   position: absolute;
   opacity: 0;
@@ -1128,6 +1099,17 @@ ease;
 
 }
 
+
+.cat-contact-pill:hover {
+  transform: scale(1.04);
+}
+  
+/* cat-pill-text grow on hover */
+.cat-contact-pill:hover .cat-pill-text {
+  transform: scale(1.15);
+}
+
+/* icon swap on hover */
 .cat-pill-icon span:first-child {
    color: white;
   opacity: 1;
@@ -1210,11 +1192,11 @@ ease;
   transition: opacity .3s ease, filter .3s ease;
   background: rgb(14 23 32);
 }
-
+ 
 /*contact section .im-form border*/
-    .cat-left-top.is-form{
-      border:1px solid rgb(255 255 255 / 100%);
-    }
+.cat-left-top.is-form{
+  border:1px solid rgb(255 255 255 / 100%);
+}
 
 .cat-contact.is-form .cat-contact-form {
    color: black;
@@ -1426,7 +1408,7 @@ background: rgba(255,255,255,0.50);
    
 
 /* ================================
-   DISCOVER SECTION – SEE MY WORK
+   DISCOVER SECTION:0 SEE MY WORK
 ================================ */
 
     .cat-work-site,
@@ -1443,7 +1425,7 @@ background: rgba(255,255,255,0.50);
     border: 1px solid rgb(255 255 255 / 10%);
 }
 
-/* Default content */
+/* DEFAULT CONTENT ------------------------ */
 .cat-work-default {
   position: absolute;
   inset: 0;
@@ -1468,9 +1450,9 @@ background: rgba(255,255,255,0.50);
 }
 
 
-/* Expanded container (base) */
+/* EXPANDED CONTAINER (ON HOVER) --------------------------------------- */
 .cat-work-sites {
-  position: positive; /* change from absolute for scroll space */
+  position: absolute; /* change from absolute for scroll space */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1543,20 +1525,6 @@ background: rgba(255,255,255,0.50);
 .cat-work-site.is-selected:hover {
   transform: none;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     
 
@@ -1678,11 +1646,6 @@ background: rgba(255,255,255,0.50);
 }
 
 
-
-
-
-/* Discover Section mobile sizing */
-
 /* -------------------------------------------------
    CAT WORK (DISCOVER) – Mobile Icon Size + Label Tightening
    ------------------------------------------------- */
@@ -1693,7 +1656,7 @@ background: rgba(255,255,255,0.50);
   .cat-work-sites {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;                 /* slightly wider spacing */
+    gap: 1.5rem;
     padding-top: 1rem;
   }
 
@@ -1703,9 +1666,9 @@ background: rgba(255,255,255,0.50);
     text-align: center;
   }
 
-  /* 🔵 Circular icon – make it larger */
+  /* Circular icon – make it larger on mobile */
   .cat-work-icon {
-    width: 76px;                 /* increased from ~60–64 */
+    width: 76px;                 
     height: 76px;
     margin: 0 auto 0.25rem;      /* tighter space to label */
   }
@@ -1724,9 +1687,6 @@ background: rgba(255,255,255,0.50);
     line-height: 1.1;
   }
 }
-
-
-
 
 
 
