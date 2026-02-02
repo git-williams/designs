@@ -646,7 +646,15 @@ ROOT: SIZING, COLORS, THEME DEFAULTS
 
 /* ================================
    HERO LAYOUT + STYLES
-================================ */
+==============================*/
+
+
+
+
+
+
+
+    
 
 .hero-text {
   max-width: 1200px;
@@ -704,24 +712,24 @@ ROOT: SIZING, COLORS, THEME DEFAULTS
 ================================ */
 
 @media (max-width: 1024px) {
-  .hero-inner {
-    justify-content: center;
-  }
-
-  .hero-text {
-    text-align: center;
-    padding: none;
-  }
-
-  .hero-heading {
-    max-width: none;
-    white-space: nowrap; /* force one line */
-    font-size: clamp(2.8rem, 5vw, 4rem);
-  }
-
-  .cat-wrapper{
-    padding-left: none;
-    padding-right: none;
+      .hero-inner {
+        justify-content: center;
+      }
+    
+      .hero-text {
+        text-align: center;
+        padding: 0;
+      }
+    
+      .hero-heading {
+        white-space: nowrap; /* force one line */
+        font-size: clamp(2.8rem, 5vw, 4rem);
+      }
+    
+      .cat-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 /* ================================
@@ -749,7 +757,7 @@ ROOT: SIZING, COLORS, THEME DEFAULTS
   padding: 5vw 0;
 
 
-  border-radius: none;
+  border-radius: 0;
   padding-left: 10px;
   padding-right: 10px;
 
@@ -1028,7 +1036,7 @@ ROOT: SIZING, COLORS, THEME DEFAULTS
 .cat-eyebrow {
   font-size: 18px;
   opacity: 1;
-   color: rgb(0, 0, 0, 50%);
+   color: rgb(0 0 0 / 50%);
   display: block;
   padding-bottom: 0px !important;
   line-height: 40px;
@@ -1191,6 +1199,9 @@ ease;
   pointer-events: none;
   transition: opacity .3s ease, filter .3s ease;
   background: rgb(14 23 32);
+
+  /*transition blur*/
+   filter: blur(4px);
 }
  
 /*contact section .im-form border*/
@@ -1246,9 +1257,8 @@ ease;
   transition: opacity .3s ease, filter .3s ease;
     display:grid;
 }
-  .cat-contact-form {
-  filter: blur(4px);
-}
+/*filter blur:4px in .cat-contact-form
+    
 /*------------------------*/
 
     /* Hide all sub-forms */
@@ -1262,10 +1272,6 @@ ease;
   display: block;
 }
 
-/* Keep your existing blur transitions */
-.cat-contact-form {
-  transition: opacity .3s ease, filter .3s ease;
-}
 
 /* Optional: smooth form entrance */
 .cat-form {
