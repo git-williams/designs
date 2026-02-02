@@ -1471,9 +1471,9 @@ background: rgba(255,255,255,0.50);
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
 
-  gap: clamp(18px, 4vw, 32px);
-  padding-inline: 24px; /* horizontal padding to allow left/right scroll */
-  padding-block: 24px;
+  gap: 1px;
+  padding-inline: 22px; /* horizontal padding to allow left/right scroll */
+  padding-top: 22px;
 
   opacity: 0;
   filter: blur(8px);
@@ -1497,11 +1497,11 @@ background: rgba(255,255,255,0.50);
   pointer-events: auto;
 }
 
-/* Individual theme buttons */
+/* Individual themes (the icon + text container) */
 .cat-work-site {
   scroll-snap-align: center;
   flex: 0 0 auto;
-  min-width: 120px; /* ensure there’s always space to scroll */
+  min-width: 100px; /* ensure there’s always space to scroll */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1509,6 +1509,9 @@ background: rgba(255,255,255,0.50);
 
   /* optional visual tweaks */
   cursor: pointer;
+
+   text-decoration: none;
+  transition: transform .25s var(--cat-ease);
 }
 
 /* Hide scrollbars (Chrome, Edge, Safari) */
@@ -1530,18 +1533,6 @@ background: rgba(255,255,255,0.50);
 
 .cat-work-site.is-selected:hover {
   transform: none;
-}
-
-    
-
-/* Individual site (the icon) */
-.cat-work-site {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  transition: transform .25s var(--cat-ease);
 }
 
 /* Icon */
@@ -1618,7 +1609,7 @@ background: rgba(255,255,255,0.50);
 
 /* --- Icons smaller + gap reduced --- */
 .cat-work-sites {
-  gap: clamp(14px, 3vw, 22px); /* reduced */
+  gap: 1px; /* reduced */
 }
 
 .cat-work-icon {
