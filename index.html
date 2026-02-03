@@ -751,6 +751,7 @@ ROOT: SIZING, COLORS, THEME DEFAULTS
 
 /* wrapper centers everything */
 .cat-wrapper {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -761,8 +762,90 @@ ROOT: SIZING, COLORS, THEME DEFAULTS
   padding-left: 10px;
   padding-right: 10px;
 
-  
+inset: 0;
+  background-size: cover;
+  background-position: center;
+ /* optional effect: filter: saturate(0.9) contrast(0.95);*/
+
+
+/* fancy background image 
+background-image: url("../images/5.jpg");
+  */
+  background:rgb(34 34 34);
 }
+
+
+
+
+
+
+
+
+
+
+
+/* ONLY on large screens */
+@media (min-width: 1024px) {
+
+  /* LEFT — long, concave fade */
+  .cat-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    /* long left fade */
+    background:
+      radial-gradient(
+        ellipse 140% 90% at left center,
+        rgba(0,0,0,0.85) 0%,
+        rgba(0,0,0,0.6) 30%,
+        rgba(0,0,0,0.25) 55%,
+        transparent 70%
+      );
+
+    /* only show it on the left half */
+    mask: linear-gradient(to right, black 60%, transparent 100%);
+  }
+
+
+  /* RIGHT — short, simple fade */
+  .cat-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background: linear-gradient(
+      to left,
+      rgba(0,0,0,0.75),
+      rgba(0,0,0,0.4) 40%,
+      transparent 70%
+    );
+
+    mask: linear-gradient(to left, black 35%, transparent 100%);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
 /* imaginary square */
 .cat-square {
