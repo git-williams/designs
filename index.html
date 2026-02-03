@@ -691,6 +691,12 @@ ROOT: SIZING, COLORS, THEME DEFAULTS
   font-weight: 600;
   line-height: 1.02;
   text-wrap: balance;
+
+  color:white;
+  
+  /*above fade*/
+  position:relative;
+  z-index:1;
 }
 
 /* ================================
@@ -782,7 +788,7 @@ background-image: url("../images/5.jpg");
 
 
 /* only on sides*/
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
 
   /* LEFT — concave outward fade */
   .cat-wrapper::before {
