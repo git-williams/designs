@@ -64,20 +64,7 @@ footer {
 
 
 
-/* =============== Wrapper / Hero Container (square element) =============*/
-.cat-wrapper{
-inset: 0;
-  background-size: cover;
-  background-position: center;
- /* optional effect: filter: saturate(0.9) contrast(0.95);*/
-
-
-/* fancy background image 
-background-image: url("../images/5.jpg");
-  */
-  background:rgb(34 34 34);
-}
-
+/* cat wrapper was here*/
 
 
 
