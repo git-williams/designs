@@ -762,6 +762,9 @@ ROOT: SIZING, COLORS, THEME DEFAULTS
   padding-left: 10px;
   padding-right: 10px;
 
+  /*above fades*/
+  z-index: 1;
+
 inset: 0;
   background-size: cover;
   background-position: center;
@@ -781,49 +784,47 @@ background-image: url("../images/5.jpg");
 
 
 
-
-
-
-/* ONLY on large screens */
 @media (min-width: 1024px) {
 
-  /* LEFT — long concave fade */
+  /* LEFT — concave fade OUTWARDS */
   .cat-wrapper::before {
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
+    left: -45vw; /* place OUTSIDE wrapper */
+    width: 45vw;
 
-    width: 45vw; /* how far it stretches inward */
+    z-index: -1;
     pointer-events: none;
 
     background:
       radial-gradient(
-        ellipse 120% 95% at left center,
+        ellipse 120% 95% at right center,
         rgba(0,0,0,0.9) 0%,
-        rgba(0,0,0,0.6) 35%,
-        rgba(0,0,0,0.25) 60%,
-        transparent 75%
+        rgba(0,0,0,0.6) 40%,
+        rgba(0,0,0,0.2) 70%,
+        transparent 100%
       );
   }
 
-  /* RIGHT — short simple fade */
+
+  /* RIGHT — short outward fade */
   .cat-wrapper::after {
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 0;
+    right: -15vw; /* OUTSIDE */
+    width: 15vw;
 
-    width: 15vw; /* shorter + sharper */
+    z-index: -1;
     pointer-events: none;
 
     background: linear-gradient(
-      to right,
-      transparent 0%,
-      rgba(0,0,0,0.5) 50%,
-      rgba(0,0,0,0.9) 100%
+      to left,
+      rgba(0,0,0,0.9),
+      transparent
     );
   }
 }
