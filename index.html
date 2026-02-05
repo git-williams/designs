@@ -1966,41 +1966,23 @@ function initContact() {
 initContact();
 
 /* =================================================
-   DISCOVER / THEME SYSTEM 
+   DISCOVER / SCROLL SYSTEM
    ================================================= */
-
-const THEMES = ["sea", "sand", "field", "fog", "hill", "mtn"];
-let currentTheme = null;
 
 const sites = document.querySelectorAll(".cat-work-site");
 if (!sites.length) return;
 
 /* -------------------------------
-   THEME SETTER
+   SCROLL TO CENTER
 -------------------------------- */
 
-function setTheme(theme) {
-  if (!theme || theme === currentTheme) return;
+function scrollToCenter(el) {
 
-  // Set global theme
-  document.documentElement.setAttribute("data-theme", theme);
-
-  // Update selected state
-  sites.forEach(site => {
-    const selected = site.dataset.theme === theme;
-    site.classList.toggle("is-selected", selected);
-    site.classList.remove("is-armed");
-    site.dataset.armed = "false";
+  window.scrollTo({
+    behavior: "smooth",
+  block: "center"
   });
-
-  currentTheme = theme;
 }
-
-/* -------------------------------
-   RANDOM THEME ON LOAD
--------------------------------- */
-
-setTheme(THEMES[Math.floor(Math.random() * THEMES.length)]);
 
 /* -------------------------------
    CLICK / ARMED LOGIC
@@ -2012,9 +1994,12 @@ sites.forEach(site => {
   site.addEventListener("click", e => {
     e.preventDefault();
 
-    const theme = site.dataset.theme;
+    // use existing attribute (no HTML change needed)
+    const targetId = site.dataset.theme;
+    const targetEl = document.getElementById(targetId);
+    if (!targetEl) return;
 
-    // Mobile: first tap arms, second tap commits
+    // Mobile: first tap arms, second tap scrolls
     if (isTouch && site.dataset.armed !== "true") {
       sites.forEach(s => {
         s.dataset.armed = "false";
@@ -2026,10 +2011,10 @@ sites.forEach(site => {
       return;
     }
 
-    setTheme(theme);
+    // do the scroll instead of theme change
+    scrollToCenter(targetEl);
   });
 });
-
 
   
   /* =================================================
@@ -2139,6 +2124,23 @@ initWork();
     </section>
 
     <section class="wrapper2 sp_light3">
+      <div class="inner2">
+        <a href="elements.html" class="image2">
+          <img src="images/quality.jpg" alt="Ascension" />
+        </a>
+        <div class="content2">
+          <h2 class="major2">Ascension</h2>
+          <p>
+            Sites designed with "Ascension" in mind are built to stand out. They
+            are a fearless challenge to what would be considered ordinary,
+            inspiring loyalty and passion.
+          </p>
+          <a href="elements.html" class="special2">Learn more</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrapper2 sp_light3" id="sea">
       <div class="inner2">
         <a href="elements.html" class="image2">
           <img src="images/quality.jpg" alt="Ascension" />
